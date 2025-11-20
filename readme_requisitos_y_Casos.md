@@ -7,9 +7,9 @@
 
  
 
-**Autores: Tomás Ignacio Condo, Camila Trinidad Morasso**
+**Autores: Tomás Ignacio Condo, Camila Trinidad Morasso y Francisco Javier Briones**
 
-**Padrones: 111.457, xxx.xxx, xxx.xxx**
+**Padrones: 111.457, 110.790, 110.058**
 
 **Fecha: 2do cuatrimestre 2025**
 
@@ -25,23 +25,25 @@
 
 #### **1.1 Objetivo del proyecto y resultados esperados**
 
-El objetivo de este proyecto es ... . Se tiene como objetivo adicional ... . Por último, se busca en este proyecto ... .
+El objetivo de este proyecto es crear un juego interactivo de memorización de patrones de colores de uso individual. Se tiene como objetivo adicional  . Por último, se busca en este proyecto ... .
+
+El objetivo de este proyecto es diseñar e implementar un juego interactivo del tipo “Simón dice” utilizando un microcontrolador STM32. El sistema deberá generar secuencias luminosas crecientes de manera pseudoaleatoria, asociadas a cuatro LEDs y sus respectivos pulsadores, que el usuario deberá reproducir correctamente para avanzar. Se busca lograr una interfaz intuitiva, tiempos de respuesta precisos y un comportamiento robusto frente a errores de pulsación, rebotes mecánicos y variaciones en la dificultad. Como resultado final, se espera obtener un prototipo totalmente funcional, modular y escalable, que permita incorporar distintos modos de juego, ajustes de velocidad, retroalimentación visual y sonora, y la capacidad de evaluar el desempeño del usuario en cada partida.
 
 #### **1.2 Proyectos similares**
 
-Se consideran X tipos de proyectos posibles que cumplen con los objetivos y resultados esperados del proyecto, todos basados en juegos del tipo interactivos:
+Se consideran 3 tipos de proyectos posibles que cumplen con los objetivos y resultados esperados del proyecto, todos basados en juegos del tipo interactivos:
 
-1. . 
+1. Juego “Simón dice” utilizando Arduino UNO y botones convencionales. 
 
-2. .
+2. Juego de secuencias con LEDs y pulsadores implementado sobre Raspberry Pi con interfaz gráfica.
 
-3. .
+3. Juego "Simón dice" pero en formato cubo, con 6 botones posibles.
 
-Para comparar estas alternativas, se tienen en cuenta X aspectos característicos:
+Para comparar estas alternativas, se tienen en cuenta 6 aspectos característicos:
 
-1. .
+1. Disponibilidad del hardware: Se evalúa si el proyecto es fácilmente implementable con una placa de desarrollo, pulsadores y LEDs disponibles en el mercado regional.
 
-2. .
+2. Complejidad de implementación: Se comprende como la dificultad técnica asociada al manejo de interrupciones, control de tiempos, antirrebote, generación de secuencias y lógica de juego.
 
 3. .
 
@@ -235,5 +237,6 @@ En las tablas 2.2 a 2.4 se presentan 3 casos de uso para el sistema.
 | Precondiciones | El sistema está encendido La puerta está cerrada, con la  cerradura cerrada. La aplicación está conectada al sistema. El indicador de puerta cerrada está encendido |
 | Flujo principal | Se acerca una tarjeta desconocida al lector RFID. El sistema indica que el intento de acceso es incorrecto. El sistema muestra el ID de la tarjeta e indica si se quiere guardar la tarjeta mediante comunicación Wi-Fi con la aplicación. |
 | Flujos alternativos | a. Se pierde la conexión Wi-Fi. El sistema no puede continuar con el guardado de la tarjeta. Se indica que se perdió la conexión b. Se apaga el sistema. El sistema no puede continuar con el guardado de la tarjeta.  |
+
 
 <p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario quiere guardar una tarjeta RFID</em></p>
