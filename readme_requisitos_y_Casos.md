@@ -26,11 +26,12 @@ El objetivo de este proyecto es diseñar e implementar un juego interactivo del 
 Como objetivos adicionales, el sistema incluirá:
 
 - Un **mecanismo de ajuste automático de brillo** mediante un sensor analógico de luz (LDR), que permitirá adaptar la intensidad de los LEDs según el nivel de iluminación del ambiente.
-- Un **menú completo controlado exclusivamente con los mismos cuatro botones del juego**, con diferentes pantallas:  
+- Un **menú completo controlado exclusivamente con los mismos cuatro botones del juego**, siendo que el sistema estará subordinado a un estado diferente al del juego en el momento del manejo del menú donde cada botón corresponderá a atrás, aceptar, arriba o abajo, disponiendo de diferentes pantallas:  
   1. Pantalla de bienvenida al encender el sistema.  
-  2. Pantalla de selección de dificultad (modo *Normal* y modo *Difícil*).  
-  3. Pantalla de juego, donde se muestra el puntaje durante la partida.  
-  4. Pantalla de despedida al apagar el juego.
+  2. Pantalla de selección de dificultad (modo *Normal* y modo *Difícil*).
+  3. Pantalla de visualización de top 3 puntajes históricos.
+  4. Pantalla de juego, donde se muestra el puntaje durante la partida.
+  5. Pantalla de despedida al apagar el juego.
 - Un **modo de dificultad especial “Difícil”**, en el que al agregar un nuevo color a la secuencia solo se reproduce ese **nuevo** color, y no la secuencia completa (a diferencia del modo Normal, donde siempre se reproduce toda la secuencia acumulada).
 - Una **memoria EEPROM externa**, destinada a almacenar datos persistentes como puntajes máximos, configuraciones de dificultad y, eventualmente, secuencias u otras estadísticas del juego.
 
@@ -293,3 +294,4 @@ En las Tablas 2.2 a 2.4 se presentan 3 casos de uso para el sistema.
 | Flujos alternativos | a) El jugador decide no reiniciar el récord al momento de la confirmación (por ejemplo, seleccionando “No” con los botones): el sistema conserva el puntaje máximo y vuelve al menú anterior.  b) Se produce un error en el acceso a la EEPROM (por ejemplo, fallo de comunicación): el sistema muestra un mensaje de error en el LCD, reproduce un sonido de falla, descarta la operación de borrado y deshabilita temporalmente la opción de reinicio hasta que se reinicie el dispositivo o se recupere la condición. |
 
 <p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta o reinicia el puntaje máximo</em></p>
+
