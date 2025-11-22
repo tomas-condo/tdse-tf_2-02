@@ -17,226 +17,181 @@
 
  
 
- 
-
- 
-
-### **1\. Selección del proyecto a implementar**
+ ### **1. Selección del proyecto a implementar**
 
 #### **1.1 Objetivo del proyecto y resultados esperados**
 
-El objetivo de este proyecto es crear un juego interactivo de memorización de patrones de colores de uso individual. Se tiene como objetivo adicional  . Por último, se busca en este proyecto ... .
+El objetivo de este proyecto es diseñar e implementar un juego interactivo del tipo *“Simón dice”* . El sistema generará secuencias luminosas crecientes de manera pseudoaleatoria, empleando cuatro LEDs de distintos colores asociados a cuatro pulsadores que el usuario deberá utilizar para reproducir la secuencia mostrada, tal que cada secuencia sea mayor que la anterior.
 
-El objetivo de este proyecto es diseñar e implementar un juego interactivo del tipo “Simón dice” utilizando un microcontrolador STM32. El sistema deberá generar secuencias luminosas crecientes de manera pseudoaleatoria, asociadas a cuatro LEDs y sus respectivos pulsadores, que el usuario deberá reproducir correctamente para avanzar. Se busca lograr una interfaz intuitiva, tiempos de respuesta precisos y un comportamiento robusto frente a errores de pulsación, rebotes mecánicos y variaciones en la dificultad. Como resultado final, se espera obtener un prototipo totalmente funcional, modular y escalable, que permita incorporar distintos modos de juego, ajustes de velocidad, retroalimentación visual y sonora, y la capacidad de evaluar el desempeño del usuario en cada partida.
+Como objetivos adicionales, el sistema incluirá:
+
+- Un **mecanismo de ajuste automático de brillo** mediante un sensor analógico de luz (LDR), que permitirá adaptar la intensidad de los LEDs según el nivel de iluminación del ambiente.
+- Un **menú completo controlado exclusivamente con los mismos cuatro botones del juego**, con diferentes pantallas:  
+  1. Pantalla de bienvenida al encender el sistema.  
+  2. Pantalla de selección de dificultad (modo *Normal* y modo *Difícil*).  
+  3. Pantalla de juego, donde se muestra el puntaje durante la partida.  
+  4. Pantalla de despedida al apagar el juego.
+- Un **modo de dificultad especial “Difícil”**, en el que al agregar un nuevo color a la secuencia solo se reproduce ese **nuevo** color, y no la secuencia completa (a diferencia del modo Normal, donde siempre se reproduce toda la secuencia acumulada).
+- Una **memoria EEPROM externa**, destinada a almacenar datos persistentes como puntajes máximos, configuraciones de dificultad y, eventualmente, secuencias u otras estadísticas del juego.
+
+Se pretende que el sistema sea robusto frente a rebotes mecánicos de los pulsadores, errores de temporización y entradas inválidas del usuario, utilizando una arquitectura modular basada en máquinas de estados. Al finalizar el proyecto se espera obtener un prototipo funcional, configurable, expandible y con capacidad de almacenamiento persistente para mejorar la experiencia de juego y permitir extensiones futuras.  
+
+
 
 #### **1.2 Proyectos similares**
 
-Se consideran 3 tipos de proyectos posibles que cumplen con los objetivos y resultados esperados del proyecto, todos basados en juegos del tipo interactivos:
+Se consideran tres tipos de proyectos posibles que cumplen con los objetivos y resultados esperados del trabajo, todos basados en juegos electrónicos de memoria con secuencias luminosas:
 
-1. Juego “Simón dice” utilizando Arduino UNO y botones convencionales. 
+1. **Juego “Simón dice” Avanzado con STM32**, con cuatro LEDs, cuatro pulsadores, selección en menú interactivo, registro de puntaje y adaptabilidad al ambiente.
+2. **Juego “Simón dice” Básico con STM32**, sólo con leds y teclas, sin interfaz interativa y de un tamaño reducido.  
+3. **Juego “Simón dice” Básico con Arduino UNO**, similar a la versión básica.
 
-2. Juego de secuencias con LEDs y pulsadores implementado sobre Raspberry Pi con interfaz gráfica.
+Para comparar estas alternativas, se tienen en cuenta seis aspectos característicos:
 
-3. Juego "Simón dice" pero en formato cubo, con 6 botones posibles.
+1. **Disponibilidad del hardware:** Se evalúa si el proyecto es fácilmente implementable con hardware disponible en mercados regionales.  
+2. **Calidad de la experiencia de juego:** Se refiere a qué tan interesante, inmersivo y variado resulta el juego para el usuario final (feedback visual, menús, niveles de dificultad, etc.).  
+3. **Escalabilidad del sistema:** Se entiende como la facilidad para extender el proyecto en el futuro, incorporando nuevos modos de juego, más niveles de dificultad, almacenamiento de estadísticas adicionales, comunicación con PC, etc.  
+4. **Tiempo de implementación:** Tiempo total que llevará diseñar, programar, integrar y depurar el proyecto seleccionado dentro del cuatrimestre.  
+5. **Costo:** El costo total del proyecto, incluyendo la placa de desarrollo, la pantalla LCD, el buzzer, el sensor LDR, la EEPROM, los pulsadores, LEDs, resistencias y cableado.  
+6. **Interés personal:** El grado de motivación e interés en trabajar con la plataforma STM32, aprender a utilizar sus periféricos (GPIO, ADC, timers, I2C/SPI, etc.) y desarrollar un juego que resulte atractivo de usar y de mejorar.  
 
-Para comparar estas alternativas, se tienen en cuenta 6 aspectos característicos:
+Se decide ponderar los aspectos de la siguiente manera, del 1 al 10:
 
-1. Disponibilidad del hardware: Se evalúa si el proyecto es fácilmente implementable con una placa de desarrollo, pulsadores y LEDs disponibles en el mercado regional.
+- Disponibilidad del hardware: 10  
+- Calidad de la experiencia de juego: 8  
+- Escalabilidad del sistema: 6  
+- Tiempo de implementación: 8  
+- Costo: 5  
+- Interés personal: 8  
 
-2. Complejidad de implementación: Se comprende como la dificultad técnica asociada al manejo de interrupciones, control de tiempos, antirrebote, generación de secuencias y lógica de juego.
+La disponibilidad del hardware es crítica, ya que se busca trabajar con componentes accesibles y fáciles de conseguir sin depender de importaciones costosas o de plazos largos; por ello se asigna un peso 10. La calidad de la experiencia de juego se valora con peso 8, dado que el objetivo principal es obtener un juego entretenido y rejugable, con buena realimentación visual y sonora. La escalabilidad del sistema recibe un peso 6: es deseable que el proyecto sea ampliable, pero se prioriza primero obtener un prototipo estable y completo. El tiempo de implementación se pondera con 8, ya que se dispone de un período acotado y se requieren iteraciones de prueba y corrección de errores.
 
-3. .
+El costo tiene un peso 5, porque, si bien no es irrelevante, se prioriza el aprendizaje y la calidad del proyecto por sobre una minimización extrema del presupuesto. Por último, el interés personal se valora con 8, ya que se busca realizar un proyecto motivador, que permita practicar programación embebida sobre STM32 y que resulte atractivo para seguir ampliándolo más allá de la materia.  
 
-4. .
+La siguiente tabla (Tabla 1.2.1) muestra los valores ponderados asignados a cada proyecto considerado.  
 
-5. .
-
-6. .
-
-Se decide ponderar los aspectos de la siguiente manera del 1 al 10: ... \. 
-
-LARGA JUSTIFICACIÓN DE PUNTAJES.
-
-La siguiente tabla (Tabla 1.2.1) muestra los valores ponderados asignados a cada proyecto considerado
 
 <table>
-        <thead>
-            <tr>
-                <th rowspan="2">Proyecto</th>
-                <th colspan="2">Cerradura con RFID y keypad</th>
-                <th colspan="2">Cerradura solo con keypad</th>
-                <th colspan="2">Cerradura con reconocimiento facial</th>
-            </tr>
-            <tr>
-                <th>Puntaje</th>
-                <th>Puntaje Ponderado</th>
-                <th>Puntaje</th>
-                <th>Puntaje Ponderado</th>
-                <th>Puntaje</th>
-                <th>Puntaje Ponderado</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="header-row">
-                <td align ="center">Disponibilidad de Hardware <br>(peso : 10)</td>
-                <td>10</td>
-                <td>100</td>
-                <td>10</td>
-                <td>100</td>
-                <td>4</td>
-                <td>40</td>
-            </tr>
-            <tr>
-                <td align ="center">Facilidad de Acceso <br>(peso : 8)</td>
-                <td>8</td>
-                <td>64</td>
-                <td>5</td>
-                <td>40</td>
-                <td>10</td>
-                <td>80</td>
-            </tr>
-            <tr class="header-row">
-                <td align ="center">Seguridad <br>(peso : 6)</td>
-                <td>8</td>
-                <td>48</td>
-                <td>8</td>
-                <td>48</td>
-                <td>6</td>
-                <td>36</td>
-            </tr>
-            <tr>
-                <td align ="center">Tiempo de Implementación <br>(peso : 8)</td>
-                <td>8</td>
-                <td>64</td>
-                <td>10</td>
-                <td>80</td>
-                <td>2</td>
-                <td>16</td>
-            </tr>
-            <tr class="header-row">
-                <td align ="center">Costo (peso : 5)</td>
-                <td>8</td>
-                <td>40</td>
-                <td>8</td>
-                <td>40</td>
-                <td>6</td>
-                <td>30</td>
-            </tr>
-            <tr>
-                <td align ="center">Interés personal <br>(peso : 8)</td>
-                <td>10</td>
-                <td>80</td>
-                <td>4</td>
-                <td>40</td>
-                <td>10</td>
-                <td>80</td>
-            </tr>
-            <tr class="highlight-green">
-                <td>Puntaje Total</td>
-                <td>-</td>
-                <td>396</td>
-                <td>-</td>
-                <td class="highlight-red">348</td>
-                <td>-</td>
-                <td>282</td>
-            </tr>
-        </tbody>
+    <thead>
+        <tr>
+            <th rowspan="2">Proyecto</th>
+            <th colspan="2">Simón avanzado STM32<br>(LCD, LDR, EEPROM)</th>
+            <th colspan="2">Simón básico STM32<br>(solo LEDs y pulsadores)</th>
+            <th colspan="2">Simón básico Arduino UNO</th>
+        </tr>
+        <tr>
+            <th>Puntaje</th>
+            <th>Puntaje Ponderado</th>
+            <th>Puntaje</th>
+            <th>Puntaje Ponderado</th>
+            <th>Puntaje</th>
+            <th>Puntaje Ponderado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="header-row">
+            <td align ="center">Disponibilidad de Hardware <br>(peso : 10)</td>
+            <td>8</td>
+            <td>80</td>
+            <td>9</td>
+            <td>90</td>
+            <td>10</td>
+            <td>100</td>
+        </tr>
+        <tr>
+            <td align ="center">Calidad de la experiencia de juego <br>(peso : 8)</td>
+            <td>10</td>
+            <td>80</td>
+            <td>7</td>
+            <td>56</td>
+            <td>5</td>
+            <td>40</td>
+        </tr>
+        <tr class="header-row">
+            <td align ="center">Escalabilidad del sistema <br>(peso : 6)</td>
+            <td>10</td>
+            <td>60</td>
+            <td>7</td>
+            <td>42</td>
+            <td>5</td>
+            <td>30</td>
+        </tr>
+        <tr>
+            <td align ="center">Tiempo de Implementación <br>(peso : 8)</td>
+            <td>6</td>
+            <td>48</td>
+            <td>8</td>
+            <td>64</td>
+            <td>9</td>
+            <td>72</td>
+        </tr>
+        <tr class="header-row">
+            <td align ="center">Costo (peso : 5)</td>
+            <td>6</td>
+            <td>30</td>
+            <td>8</td>
+            <td>40</td>
+            <td>9</td>
+            <td>45</td>
+        </tr>
+        <tr>
+            <td align ="center">Interés personal <br>(peso : 8)</td>
+            <td>10</td>
+            <td>80</td>
+            <td>8</td>
+            <td>64</td>
+            <td>6</td>
+            <td>48</td>
+        </tr>
+        <tr class="highlight-green">
+            <td>Puntaje Total</td>
+            <td>-</td>
+            <td>378</td>
+            <td>-</td>
+            <td class="highlight-red">356</td>
+            <td>-</td>
+            <td>335</td>
+        </tr>
+    </tbody>
 </table>
 <p align="center"><em>Tabla 1.2.1: Comparación de proyectos</em></p>
 
+
+
 #### **1.3 Selección de proyecto**
 
-Considerando la Tabla 1.2.1,  se elige implementar ... . EXPLICACIÓN LARGA... .
+Considerando la Tabla 1.2.1, se elige implementar el juego “Simón dice” avanzado con STM32, utilizando LEDs, pulsadores, pantalla LCD, buzzer, sensor LDR y memoria EEPROM externa. Si bien el juego básico con Arduino UNO presenta una excelente disponibilidad de hardware y un costo reducido, no permite aprovechar en profundidad los periféricos del STM32 ni desarrollar una arquitectura modular más compleja. Además, limita la posibilidad de escalar el proyecto hacia nuevas funcionalidades, como distintos modos de juego, almacenamiento de récords o futuras comunicaciones con otros dispositivos.
 
+Por otro lado, el juego “Simón dice” básico con STM32 constituye una opción intermedia: mantiene la plataforma STM32 pero con una interfaz simple, sin menú, sin ajuste automático de brillo y sin persistencia de datos. Sus tiempos de implementación son menores, pero la experiencia de juego es más limitada y se desaprovecha la oportunidad de trabajar con periféricos adicionales.
 
+El juego avanzado con STM32 se destaca porque combina:
+
+- Una **experiencia de usuario más rica** (secuencias luminosas, sonidos asociados a cada color, melodías de acierto y error).  
+- Un **menú de múltiples pantallas** (bienvenida, selección de dificultad, puntaje en juego y despedida), controlado únicamente con los mismos cuatros botones del juego.  
+- La **adaptación automática del brillo** mediante el sensor LDR.  
+- La **persistencia de datos** mediante EEPROM externa.  
+
+Esto lo convierte en un proyecto ideal para integrar conocimientos de programación embebida, diseño de máquinas de estados, gestión de tiempos, uso de ADC y buses de comunicación, y modularidad del código.
+
+En el contexto local, existen numerosos juegos comerciales del tipo “Genius” o “Simón” disponibles como juguetes o aplicaciones de celular. Sin embargo, suelen ser dispositivos cerrados que no permiten modificar las reglas del juego ni acceder a su implementación interna. Este proyecto apunta a desarrollar una plataforma abierta y programable, pensada tanto para entretenimiento como para aprendizaje en el ámbito de la ingeniería electrónica, donde el alumno pueda experimentar con nuevas reglas, efectos sonoros, modos de dificultad y sistemas de almacenamiento de récords.
+
+Los desafíos principales del proyecto se centran en la correcta generación de secuencias pseudoaleatorias, la sincronización precisa de tiempos para la reproducción de la secuencia y la lectura de las respuestas del usuario, el diseño de un esquema robusto de antirrebote, la implementación de un menú navegable solo con los botones de juego y la organización del firmware en módulos y máquinas de estado claras, que faciliten la depuración y la futura expansión del juego.  
 
 
 
 ###### **1.3.1 Diagrama en bloques**
 
-En la Figura 1.3.1 se muestra el diagrama en bloques del sistema con los principales módulos del proyecto
+En la Figura 1.3.1 se muestra el diagrama en bloques del sistema con los principales módulos del proyecto.  
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/57fad928-0021-4330-bb8f-daf010a19ebe" alt="image1">
+  <img src="ruta/a/diagrama_en_bloques_simondice_actualizado.png" alt="Diagrama en bloques del sistema SimonDice STM32">
 </p>
 
 <p align="center"><em>Figura 1.3.1: Diagrama en bloques del sistema</em></p>
 
 
-### **2\. Elicitación de requisitos y casos de uso**
 
-En Argentina existen varios productos de características similares a las del proyecto, cada producto diferenciándose de otro con detalles, como por ejemplo huellas digitales, llaves, etc. Sin embargo, parecería que no hay un producto en Argentina que cumpla exactamente la misma función que el proyecto desarrollado.
+---
+ deshabilita temporalmente la opción de reinicio hasta que se reinicie el dispositivo o se recupere la condición. |
 
-Como primer competidor del mercado se puede mencionar a [Yale](https://yalehome.com.ar/categoria-producto/cerraduras-digitales/), la cual ofrece una amplia gama de cerraduras digitales inteligentes para seguridad del hogar. Los precios de sus productos orbitan desde los 45.000 hasta los 600.000 pesos y sus productos incluyen desde cerraduras con teclado matricial hasta cerraduras con huellas digitales, todas con una aplicación para el celular. El proyecto tiene similitudes en el teclado matricial y en la aplicación, pero se diferencia en la oferta de los sensores magnéticos, del lector RFID y de la comunicación con parlante y micrófono.
-
-Un segundo competidor es [Philips](https://www.tienda.philips.com.ar/productos-para-el-hogar/smart-lock/cerraduras-inteligentes), la cual tiene productos con reconocimiento facial y video portero. Esta tecnología es considerablemente superior al igual que sus precios, los cuales rondan el 1.000.000 de pesos. Sin embargo, la empresa no cuenta con lectores RFID ni sensores magnéticos, lo cual diferencia a nuestro proyecto.
-
-En resumen, el mercado es sumamente competitivo y las características y funcionalidades de la cerradura pueden ser modificadas y ampliadas fácilmente, permitiendo desarrollar productos únicos y distintos de la competencia que encuentren un lugar en el mercado.
-
-| Grupo | ID | Descripción |
-| :---- | :---- | :---- |
-| Acceso | 1.1 | El sistema permitirá el acceso a la instalación mediante RFID |
-|  | 1.2 | El sistema permitirá el acceso a la instalación mediante un teclado matricial |
-|  | 1.3 | En caso de acceso permitido, el  sistema abrirá la puerta durante un periodo de tiempo fijado |
-| Indicadores | 2.1 | El sistema contará con un indicador luminoso para indicar que la puerta está cerrada |
-|  | 2.2 | El sistema contará con un indicador luminoso para indicar que la puerta está abierta |
-|  | 2.3 | El sistema contará con un parlante que indique mediante sonido cuando se abre la puerta |
-|  | 2.4 | El sistema contará con un parlante que indique mediante sonido cuando se introduce un código incorrecto |
-|  | 2.5 | El sistema contará con un parlante que indique mediante sonido cuando se presiona una tecla |
-|  | 2.6 | El sistema notificará con el parlante cuando se deja la puerta abierta |
-|  | 2.7 | El sistema notificará mediante el titileo de leds cuando la puerta se deja abierta o cuando se introduce un código/RFID erróneo |
-|  | 2.8 | El sistema notifica con audio y luz cuando se deja un código sin introducir completamente |
-| Motor | 3.1  | El sistema contará con un motor para abrir y cerrar la cerradura |
-|  | 3.2 | El sistema solo podrá cerrar la puerta cuando esta se halla contra el marco |
-| Comunicación Audio  | 4.1 | El sistema deberá contar con un parlante para transmitir señales de audio |
-|  | 4.2 | El sistema deberá contar con un micrófono para recibir señales de audio |
-| Comunicación Wi-Fi | 5.1 | El sistema se comunicará mediante Wi-Fi con la aplicación de celular |
-|  | 5.2 | El sistema deberá enviar a la aplicación la información de acceso a la instalación |
-|  | 5.3 | El sistema deberá enviar a la aplicación la información de acceso denegado a la instalación |
-|  | 5.4 | En caso de lectura RFID, el sistema deberá comunicar la lectura de RFIDs desconocidos, junto con su ID (para poder guardarlo posteriormente) |
-|  | 5.4 | El sistema deberá comunicarle a la aplicación el estado de la puerta y el numero de puerta |
-|  | 5.5 | El sistema deberá poder recibir señales de audio de la aplicación |
-|  | 5.6 | El sistema deberá poder transmitir señales de audio a la aplicación |
-| Aplicación | 6.1 | La aplicación tendrá la base de datos de los individuos habilitados con sus IDs |
-|  | 6.2 | La aplicación deberá permitirle al usuario configurar los permisos de acceso de los individuos |
-|  | 6.3 | La aplicación deberá poder mostrar la información de los accesos e intentos de acceso |
-|  | 6.4 | La aplicación deberá poder controlar manualmente la apertura o cerradura de la puerta |
-|  | 6.5 | La aplicación deberá permitirle al usuario configurar añadir nuevos individuos a la base de datos mediante codigo o RFID |
-|  | 6.6 | La aplicación deberá mostrarle al usuario el estado de la puerta |
-| Interruptores/ Botones | 7.1 | El sistema contará con botones para abrir o cerrar la puerta de forma manual |
-|  | 7.2 | El sistema contará con un botón de timbre |
-| Sensores | 8.1 | El sistema contará con un sensor magnético que detectará cuando la puerta se halla contra el marco |
-
-<p align="center"><em>Tabla 2.1: Requisitos del proyecto</em></p>
-
-En las tablas 2.2 a 2.4 se presentan 3 casos de uso para el sistema.
-
-| Elemento | Definición |
-| :---- | :---- |
-| Disparador | Se quiere acceder a la instalación con permiso de acceso y con código en el teclado matricial. |
-| Precondiciones | El sistema está encendido La puerta está cerrada, con la  cerradura cerrada. La aplicación está conectada al sistema. El indicador de puerta cerrada está encendido  |
-| Flujo principal | El individuo introduce su código en el teclado matricial. Por cada tecla que presione recibe una melodía indicando la recepción del carácter introducido. Una vez introducido todo el código, el motor abre la cerradura y se notifica con una melodía el acceso habilitado. Además, con un led se notifica la habilitación del acceso. El módulo Wi-Fi comunica a la aplicación el acceso a la instalación, mostrando el estado de la puerta, la identificación del ingresante, la hora y el número de puerta. El individuo cierra la puerta una vez adentro. |
-| Flujos alternativos | a. El individuo introduce erróneamente el código, con lo cual se notifica auditiva y visualmente al usuario y se notifica mediante Wi-Fi que se intentó acceder sin permiso a la instalación.  b. El individuo deja de introducir el código a mitad de camino. Luego de un tiempo preestablecido, el código a medias se descarta y se notifica que el intento fue incorrecto tanto al individuo como al propietario mediante Wi-Fi.. c. El individuo olvida la puerta abierta, entonces se suena una “alarma” y se notifica al propietario mediante Wi-Fi d. Un usuario dentro de la instalación presiona el botón de cerrar la puerta antes de que se introduzca el código. La puerta permanece cerrada. e. El usuario acerca su tarjeta en vez de terminar el código. La puerta se abre y se indica que la puerta está abierta. |
-
-<p align="center"><em>Tabla 2.2: Caso de uso 1: El usuario quiere acceder con código</em></p>
-
-
-| Elemento | Definición |
-| :---- | :---- |
-| Disparador | Se quiere acceder a la instalación con permiso de acceso y con RFID. |
-| Precondiciones | El sistema está encendido La puerta está cerrada, con la  cerradura cerrada. La aplicación está conectada al sistema. El indicador de puerta cerrada está encendido  |
-| Flujo principal | El individuo acerca su tarjeta al lector. El ID de la tarjeta es correcto, el motor abre la cerradura y se notifica con una melodía el acceso habilitado. Además, con un led se notifica la habilitación del acceso. El módulo Wi-Fi comunica a la aplicación el acceso a la instalación, mostrando el estado de la puerta, la identificación del ingresante, la hora y el número de puerta. El individuo cierra la puerta una vez adentro. |
-| Flujos alternativos | a. El individuo usa una tarjeta no habilitada, con lo cual se notifica auditiva y visualmente al usuario y se notifica mediante Wi-Fi que se intentó acceder sin permiso a la instalación.  b. El individuo olvida la puerta abierta, entonces se suena una “alarma” y se notifica al propietario mediante Wi-Fi |
-
-<p align="center"><em>Tabla 2.3: Caso de uso 2: El usuario quiere acceder con RFID</em></p>
-
-
-| Elemento | Definición |
-| :---- | :---- |
-| Disparador | Se quiere añadir una nueva tarjeta RFID |
-| Precondiciones | El sistema está encendido La puerta está cerrada, con la  cerradura cerrada. La aplicación está conectada al sistema. El indicador de puerta cerrada está encendido |
-| Flujo principal | Se acerca una tarjeta desconocida al lector RFID. El sistema indica que el intento de acceso es incorrecto. El sistema muestra el ID de la tarjeta e indica si se quiere guardar la tarjeta mediante comunicación Wi-Fi con la aplicación. |
-| Flujos alternativos | a. Se pierde la conexión Wi-Fi. El sistema no puede continuar con el guardado de la tarjeta. Se indica que se perdió la conexión b. Se apaga el sistema. El sistema no puede continuar con el guardado de la tarjeta.  |
-
-
-<p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario quiere guardar una tarjeta RFID</em></p>
+<p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta o reinicia el puntaje máximo</em></p>
