@@ -14,7 +14,6 @@
 **Fecha: 2do cuatrimestre 2025**
 
  
-
  
 
  ### **1. Selección del proyecto a implementar**
