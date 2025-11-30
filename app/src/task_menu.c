@@ -50,7 +50,7 @@
 #include "app.h"
 #include "task_menu_attribute.h"
 #include "task_menu_interface.h"
-#include "task_menu.h"         // <-- ¡AÑADIR ESTA LÍNEA!
+#include "task_menu.h"
 #include "display.h"
 
 /********************** macros and definitions *******************************/

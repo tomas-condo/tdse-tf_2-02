@@ -92,6 +92,47 @@ extern "C" {
 #define LED_A_ON		GPIO_PIN_SET
 #define LED_A_OFF		GPIO_PIN_RESET
 
+#define BTN_AM_PIN 		BOTON_AM_Pin
+#define BTN_AM_PORT 	BOTON_AM_GPIO_Port
+#define BTN_AM_PRESSED	GPIO_PIN_RESET
+#define BTN_AM_HOVER	GPIO_PIN_SET
+
+#define BTN_RO_PIN 		BOTON_AM_Pin
+#define BTN_RO_PORT 	BOTON_RO_GPIO_Port
+#define BTN_RO_PRESSED	GPIO_PIN_RESET
+#define BTN_RO_HOVER	GPIO_PIN_SET
+
+#define BTN_AZ_PIN 		BOTON_AM_Pin
+#define BTN_AZ_PORT 	BOTON_AZ_GPIO_Port
+#define BTN_AZ_PRESSED	GPIO_PIN_RESET
+#define BTN_AZ_HOVER	GPIO_PIN_SET
+
+#define BTN_VE_PIN 		BOTON_AM_Pin
+#define BTN_VE_PORT 	BOTON_VE_GPIO_Port
+#define BTN_VE_PRESSED	GPIO_PIN_RESET
+#define BTN_VE_HOVER	GPIO_PIN_SET
+
+#define LED_AM_PIN		LED_AM_Pin
+#define LED_AM_PORT		LED_AM_GPIO_Port
+#define LED_AM_ON		GPIO_PIN_SET
+#define LED_AM_OFF		GPIO_PIN_RESET
+
+#define LED_AZ_PIN		LED_AZ_Pin
+#define LED_AZ_PORT		LED_AZ_GPIO_Port
+#define LED_AZ_ON		GPIO_PIN_SET
+#define LED_AZ_OFF		GPIO_PIN_RESET
+
+#define LED_VE_PIN		LED_VE_Pin
+#define LED_VE_PORT		LED_VE_GPIO_Port
+#define LED_VE_ON		GPIO_PIN_SET
+#define LED_VE_OFF		GPIO_PIN_RESET
+
+#define LED_RO_PIN		LED_RO_Pin
+#define LED_RO_PORT		LED_RO_GPIO_Port
+#define LED_RO_ON		GPIO_PIN_SET
+#define LED_RO_OFF		GPIO_PIN_RESET
+
+
 #endif
 
 /* STM32 Nucleo Boards - 144 Pins */
