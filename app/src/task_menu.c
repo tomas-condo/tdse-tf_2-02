@@ -64,12 +64,14 @@
 /********************** internal data declaration ****************************/
 /*task_menu_dta_t task_menu_dta =
 	{DEL_MEN_XX_MIN, ST_MEN_XX_IDLE, EV_MEN_ENT_IDLE, false};*/
-
+/*
+//Para posible agregado de actuadores un posible modelo de codigo:
 const task_motor_cfg_t task_motor_cfg_list[] = {
 	{ID_MOTOR_1, 0, 0, 0},
 
 	{ID_MOTOR_2, 0, 0, 0}, // Valores iniciales
 };
+*/
 
 task_menu_dta_t task_menu_dta =
 {
@@ -81,10 +83,10 @@ task_menu_dta_t task_menu_dta =
 
 
     // CAMPOS DE ÍNDICE AÑADIDOS
-	/*Lista de motores*/task_motor_cfg_list,
+	///*Lista de motores*/task_motor_cfg_list, // PARA ACTUADORES
     /* index_menu1  */ 0,
     /* index_menu2  */ 0,
-    /* index_menu3  */ 0,
+ //   /* index_menu3  */ 0,
 
 };
 
@@ -142,10 +144,10 @@ void task_menu_init(void *parameters)
 	displayInit( DISPLAY_CONNECTION_GPIO_4BITS );
 
     displayCharPositionWrite(0, 0);
-	displayStringWrite("TdSE Bienvenidos");
+	displayStringWrite("   Bienvenido   ");
 
-	displayCharPositionWrite(0, 1);
-	displayStringWrite("Test Nro: ");
+	displayCharPositionWrite(0, 2);
+	displayStringWrite(" Pulse un botón ");
 }
 
 void task_menu_statechart(void) {
@@ -165,26 +167,28 @@ void task_menu_statechart(void) {
     // 2. Máquina de Estados (solo si hay un evento para procesar)
     // ---------------------------------------------------------------------
     if (true == p_task_menu_dta -> flag) {
-        switch (p_task_menu_dta -> state) {
+        switch (p_task_menu_dta -> state){
             // =============================================================
             // ESTADO MAIN
             // =============================================================
             case ST_MEN_MAIN:
-                if (p_task_menu_dta -> event == EV_MEN_ENTER) {
+                if (p_task_menu_dta -> event == EV_MEN_ENTER ||
+                	p_task_menu_dta -> event == EV_MEN_NEXT  ||
+					p_task_menu_dta -> event == EV_MEN_ESC){
                     // Transición MAIN -> MENU 1
                 	displayCharPositionWrite(0, 0);
-					displayStringWrite("Bienvenido al Menu 1");
-					for(int i = 1; i < 4; i++){
-						displayCharPositionWrite(0, i);
-						displayStringWrite("                    ");
-					};
-					displayCharPositionWrite(0, 2);
-					displayStringWrite(">Motor 1     Motor 2");
+					displayStringWrite("Instrucciones:  ");
+                	displayCharPositionWrite(0, 1);
+					displayStringWrite("    Ro=ON/OFF   ");
+                	displayCharPositionWrite(0, 2);
+					displayStringWrite("Am=ESC  Az=ENTER");
+                	displayCharPositionWrite(0, 3);
+					displayStringWrite("     Ve=NEXT    ");
                     p_task_menu_dta -> flag = false;
                     p_task_menu_dta -> state = ST_MEN_MENU1;
                     p_task_menu_dta -> index_menu1 = 0; //reset
                 }
-                else if (p_task_menu_dta->event == EV_MEN_NEXT || p_task_menu_dta->event == EV_MEN_ESC)
+                else
                     // Transición MAIN -> MAIN
                     p_task_menu_dta->state = ST_MEN_MAIN;
                 break;
@@ -193,17 +197,15 @@ void task_menu_statechart(void) {
             // =============================================================
             case ST_MEN_MENU1:
                 if (p_task_menu_dta -> event == EV_MEN_NEXT){
-                    if (p_task_menu_dta -> index_menu1 < 1){ // [guard] index_menu1 < 2
-                        // Acción: index_menu1 ++
+                    if (p_task_menu_dta -> index_menu1 == 0){
                     	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(" Motor 1    >Motor 2");
+                    	displayStringWrite(">Jugar  Puntajes");
                         p_task_menu_dta -> index_menu1++;
                     }
-                    else if (p_task_menu_dta->index_menu1 == 1){ // [guard] index_menu1 == 2
-                        // Acción: index_menu1 = 0 (Wrap-around)
+                    else if (p_task_menu_dta->index_menu1 == 1){
                         p_task_menu_dta -> index_menu1 = 0;
                         displayCharPositionWrite(0, 2);
-                        displayStringWrite(">Motor 1     Motor 2");
+                        displayStringWrite(" Jugar >Puntajes");
                     }
                     // La transición es a MENU 1 en ambos casos
                     p_task_menu_dta -> state = ST_MEN_MENU1;
@@ -215,14 +217,29 @@ void task_menu_statechart(void) {
                 }
                 else if (p_task_menu_dta -> event == EV_MEN_ENTER){
                     // Transición MENU 1 -> MENU 2
-                	displayCharPositionWrite(0, 0);
-                	displayStringWrite("Bienvenido al Menu 2");
-                	displayCharPositionWrite(0, 2);
-                	displayStringWrite(">Power  Speed  Spin ");
-
-                	p_task_menu_dta -> flag = false;
-                    p_task_menu_dta -> state = ST_MEN_MENU2;
-                    p_task_menu_dta -> index_menu2 = 0; // Entramos a MENU 2, iniciamos su índice
+                    if (p_task_menu_dta->index_menu1 == 0){
+                    	displayCharPositionWrite(0, 0);
+                    	displayStringWrite("Dificultad:     ");
+                    	displayCharPositionWrite(0, 2);
+                    	displayStringWrite(">Normal  Dificil");
+                        // La transición es a MENU 2
+                        p_task_menu_dta -> flag = false;
+                        p_task_menu_dta -> state = ST_MEN_MENU2;
+                        p_task_menu_dta -> index_menu2 = 0; // Entramos a MENU 2, iniciamos su índice
+                        }
+                    else if (p_task_menu_dta->index_menu1 == 1){
+                        displayCharPositionWrite(0, 0);
+                        displayStringWrite("Puntajes");
+                        displayCharPositionWrite(0, 1);
+                        displayStringWrite("#1 %d1");
+                        displayCharPositionWrite(0, 2);
+                        displayStringWrite("#2 %d2");
+                        displayCharPositionWrite(0, 3);
+                        displayStringWrite("#3 %d3");
+                        // La transición es a MENU 3
+                        p_task_menu_dta -> flag = false;
+                        p_task_menu_dta -> state = ST_MEN_MENU3;// Entramos a MENU 3
+                    }
                 }
                 break;
 
@@ -231,57 +248,37 @@ void task_menu_statechart(void) {
             // =============================================================
 
             case ST_MEN_MENU2:
-                if (p_task_menu_dta -> event == EV_MEN_NEXT)
-                {
-                    if (p_task_menu_dta -> index_menu2 == 0){ // [guard] index_menu2 < 3
-                        // Acción: index_menu2 ++
+                if (p_task_menu_dta -> event == EV_MEN_NEXT){
+                    if (p_task_menu_dta -> index_menu2 == 0){
                     	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(" Power >Speed  Spin ");
+                    	displayStringWrite(">Normal  Dificil");
                         p_task_menu_dta -> index_menu2++;
                     }
-                    else if (p_task_menu_dta -> index_menu2 == 1){ // [guard] index_menu2 < 3
-						// Acción: index_menu2 ++
-                        displayCharPositionWrite(0, 2);
-                        displayStringWrite(" Power  Speed >Spin");
-
-						p_task_menu_dta -> index_menu2++;
-					}
-                    else if (p_task_menu_dta -> index_menu2 == 2){ // [guard] index_menu2 == 3
-                        // Acción: index_menu2 = 0 (Wrap-around)
-                        displayCharPositionWrite(0, 2);
-                        displayStringWrite(">Power  Speed  Spin ");
+                    else if (p_task_menu_dta->index_menu2 == 1){
                         p_task_menu_dta -> index_menu2 = 0;
+                        displayCharPositionWrite(0, 2);
+                    	displayStringWrite(" Normal >Dificil");
                     }
                     // La transición es a MENU 2 en ambos casos
                     p_task_menu_dta -> state = ST_MEN_MENU2;
                 }
-                else if (p_task_menu_dta -> event == EV_MEN_ESC) {
-                    // Transición MENU 2 -> MENU 1
-					displayCharPositionWrite(0, 2);
-					displayStringWrite(">Motor 1     Motor 2");
+                else if (p_task_menu_dta -> event == EV_MEN_ESC){
+                    // Transición MENU 2 -> MENU1
                     p_task_menu_dta -> state = ST_MEN_MENU1;
-                    p_task_menu_dta->index_menu1 = 0;
+                    p_task_menu_dta -> index_menu2 = 0;
+                    p_task_menu_dta -> index_menu1 = 0;
                 }
-                else if (p_task_menu_dta->event == EV_MEN_ENTER) {
-                    // Transición MENU 2 -> MENU 3
-                	displayCharPositionWrite(0, 0);
-					displayStringWrite("Bienvenido al Menu 3");
+                else if (p_task_menu_dta -> event == EV_MEN_ENTER){
+                    if (p_task_menu_dta->index_menu2 == 0){
 
-                	p_task_menu_dta -> flag = false;
-                    p_task_menu_dta->state = ST_MEN_MENU3;
-                    p_task_menu_dta->index_menu3 = 0; // Entramos a MENU 3, iniciamos su índice
-                    if (p_task_menu_dta -> index_menu2 == 0){
-                    	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(">ON             OFF");
+                    	// gameplay(normal);
+                        }
+                    else if (p_task_menu_dta->index_menu2 == 1){
+                    	// gameplay(dificil);
                     }
-                    else if (p_task_menu_dta -> index_menu2 == 1){
-                    	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(">0 1 2 3 4 5 6 7 8 9");
-                    }
-                    else if (p_task_menu_dta -> index_menu2 == 2){
-                    	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(">LEFT          RIGHT");
-                    }
+                // La transición es a MENU 2 en ambos casos
+                p_task_menu_dta -> flag = false;
+                p_task_menu_dta -> state = ST_MEN_MENU3;
                 }
                 break;
 
@@ -290,71 +287,7 @@ void task_menu_statechart(void) {
             // =============================================================
 
             case ST_MEN_MENU3:
-
-            	if (p_task_menu_dta -> index_menu2 == 0){
-            		if (p_task_menu_dta->event == EV_MEN_NEXT){
-            			if(p_task_menu_dta -> index_menu3 == 0){
-							p_task_menu_dta->index_menu3++; // Acción: index_menu3++
-							displayCharPositionWrite(0, 2);
-							displayStringWrite(" ON            >OFF");
-            			}
-            			else if(p_task_menu_dta -> index_menu3 == 1){
-							p_task_menu_dta->index_menu3--; // Acción: index_menu3--
-							displayCharPositionWrite(0, 2);
-							displayStringWrite(">ON             OFF");
-            			}
-            		}
-
-				}
-				else if (p_task_menu_dta -> index_menu2 == 1){
-					if (p_task_menu_dta->event == EV_MEN_NEXT)
-					{
-					    displayCharPositionWrite(2 * p_task_menu_dta->index_menu3, 2);
-					    displayStringWrite(" ");
-					    if(p_task_menu_dta->index_menu3 == 9) p_task_menu_dta->index_menu3 = 0;
-					    else p_task_menu_dta->index_menu3++;
-						displayCharPositionWrite(2 * p_task_menu_dta->index_menu3, 2);
-						displayStringWrite(">"); //agregar cada > a cada numero
-					}
-
-
-				}
-				else if (p_task_menu_dta -> index_menu2 == 2){
-					if (p_task_menu_dta->event == EV_MEN_NEXT){
-						if(p_task_menu_dta -> index_menu3 == 0){
-							p_task_menu_dta->index_menu3++; // Acción: index_menu3++
-							displayCharPositionWrite(0, 2);
-							displayStringWrite(" LEFT         >RIGHT");
-						}
-						else if(p_task_menu_dta -> index_menu3 == 1){
-							p_task_menu_dta->index_menu3--; // Acción: index_menu3--
-							displayCharPositionWrite(0, 2);
-							displayStringWrite(">LEFT          RIGHT");
-						}
-					}
-				}
-
-                else if (p_task_menu_dta->event == EV_MEN_ESC) {
-                    // Transición MENU 3 -> MENU 2
-                    p_task_menu_dta->state = ST_MEN_MENU2;
-                    p_task_menu_dta->index_menu2 = 0;
-                }
-
-                else if (p_task_menu_dta->event == EV_MEN_ENTER)
-                {
-                    // Transición MENU 3 -> MENU 3
-                	if(p_task_menu_dta->index_menu2 = 0)
-					p_task_menu_dta->motores[p_task_menu_dta->index_menu1]->power = p_task_menu_dta->index_menu3;
-
-                	if(p_task_menu_dta->index_menu2 = 1)
-                	p_task_menu_dta->motores[p_task_menu_dta->index_menu1]->speed = p_task_menu_dta->index_menu3;
-
-                	if(p_task_menu_dta->index_menu2 = 2)
-                	p_task_menu_dta->motores[p_task_menu_dta->index_menu1]->spin = p_task_menu_dta->index_menu3;
-
-                	p_task_menu_dta -> flag = false;
-                    p_task_menu_dta->state = ST_MEN_MENU3;
-                }
+            		// Puntaje Actual
                 break;
 
             default:

@@ -90,6 +90,8 @@ typedef enum task_menu_ev {
 /* State of Task Menu */
 typedef enum task_menu_st {ST_MEN_XX_IDLE, ST_MEN_XX_ACTIVE} task_menu_st_t;
 
+//Para posible agregado de actuadores un posible modelo de codigo:
+/*
 typedef enum task_motor_id {ID_MOTOR_1,
 							ID_MOTOR_2}task_motor_id_t;
 
@@ -100,7 +102,7 @@ typedef struct
     int spin;           //( 0 LEFT , 1 RIGHT)
     int speed;          //(0 a 9)
 } task_motor_cfg_t;
-
+*/
 typedef struct
 {
     uint32_t tick;
@@ -108,10 +110,9 @@ typedef struct
     task_menu_ev_t event;
     bool flag;
 
-    task_motor_cfg_t*   motores;
+    //task_motor_cfg_t*   motores;
     uint8_t index_menu1;
     uint8_t index_menu2;
-    uint8_t index_menu3;
 
 } task_menu_dta_t;
 

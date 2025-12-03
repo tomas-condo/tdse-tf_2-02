@@ -44,7 +44,7 @@ extern "C" {
 #endif
 
 /********************** inclusions *******************************************/
-
+#include <stdbool.h>
 /********************** macros ***********************************************/
 #define TEST_0 (0)
 #define TEST_1 (1)
@@ -53,7 +53,10 @@ extern "C" {
 #define TEST_X (TEST_0)
 
 /********************** typedef **********************************************/
-
+typedef struct {
+	bool adc_end_of_conversion;
+	uint16_t adc_value;
+} shared_data_type;
 /********************** external data declaration ****************************/
 extern uint32_t g_app_cnt;
 extern uint32_t g_app_runtime_us;
