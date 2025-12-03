@@ -44,7 +44,9 @@
 #include "dwt.h"
 
 /* Application & Tasks includes */
+#include "app.h"
 #include "board.h"
+#include "task_adc.h"
 #include "task_sensor.h"
 #include "task_menu.h"
 #include "task_adc.h"
@@ -68,6 +70,7 @@ typedef struct {
     uint32_t WCET;			// Worst-case execution time (microseconds)
 } task_dta_t;
 
+shared_data_type shared_data;
 /********************** internal data declaration ****************************/
 const task_cfg_t task_cfg_list[]	= {
 		{task_sensor_init,	task_sensor_update, 	NULL},

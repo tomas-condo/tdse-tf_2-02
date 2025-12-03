@@ -38,11 +38,11 @@
 /********************** inclusions *******************************************/
 /* Project includes. */
 #include "main.h"
-
+//#include "stm32f1xx_hal_adc.h"
 /* Demo includes. */
 #include "logger.h"
 #include "dwt.h"
-
+//#include "task_adc.h"
 /* Application & Tasks includes. */
 #include "board.h"
 #include "app.h"
@@ -57,6 +57,7 @@
 HAL_StatusTypeDef ADC_Poll_Read(uint16_t *value);
 
 /********************** internal data definition *****************************/
+
 const char *p_task_adc 		= "Task ADC";
 
 /********************** external data declaration *****************************/
