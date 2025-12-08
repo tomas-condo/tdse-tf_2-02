@@ -1,6 +1,4 @@
-/*
- * @file   : task_gameplay.h
- */
+
 #ifndef TASK_GAMEPLAY_H_
 #define TASK_GAMEPLAY_H_
 
@@ -26,4 +24,4 @@ void task_gameplay_init(void *parameters);
 void task_gameplay_update(void *parameters);
 void gameplay_start(game_difficulty_t difficulty);
 
-#endif /* TASK_GAMEPLAY_H_ */
+#endif 
