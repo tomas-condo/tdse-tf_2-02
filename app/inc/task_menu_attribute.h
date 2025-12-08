@@ -83,7 +83,13 @@ typedef enum task_menu_ev {
 	   EV_MEN_ENTER,
 	   EV_MEN_NEXT,
 	   EV_MEN_ESC,
-	   EV_MEN_IDLE
+	   EV_MEN_IDLE,
+
+/*Eventos para gameplay*/
+		EV_BTN_AZ_PRESS, // Botón Azul
+    	EV_BTN_RO_PRESS, // Botón Rojo
+    	EV_BTN_AM_PRESS, // Botón Amarillo
+    	EV_BTN_VE_PRESS, //Botón Verde
 
    } task_menu_ev_t;
 
