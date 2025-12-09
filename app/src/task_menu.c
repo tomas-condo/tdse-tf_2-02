@@ -158,11 +158,15 @@ void task_menu_statechart(void) {
     // ---------------------------------------------------------------------
     // 1. Manejo de Eventos
     // ---------------------------------------------------------------------
+	if (task_gameplay_dta.active == true) {
+        // Opcional: Si task_gameplay acaba de terminar, recuperar control
+        return; 
+    }
     if (true == any_event_task_menu()) {
         p_task_menu_dta -> flag = true;
         p_task_menu_dta -> event = get_event_task_menu();
     }
-
+	
     // ---------------------------------------------------------------------
     // 2. Máquina de Estados (solo si hay un evento para procesar)
     // ---------------------------------------------------------------------
