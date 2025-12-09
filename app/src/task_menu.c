@@ -269,13 +269,15 @@ void task_menu_statechart(void) {
                     p_task_menu_dta -> index_menu1 = 0;
                 }
                 else if (p_task_menu_dta -> event == EV_MEN_ENTER){
-                    if (p_task_menu_dta->index_menu2 == 0){
-
-                    	// gameplay(normal);
-                        }
-                    else if (p_task_menu_dta->index_menu2 == 1){
-                    	// gameplay(dificil);
+					if (p_task_menu_dta->index_menu2 == 0){
+                    	gameplay_start(GAME_DIFF_NORMAL);
+						// gameplay(normal);
                     }
+                    else if (p_task_menu_dta->index_menu2 == 1){
+                    	gameplay_start(GAME_DIFF_HARD);
+						// gameplay(dificil);
+                    }
+                    
                 // La transición es a MENU 2 en ambos casos
                 p_task_menu_dta -> flag = false;
                 p_task_menu_dta -> state = ST_MEN_MENU3;
