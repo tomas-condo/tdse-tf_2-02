@@ -52,6 +52,7 @@
 #include "task_menu_interface.h"
 #include "task_menu.h"
 #include "display.h"
+#include "task_gameplay.h"
 
 /********************** macros and definitions *******************************/
 #define G_TASK_MEN_CNT_INI			0ul
@@ -154,7 +155,6 @@ void task_menu_statechart(void) {
     task_menu_dta_t *p_task_menu_dta;
     /* Update Task Menu Data Pointer */
     p_task_menu_dta = &task_menu_dta;
-
     // ---------------------------------------------------------------------
     // 1. Manejo de Eventos
     // ---------------------------------------------------------------------
