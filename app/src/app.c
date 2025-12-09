@@ -50,6 +50,7 @@
 #include "task_sensor.h"
 #include "task_menu.h"
 #include "task_adc.h"
+#include "task_gameplay.h"
 
 /********************** macros and definitions *******************************/
 #define G_APP_CNT_INI		0ul
@@ -76,6 +77,7 @@ const task_cfg_t task_cfg_list[]	= {
 		{task_sensor_init,	task_sensor_update, 	NULL},
 		{task_menu_init,	task_menu_update, 		NULL},
 		{task_adc_init, task_adc_update, &shared_data},
+		{task_gameplay_init,task_gameplay_update,   NULL},
 };
 
 #define TASK_QTY	(sizeof(task_cfg_list)/sizeof(task_cfg_t))
@@ -91,7 +93,7 @@ uint32_t g_app_cnt;
 uint32_t g_app_runtime_us;
 
 volatile uint32_t g_app_tick_cnt;
-
+extern volatile uint32_t g_task_gameplay_tick_cnt;
 task_dta_t task_dta_list[TASK_QTY];
 
 /********************** external functions definition ************************/
@@ -130,6 +132,8 @@ void app_init(void)
 
 	g_task_sensor_tick_cnt = G_APP_TICK_CNT_INI;
 	g_task_menu_tick_cnt = G_APP_TICK_CNT_INI;
+	g_task_gameplay_tick_cnt = G_APP_TICK_CNT_INI; 
+    
     __asm("CPSIE i");	/* enable interrupts */
 }
 
@@ -198,6 +202,7 @@ void HAL_SYSTICK_Callback(void)
 
 	g_task_sensor_tick_cnt++;
 	g_task_menu_tick_cnt++;
+	g_task_gameplay_tick_cnt++;
 }
 
 /********************** end of file ******************************************/
