@@ -19,11 +19,11 @@ La implementación del mismo se realizó utilizando los lenguajes de código C++
 # Índice General
 
 - [**Introducción general**](#introducción-general)
-  - [1.1 Análisis de necesidad y objetivos](#11-análisis-de-necesidad-y-objetivos)
-  - [1.2 Módulos e Interfaz](#12-módulos-e-interfaces-de-smartlock)
+  - [1.1 Análisi objetivos](#11-análisis-de-objetivos)
+  - [1.2 Equipo](#12-Equipo)
 - [**Introducción específica**](#introducción-específica)
   - [2.1 Requisitos](#21-requisitos)
-  - [2.2 Uso](#22-casos-de-uso)
+  - [2.2 Casos de uso](#22-casos-de-uso)
   - [2.3 Descripción de los Módulos del sistema](#23-descripción-de-los-módulos-del-sistema)
     - [2.3.1 Alimentación](#231-alimentación)
     - [2.3.2 Microcontrolador](#232-microcontrolador)
@@ -54,4 +54,114 @@ La implementación del mismo se realizó utilizando los lenguajes de código C++
 
 
 # **Introducción general** 
-## **1.1 Análisis de necesidad y objetivos**
+## **1.1 Análisis de objetivos**
+
+El objetivo del proyecto es crear un juego del estilo de simon dice parar su uso en competencias, capaz de garantizar calidad, precisión y consistencia en el proceso, bajo estándares de competencias profesionales y amateur de el juego de memoria.
+
+En el mercado argentino existen diversos productos relacionados con juegos de memoria y reflejos, desde el clásico “Simon” de Hasbro hasta juguetes electrónicos genéricos y aplicaciones móviles que imitan el mismo concepto. Estos dispositivos suelen ofrecer distintas combinaciones de luces y sonidos, pero en general son sistemas cerrados, con lógica de juego fija y sin posibilidad de modificación por parte del usuario.
+
+Como primer competidor puede mencionarse el juego electrónico comercial tipo “Simon”, que ofrece una secuencia de luces y sonidos que el jugador debe repetir. Si bien la experiencia es entretenida, el usuario no tiene acceso al hardware ni al software interno, por lo que no puede cambiar reglas, niveles de dificultad ni integrar el juego con otros sistemas. Nuestro proyecto se diferencia en que está completamente implementado sobre una plataforma de desarrollo STM32, permitiendo modificar el firmware y experimentar con nuevas funciones.
+
+Un segundo competidor lo constituyen las aplicaciones de juego de memoria para teléfonos celulares, ampliamente disponibles en tiendas digitales. Estas aplicaciones pueden ofrecer gráficos y sonidos avanzados, pero pierden el componente tangible de interactuar con botones físicos y LEDs reales, y no permiten practicar el diseño de sistemas embebidos. El presente proyecto recupera ese aspecto físico y educativo, brindando un entorno ideal para ejercitar programación en C sobre STM32 y diseño de interfaces hombre-máquina simples pero efectivas.
+
+En resumen, el mercado de juegos electrónicos de memoria es amplio y competitivo, pero la posibilidad de personalización y experimentación técnica que ofrece un prototipo basado en STM32 permite desarrollar un producto único, orientado tanto al entretenimiento como a la formación académica, destacándose además por el ajuste dinámico de brillo (LDR), el menú manejado solo con botones y la presencia de memoria EEPROM externa.
+
+
+
+## **1.2. Equipo y estructura**
+
+El Proyecto se puede visualizar en el siguiente esquematicos:
+
+ 
+
+Vemos que esta contectado un pulsador con su led designada, cada pulsador y led correspondiendo a uno de los puertos de la placa Núcleo-F103RBTX. Fisicamente una vez que se presione un pulsador se enviara una señal a la placa. El LDR tambien se contecta a la placa por su respectivo puerto enviandole información sobre el ambiente.
+
+Por otro lado el juego esta divido en varios estados donde cada uno se ve reflejado en la pantalla durante su uso. Se pueden vizualisar en el siguinte statechart:
+
+<img width="1075" height="650" alt="image" src="https://github.com/user-attachments/assets/e5fc5258-00b3-48d0-beeb-8da4056bef89" />
+
+Luego de los estados de bienvenida e instrucciones donde se muestran en el display dos mensajes para que el usuario se familiarice con el juego, el sistema entra en el menu principal donde se muestran las opciones de puntaje y juego. En la sección de puntaje se visualizan los 3 mejores puntajes historicos, y la sección de juego nos lleva a un segundo menu donde ahi se selcciona la dificultad del juego que se desea. Finalmente luego de que termine el juego se vuelve al menu principal.
+
+# **Introducción específica** 
+
+#### **2.1 Requisitos del proyecto**
+
+En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
+
+| Grupo | ID | Descripción |
+| :---- | :---- | :---- |
+| Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. |
+|  | 1.2 | El sistema permitirá al jugador repetir la secuencia mediante cuatro pulsadores asociados a los cuatro LEDs. |
+|  | 1.3 | El sistema comparará la secuencia ingresada por el jugador con la secuencia objetivo y determinará si es correcta. |
+|  | 1.4 | En caso de acierto, el sistema incrementará la longitud de la secuencia y avanzará al siguiente nivel. |
+|  | 1.5 | En caso de error, el sistema finalizará la ronda y mostrará el resultado al jugador. |
+|  | 1.6 | En modo Normal, al iniciar cada nivel se reproducirá la secuencia completa acumulada. |
+|  | 1.7 | En modo Difícil, al iniciar cada nivel solo se reproducirá el **nuevo color agregado** a la secuencia. |
+| Interfaz luminosa | 2.1 | Cada LED estará asociado a un color fijo y a un pulsador específico. |
+|  | 2.2 | Durante la reproducción de la secuencia, el LED correspondiente se encenderá de forma claramente distinguible. |
+|  | 2.3 | Al presionar un pulsador, el LED asociado se encenderá mientras dure la pulsación. |
+|  | 2.4 | El sistema implementará antirrebote por software para los cuatro pulsadores. |
+|  | 2.5 | El sistema deberá registrar pulsaciones rápidas sin perder eventos. |
+|  | 2.6 | El brillo de los LEDs se ajustará automáticamente según el valor leído en el sensor LDR. |
+| Sensor LDR | 3.1 | El sistema contará con un sensor de luz LDR conectado a una entrada analógica del STM32. |
+|  | 3.2 | El sistema leerá periódicamente el valor de la LDR mediante el ADC. |
+|  | 3.3 | El sistema ajustará el ciclo de trabajo PWM de los LEDs en función de la luminosidad ambiente. |
+| Pantalla LCD | 4.1 | El sistema contará con una pantalla LCD para mostrar información de estado. |
+|  | 4.2 | Al encender el sistema, el LCD mostrará una pantalla de bienvenida durante unos segundos. |
+|  | 4.3 | Luego de la bienvenida, el LCD mostrará una pantalla de selección de dificultad (Normal / Difícil). |
+|  | 4.4 | Durante el juego, el LCD mostrará el puntaje actual del jugador. |
+|  | 4.5 | Al apagar o finalizar el juego, el LCD mostrará una pantalla de despedida. |
+| Menú con botones | 5.1 | Todos los menús se manejarán exclusivamente con los cuatro botones del juego. |
+|  | 5.2 | Al menos un botón permitirá avanzar entre opciones y otro confirmará la selección. |
+|  | 5.3 | El sistema indicará en pantalla las opciones seleccionadas y confirmadas. |
+| Modos de juego y dificultad | 6.1 | El sistema contará al menos con dos niveles de dificultad: Normal y Difícil. |
+|  | 6.2 | La dificultad podrá afectar la velocidad de reproducción de la secuencia y/o el tiempo de respuesta permitido. |
+|  | 6.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. |
+| Persistencia y estadísticas (EEPROM) | 7.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. |
+|  | 7.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. |
+|  | 7.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. |
+|  | 7.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. |
+| Seguridad y robustez | 8.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. |
+|  | 8.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
+|  | 8.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
+
+<p align="center"><em>Tabla 2.1: Requisitos del proyecto</em></p>
+
+##** Casos de uso** 
+
+ **Caso de uso 1: El usuario juega una partida en modo clásico**
+
+| Elemento | Definición |
+| :---- | :---- |
+| Disparador | El jugador quiere iniciar una nueva partida en modo clásico (Normal o Difícil). |
+| Precondiciones | El sistema está encendido. Se ha mostrado la pantalla de bienvenida. El jugador ha seleccionado una dificultad en la pantalla correspondiente utilizando los botones del juego. Todos los LEDs están apagados y el buzzer en silencio. |
+| Flujo principal | El jugador navega el menú utilizando los botones y selecciona la opción “Nuevo juego”. El sistema genera una secuencia pseudoaleatoria inicial de un solo LED y la reproduce con luz y sonido (según el modo: secuencia completa o solo el nuevo color). El jugador repite la secuencia utilizando los cuatro pulsadores; por cada pulsación correcta se enciende el LED correspondiente y se reproduce su tono. Si el jugador ingresa correctamente toda la secuencia, el sistema incrementa la longitud en un elemento, actualiza el nivel y el puntaje y muestra el nuevo puntaje en la pantalla LCD. Este ciclo se repite hasta que el jugador comete un error o decide abandonar la partida. |
+| Flujos alternativos | a) El jugador se equivoca en alguna pulsación: el sistema reproduce un sonido de error, muestra un mensaje de “Secuencia incorrecta” en el LCD y finaliza la partida mostrando el puntaje final.  b) El jugador excede el tiempo máximo para ingresar la secuencia: el sistema considera la jugada como incorrecta, reproduce un sonido de error y finaliza la partida.  c) El jugador presiona una combinación de botones para cancelar la partida: el sistema detiene el juego, guarda el puntaje si corresponde (por ejemplo, si es un nuevo récord) y vuelve al menú principal. |
+
+<p align="center"><em>Tabla 2.2: Caso de uso 1: El usuario juega una partida</em></p>
+
+
+
+ ** Caso de uso 2: El usuario cambia la dificultad del juego**
+
+| Elemento | Definición |
+| :---- | :---- |
+| Disparador | El jugador quiere cambiar el nivel de dificultad del juego (Normal / Difícil). |
+| Precondiciones | El sistema está encendido. No hay una partida en curso. El juego se encuentra en el menú principal o en el menú de configuración. |
+| Flujo principal | El jugador accede a la pantalla de selección de dificultad utilizando los botones del juego. En el LCD se muestran las opciones “Normal” y “Difícil”. Mediante uno o más botones se avanza entre las opciones y se selecciona la deseada con otro botón (por ejemplo, “Confirmar”). El sistema almacena la nueva dificultad seleccionada (posiblemente en EEPROM), actualiza los parámetros internos (forma de reproducir la secuencia, tiempos, etc.) y vuelve al menú principal mostrando la dificultad activa. |
+| Flujos alternativos | a) El jugador sale del menú de dificultad sin confirmar ningún cambio (por ejemplo, con una combinación de botones): el sistema mantiene la dificultad previamente establecida.  b) Se produce una lectura inválida de los botones (por rebote o secuencia inconsistente): el sistema descarta la entrada y solicita al usuario que vuelva a seleccionar, manteniendo el estado anterior. |
+
+<p align="center"><em>Tabla 2.3: Caso de uso 2: El usuario cambia la dificultad del juego</em></p>
+
+
+
+ ** Caso de uso 3: El usuario consulta o reinicia el puntaje máximo**
+
+| Elemento | Definición |
+| :---- | :---- |
+| Disparador | El jugador quiere consultar o reiniciar el puntaje máximo almacenado en la memoria EEPROM. |
+| Precondiciones | El sistema está encendido. No hay una partida en curso. El juego se encuentra en el menú principal. La EEPROM ha sido inicializada correctamente. |
+| Flujo principal | El jugador navega hasta el menú de “Estadísticas” utilizando los mismos botones del juego. El sistema lee de la EEPROM el puntaje máximo almacenado y lo muestra en la pantalla LCD, junto con el último puntaje obtenido (si se desea). El jugador puede desplazarse con los botones hasta la opción “Reiniciar récord” y seleccionarla con el botón de confirmación. El sistema solicita confirmación adicional (por ejemplo, mostrando “¿Confirmar borrado? Sí/No”). Si el jugador confirma, el sistema borra o reinicia el valor de récord en la EEPROM (por ejemplo, a 0) y muestra un mensaje indicando que el récord fue reiniciado correctamente. |
+| Flujos alternativos | a) El jugador decide no reiniciar el récord al momento de la confirmación (por ejemplo, seleccionando “No” con los botones): el sistema conserva el puntaje máximo y vuelve al menú anterior.  b) Se produce un error en el acceso a la EEPROM (por ejemplo, fallo de comunicación): el sistema muestra un mensaje de error en el LCD, reproduce un sonido de falla, descarta la operación de borrado y deshabilita temporalmente la opción de reinicio hasta que se reinicie el dispositivo o se recupere la condición. |
+
+<p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta o reinicia el puntaje máximo</em></p>
