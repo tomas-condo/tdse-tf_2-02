@@ -25,23 +25,20 @@ La implementación del mismo se realizó utilizando los lenguajes de código C++
   - [2.1 Requisitos](#21-requisitos)
   - [2.2 Casos de uso](#22-casos-de-uso)
   - [2.3 Descripción de los Módulos del sistema](#23-descripción-de-los-módulos-del-sistema)
-    - [2.3.1 Alimentación](#231-alimentación)
+    - [2.3.1 Memoria](#231-memoria)
     - [2.3.2 Microcontrolador](#232-microcontrolador)
     - [2.3.3 LDR](#234-LDR)
     - [2.3.4 Pantalla Led](#235-Pantalla-Led)
     - [2.3.5 Pulsadores](#236-Pulsadores)
 - [**Diseño e Implementación**](#diseño-e-implementación)
   - [3.1 Diseño del Hardware](#31-diseño-del-hardware)
-    - [3.1.1 Diseño de la alimentación](#311-diseño-de-la-alimentación)
+    - [3.1.1 Diseño de la memoria](#311-diseño-de-la-alimentación)
     - [3.1.2 Diseño de los indicadores e interruptores](#312-diseño-de-los-indicadores-e-interruptores)
-    - [3.1.3 Diseño del LDR](#313-diseño-del-LDR)
-    - [3.1.4 Diseño del hardware con la placa NUCLEO-F103RBTX](#318-diseño-del-hardware-con-la-placa-nucleo-F103RBTX)
   - [3.2 Firmware del Juego](#32-firmware-del-juego)
-    - [3.2.1 Módulo pantalla led](#321-módulo-pantalla-led)
-    - [3.2.2 Módulo pulsadores](#322-módulo-pulsadores)
-    - [3.2.3 Módulo LDR](#323-módulo-ldr)
-    - [3.2.4 Módulo System](#327-módulo-system)
-  - [3.3 Diseño de la aplicación y manejo de paquetes](#35-diseño-de-la-aplicación-y-manejo-de-paquetes)
+    - [3.2.1 Módulo display](#321-módulo-display)
+    - [3.2.2 Módulo LDR](#322-módulo-ldr)
+    - [3.2.3 Módulo Menu](#323-módulo-Menu)
+    - [3.2.4 Módulo Gameplay](#327-módulo-gamplay)
 - [**Ensayos y Resultados**](#ensayos-y-resultados)
   - [4.1 Pruebas funcionales de funcionamiento](#41-pruebas-funcionales-de-funcionamiento)
   - [4.2 Cumplimiento de requisitos](#42-cumplimiento-de-requisitos)
@@ -165,3 +162,184 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 | Flujos alternativos | a) El jugador decide no reiniciar el récord al momento de la confirmación (por ejemplo, seleccionando “No” con los botones): el sistema conserva el puntaje máximo y vuelve al menú anterior.  b) Se produce un error en el acceso a la EEPROM (por ejemplo, fallo de comunicación): el sistema muestra un mensaje de error en el LCD, reproduce un sonido de falla, descarta la operación de borrado y deshabilita temporalmente la opción de reinicio hasta que se reinicie el dispositivo o se recupere la condición. |
 
 <p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta o reinicia el puntaje máximo</em></p>
+
+
+## **2.3 Descripción de los Módulos del sistema**
+## **2.3.1 Memoria**
+
+El sistema utiliza una memoria At24c256 que se muestra en la siguiente imagen:
+
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
+**Figura 2.3.1**: Memoria At24c256.
+
+Tiene comunicación I2c y dispone de 256 Kb, organizados en 32.768.
+
+## **2.3.2 Microcontrolador**
+Como controlador principal del sistema se utiliza la placa NUCLEO-F103RBTX. La elección de esta placa recayó en la disponibilidad ya que fue la ofrecida por los profesores, teniendo además como requerimiento la cantidad de memoria, pines y periféricos de la placa. La placa se programó en C++ a través de la plataforma STMCUBE32IDE.
+
+<img width="700" height="500" alt="image" src="https://github.com/user-attachments/assets/a657bf6e-783d-4a81-aee4-6a8a7ba27641" />
+**Figura 2.3.2**: Placa NUCLEO-F103RBTX.
+
+## **2.3.3 LDR**
+
+Utilizamos el LDR :
+
+**Figura 2.3.3**: LDR.
+
+## **2.3.4 Pantalla Led**
+Para el display usamos la pantalla Lcd 1602 Hd44780 con Backlight Azul de la siguiente imagen:
+
+<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/925e7613-ac74-4276-904e-c581b1f05a5e" />
+**Figura 2.3.4**: Display Lcd 1602 Hd44780.
+
+## **2.3.4 Pulsadores**
+Finalmente utilizamos los siguientes pulsadores como dispositivos de entrada para que utilice el usuario: 
+
+<img width="360" height="207" alt="image" src="https://github.com/user-attachments/assets/62e9b6a6-9033-4ab8-8a83-9f85e7107e29" />
+**Figura 2.3.5**: Pulsadores.
+
+
+# **CAPÍTULO 3** 
+
+# **Diseño e implementación** 
+
+## **3.1 Diseño del Hardware** 
+
+Para el diseño y montaje de la placa se siguio el siguiente esquematico:
+
+<img width="1126" height="1107" alt="image" src="https://github.com/user-attachments/assets/3990b17a-3344-4455-83da-e05cc1961415" />
+**Figura 3.1a**: Esquematico hadrware.
+
+Y luego lo soldamos a una placa y lo juntamos con la placa nucelo
+
+**Figura 3.1b**: Montaje.
+
+
+## **3.1.1 Diseño de la memoria** 
+
+En la figura 3.1.1 se muestra el circuito esquemático del hardware de la memoria con sus conexiones a tierra y vcc, y tambien sus pines SCL Y SDA conectados a la placa nucleo.
+
+**Figura 3.1.1**: Memoria del sistema.
+
+## **3.1.2 Diseño de los indicadores e interruptores** 
+
+En la figura 3.1.2 se ve el esquematico de como se conectan los pulsadores, luces led y LDR a la placa nucleo.
+
+<img width="649" height="729" alt="image" src="https://github.com/user-attachments/assets/d8b3c91b-32d7-4609-9030-e4f96dee3a26" />
+**Figura 3.1.2**: Esquematico para pulsadores, LDR, y luces led del sistema.
+
+
+## **3.2 Firmware del *juego*** 
+
+Para la impementacion del firmaware del juego utilizamos el lenguaje C++. Con el y utilizando archivos usados para otros trabajos previos pudimos programarlo para su funcionamiento.
+
+## **3.2.1 Módulo display** 
+Este módulo se encarda de mostrarle al usuario la informacion del estado del juego u menu utilizando el display.
+
+
+**Figura 3.2.1**: 
+
+
+## **3.2.2 Módulo LDR** 
+Este modulo se encarga de a partir de la luz del ambiente detectada por el LDR dictaminar la optima luz de brillo para el display.
+
+
+
+**Figura 3.2.2**:
+
+
+
+## **3.2.3 Módulo Menu** 
+Este modulo se usa para atravesar los distintos menus del juego, es el mas complejo ya que se encarga de pasar de menu a menu, y tomar los inputs del usurio para que este pueda hacer lo que desee, sea ver el puntaje o jugar con el modo de juego que desee.
+
+**Figura 3.2.3**: 
+
+## **3.2.4 Módulo Gameplay**
+En este modulo podemos ver el gameplay en su de los distintos modos de juego como tambien como luego de terminar de jugar se pasa a memoria el puntaje que pueda considerarse lo suficientemente bueno como para ser mostrado en el ranking.
+
+**Figura 3.2.4**:
+
+
+# **CAPÍTULO 4** 
+
+# **Ensayos y resultados** 
+
+## **4.1 Pruebas funcionales de funcionamiento**  
+
+
+## **4.2 Cumplimiento de requisitos**  
+
+Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciales, agregando el estado de los mismos. Esto se observa en la tabla 4.2.
+| Grupo | ID | Descripción | Estado |
+| :---- | :---- | :---- | :---- |
+| Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. |
+|  | 1.2 | El sistema permitirá al jugador repetir la secuencia mediante cuatro pulsadores asociados a los cuatro LEDs. |
+|  | 1.3 | El sistema comparará la secuencia ingresada por el jugador con la secuencia objetivo y determinará si es correcta. |
+|  | 1.4 | En caso de acierto, el sistema incrementará la longitud de la secuencia y avanzará al siguiente nivel. |
+|  | 1.5 | En caso de error, el sistema finalizará la ronda y mostrará el resultado al jugador. |
+|  | 1.6 | En modo Normal, al iniciar cada nivel se reproducirá la secuencia completa acumulada. |
+|  | 1.7 | En modo Difícil, al iniciar cada nivel solo se reproducirá el **nuevo color agregado** a la secuencia. |
+| Interfaz luminosa | 2.1 | Cada LED estará asociado a un color fijo y a un pulsador específico. |
+|  | 2.2 | Durante la reproducción de la secuencia, el LED correspondiente se encenderá de forma claramente distinguible. |
+|  | 2.3 | Al presionar un pulsador, el LED asociado se encenderá mientras dure la pulsación. |
+|  | 2.4 | El sistema implementará antirrebote por software para los cuatro pulsadores. |
+|  | 2.5 | El sistema deberá registrar pulsaciones rápidas sin perder eventos. |
+|  | 2.6 | El brillo de los LEDs se ajustará automáticamente según el valor leído en el sensor LDR. |
+| Sensor LDR | 3.1 | El sistema contará con un sensor de luz LDR conectado a una entrada analógica del STM32. |
+|  | 3.2 | El sistema leerá periódicamente el valor de la LDR mediante el ADC. |
+|  | 3.3 | El sistema ajustará el ciclo de trabajo PWM de los LEDs en función de la luminosidad ambiente. |
+| Pantalla LCD | 4.1 | El sistema contará con una pantalla LCD para mostrar información de estado. |
+|  | 4.2 | Al encender el sistema, el LCD mostrará una pantalla de bienvenida durante unos segundos. |
+|  | 4.3 | Luego de la bienvenida, el LCD mostrará una pantalla de selección de dificultad (Normal / Difícil). |
+|  | 4.4 | Durante el juego, el LCD mostrará el puntaje actual del jugador. |
+|  | 4.5 | Al apagar o finalizar el juego, el LCD mostrará una pantalla de despedida. |
+| Menú con botones | 5.1 | Todos los menús se manejarán exclusivamente con los cuatro botones del juego. |
+|  | 5.2 | Al menos un botón permitirá avanzar entre opciones y otro confirmará la selección. |
+|  | 5.3 | El sistema indicará en pantalla las opciones seleccionadas y confirmadas. |
+| Modos de juego y dificultad | 6.1 | El sistema contará al menos con dos niveles de dificultad: Normal y Difícil. |
+|  | 6.2 | La dificultad podrá afectar la velocidad de reproducción de la secuencia y/o el tiempo de respuesta permitido. |
+|  | 6.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. |
+| Persistencia y estadísticas (EEPROM) | 7.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. |
+|  | 7.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. |
+|  | 7.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. |
+|  | 7.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. |
+| Seguridad y robustez | 8.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. |
+|  | 8.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
+|  | 8.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
+
+**Tabla 4.2**: Requisitos del proyecto y estados de cumplimiento.
+
+Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio.
+
+## **4.3 Comparación con otros sistemas similares**   
+
+
+
+## **4.4 Documentación del desarrollo realizado**
+
+La tabla 4.4 muestra la documentación del desarrollo de este proyecto.
+| Nombre                 | Fecha de Finalización     | Referencia         |
+|------------------------|---------------------------|--------------------|
+| Trabajo Práctico 1    | 11 de Octubre del 2024    | README_TP1.md      |
+| Trabajo Práctico 2    | 17 de Octubre del 2024    | README_TP2.md      |
+| Trabajo Práctico 3    | 17 de Noviembre del 2024  | README_TP3.md      |
+| Requisitos y casos   | 18 de Noviembre del 2024  | Readme_requisitos_y_casos.md      |
+| Informe de Avance   | 29 de Noviembre del 2024  | Informe de Avance del Trabajo Final.md      |
+| Trabajo Práctico Final | 9 de Diciembre del 2024   | README_TP_FINAL.md |
+| Memoria del trabajo | 13 de Diciembre del 2024   | Memoria del trabajo final.md |
+
+**Tabla 4.4**: Desarrollo del proyecto.
+
+# **CAPÍTULO 5** 
+
+# **Conclusiones** 
+
+## **5.1 Resultados obtenidos**
+
+ 
+## **5.2 Próximos pasos** 
+
+
+# **Bibliografía** 
+
+
