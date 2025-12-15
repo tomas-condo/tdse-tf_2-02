@@ -39,6 +39,7 @@ La implementación del mismo se realizó utilizando los lenguajes de código C++
     - [3.2.2 Módulo LDR](#322-módulo-ldr)
     - [3.2.3 Módulo Menu](#323-módulo-Menu)
     - [3.2.4 Módulo Gameplay](#327-módulo-gamplay)
+    - [3.2.5 Módulo Sensores](#327-módulo-sensores)
 - [**Ensayos y Resultados**](#ensayos-y-resultados)
   - [4.1 Pruebas funcionales de funcionamiento](#41-pruebas-funcionales-de-funcionamiento)
   - [4.2 Cumplimiento de requisitos](#42-cumplimiento-de-requisitos)
@@ -128,7 +129,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 
 <p align="center"><em>Tabla 2.1: Requisitos del proyecto</em></p>
 
-##** Casos de uso** 
+## ** Casos de uso** 
 
  **Caso de uso 1: El usuario juega una partida en modo clásico**
 
@@ -243,31 +244,76 @@ En la figura 3.1.2 se ve el esquematico de como se conectan los pulsadores, luce
 Para la impementacion del firmaware del juego utilizamos el lenguaje C++. Con el y utilizando archivos usados para otros trabajos previos pudimos programarlo para su funcionamiento.
 
 ## **3.2.1 Módulo display** 
-Este módulo se encarda de mostrarle al usuario la informacion del estado del juego u menu utilizando el display.
+Este módulo se encarda de mostrarle al usuario la informacion del estado del juego u menu utilizando el display. Lo primero que hace este moódulo es generar las conexiones de la placa experimental con el display como se muestra en la siguiente figura: 
+<img width="665" height="283" alt="image" src="https://github.com/user-attachments/assets/bca28950-2379-4853-8c99-fcfa59e57d7d" />
+**Figura 3.2.1.a**: Conexiones de pines
 
+Con esas conexiones se realiza un data bus para que la informacion pueda ser transmitida al display:
+<img width="552" height="725" alt="image" src="https://github.com/user-attachments/assets/d4a41a73-12b8-4d5a-847a-f2ca6c641509" />
+**Figura 3.2.1.b**: Data Bus
 
-**Figura 3.2.1**: 
+<img width="472" height="746" alt="image" src="https://github.com/user-attachments/assets/592fd532-e6b3-409d-acd4-32b77b594d04" />
+**Figura 3.2.1.c**: Logica del display
 
+Y luego finalmente dependiendo del estado utiliza el tipo de función **displayCodeWrite** para mostrar en el display la pantalla deseada. 
 
-## **3.2.2 Módulo LDR** 
-Este modulo se encarga de a partir de la luz del ambiente detectada por el LDR dictaminar la optima luz de brillo para el display.
+## **3.2.2 Módulo Memoria** 
+Este modulo se encarga de a partir de los datos adquiridos guardarlo a la memoria EEPROM utilizada.
 
 
 
 **Figura 3.2.2**:
 
-
-
 ## **3.2.3 Módulo Menu** 
 Este modulo se usa para atravesar los distintos menus del juego, es el mas complejo ya que se encarga de pasar de menu a menu, y tomar los inputs del usurio para que este pueda hacer lo que desee, sea ver el puntaje o jugar con el modo de juego que desee.
 
-**Figura 3.2.3**: 
+<img width="595" height="650" alt="image" src="https://github.com/user-attachments/assets/3063c507-be19-461a-a3a5-0cbb49dc899f" />
+**Figura 3.2.3.a**: Menu inicial
+
+<img width="457" height="451" alt="image" src="https://github.com/user-attachments/assets/7e953a48-337c-46ba-8d72-411874d5cefc" />
+**Figura 3.2.3.b**: Segundo menu elección entre Juego y puntaje
+
+<img width="660" height="621" alt="image" src="https://github.com/user-attachments/assets/2249eb3f-5650-4055-9e25-7c03506e8bb2" />
+**Figura 3.2.3.c**: Trasición a menu de juego u puntajes
+
+<img width="467" height="705" alt="image" src="https://github.com/user-attachments/assets/740c5fac-0ab0-441e-9040-94a016c48955" />
+**Figura 3.2.3.d**: Menu elección de juego
+
+Para todos los menus se sigue la misma logica, toma los datos que introduce el usuario a base de los pulsadores, siendo asignados cada color como una opcion, ENTER, NEXT, y ESC donde enter se usa para introducir la opción deseada, next para cambiar de selección, y esc para volcer al menu anterior. De esa manera moviendo un indice que cambia entre las opciones del menu en el que actualmente esta el usaurio.
 
 ## **3.2.4 Módulo Gameplay**
 En este modulo podemos ver el gameplay en su de los distintos modos de juego como tambien como luego de terminar de jugar se pasa a memoria el puntaje que pueda considerarse lo suficientemente bueno como para ser mostrado en el ranking.
 
-**Figura 3.2.4**:
 
+<img width="766" height="578" alt="image" src="https://github.com/user-attachments/assets/67f0e6a7-ffab-4aca-8efc-6af20b910081" />
+**Figura 3.2.4.a**: Logica para mostrar la secuencia
+
+El juego dependiendo de que modo de juego es el qeu selecciono el usuario, sea este normal o dificl, muestra la secuencia añadiendo un color más por nivel para el modo de juego normal, o solo muestra el nuevo color para el dificil. Y luego se muestra en el display un mensaje, "Tu Turno" para que el jugador sepa que ahora puede volver a introducir la secuencia. Se utilizan la función led_control para prender y apagar las luces led correspondientes, y para añadir un nuevo color a la secuencia se usa game.sequence[game.seq_length] = rand() % 4, que a medida que se vaya aumentando el nivel se eligira aleatoriamente un nuevo color para la secuencia.
+
+<img width="427" height="448" alt="image" src="https://github.com/user-attachments/assets/253b4d48-8132-4f8a-9c83-2aa85d643a96" />
+**Figura 3.2.4.b**: Introducción de secuencia por el usuario
+
+Aqui pasa al estado de input donde aguarda a que el usuario introduzca la secuencia correcta, y una vez que sea presionado un boton se mandara el estado a ser corroborado de que fue el correcto.
+
+
+<img width="345" height="225" alt="image" src="https://github.com/user-attachments/assets/0a79ee43-c06c-40b0-b6cc-d2f880938636" />
+**Figura 3.2.4.c**: Chequeo de secuencia
+
+Aqui se pasa a revisar luego de cada input si lo introducido por el usaurio es correcto, si introdujo bien la secuencia se pasara de nivel y comenzara el ciclo nuevamente, en cmabio si no es asi pasara al estado de game over.
+
+<img width="482" height="518" alt="image" src="https://github.com/user-attachments/assets/db4af8e0-6c39-412f-a7d9-ae81273f5153" />
+**Figura 3.2.4.d**: Estado de GAME OVER
+
+Finalmente, luego de que el usuario haya introducido mal la secuencia el juego terminara, se mostrara su puntuación final y como se compara con los top 3 puntajes y se volvera al menu principal.
+
+## **3.2.5 Módulo Sensores**
+Este modulo se encarga de que sea minimizar el rebote y registrar los inputs del usuario. Decimos que cuando el sietema esta en estado idle el boton esta arriba, y luego de qeu es presionado pasara por los eventos, falling, down, y rising en ese orden.
+
+<img width="483" height="592" alt="image" src="https://github.com/user-attachments/assets/7098b785-2301-4527-b962-dde13d69d5bc" />
+**Figura 3.2.5.a**: Estados boton abajo y cayendo 
+
+<img width="448" height="357" alt="image" src="https://github.com/user-attachments/assets/8747c982-5afa-4bdf-90a2-1cdcc0d0598e" />
+**Figura 3.2.5.b**: Estados boton subiendo
 
 # **CAPÍTULO 4** 
 
@@ -327,11 +373,7 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 
 Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto.
 
-## **4.3 Comparación con otros sistemas similares**   
-
-
-
-## **4.4 Documentación del desarrollo realizado**
+## **4.3 Documentación del desarrollo realizado**
 
 <table><thead>
   <tr>
@@ -378,7 +420,7 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 </tbody>
 </table>
 
-**Tabla 4.4**: Desarrollo del proyecto.
+**Tabla 4.3**: Desarrollo del proyecto.
 
 # **CAPÍTULO 5** 
 
@@ -389,6 +431,7 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
  
 ## **5.2 Próximos pasos** 
 
+Para continuar este proyecto podemos rediseñar la interfaz del usuario para que con mayor presupuesto podamos agregar una caracasa exterior y botones más grandes que sean más satisfactorios para presionar y asi brindar una mejor experiencia al usuario. Tambien consideramos agregar el sonido que no pudimos incluir por restricciones de tiempo.
 
 # **Bibliografía** 
 
