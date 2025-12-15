@@ -84,7 +84,6 @@ Luego de los estados de bienvenida e instrucciones donde se muestran en el displ
 #### **2.1 Requisitos del proyecto**
 
 En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
-
 | Grupo | ID | Descripción |
 | :---- | :---- | :---- |
 | Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. |
@@ -111,16 +110,21 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 | Menú con botones | 5.1 | Todos los menús se manejarán exclusivamente con los cuatro botones del juego. |
 |  | 5.2 | Al menos un botón permitirá avanzar entre opciones y otro confirmará la selección. |
 |  | 5.3 | El sistema indicará en pantalla las opciones seleccionadas y confirmadas. |
-| Modos de juego y dificultad | 6.1 | El sistema contará al menos con dos niveles de dificultad: Normal y Difícil. |
-|  | 6.2 | La dificultad podrá afectar la velocidad de reproducción de la secuencia y/o el tiempo de respuesta permitido. |
-|  | 6.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. |
-| Persistencia y estadísticas (EEPROM) | 7.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. |
-|  | 7.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. |
-|  | 7.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. |
-|  | 7.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. |
-| Seguridad y robustez | 8.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. |
-|  | 8.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
-|  | 8.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
+| Audio | 6.1 | El sistema contará con un buzzer para producir señales sonoras. |
+|  | 6.2 | Cada color del juego tendrá asignado un tono característico reproducido por el buzzer. |
+|  | 6.3 | El sistema reproducirá una melodía corta al superar un nivel. |
+|  | 6.4 | El sistema reproducirá una secuencia de error cuando el jugador falle la secuencia. |
+|  | 6.5 | El sistema podrá emitir sonidos breves al navegar por el menú. |
+| Modos de juego y dificultad | 7.1 | El sistema contará al menos con dos niveles de dificultad: Normal y Difícil. |
+|  | 7.2 | La dificultad podrá afectar la velocidad de reproducción de la secuencia y/o el tiempo de respuesta permitido. |
+|  | 7.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. |
+| Persistencia y estadísticas (EEPROM) | 8.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. |
+|  | 8.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. |
+|  | 8.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. |
+|  | 8.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. |
+| Seguridad y robustez | 9.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. |
+|  | 9.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
+|  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
 
 <p align="center"><em>Tabla 2.1: Requisitos del proyecto</em></p>
 
@@ -182,8 +186,9 @@ Como controlador principal del sistema se utiliza la placa NUCLEO-F103RBTX. La e
 
 ## **2.3.3 LDR**
 
-Utilizamos el LDR :
+Utilizamos el sensor LDR Gl5539 de la siguiente imagen: 
 
+<img width="442" height="500" alt="image" src="https://github.com/user-attachments/assets/0886f18a-fa2f-44a9-8f7c-94493d16a883" />
 **Figura 2.3.3**: LDR.
 
 ## **2.3.4 Pantalla Led**
@@ -272,44 +277,51 @@ En este modulo podemos ver el gameplay en su de los distintos modos de juego com
 Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciales, agregando el estado de los mismos. Esto se observa en la tabla 4.2.
 | Grupo | ID | Descripción | Estado |
 | :---- | :---- | :---- | :---- |
-| Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. |
-|  | 1.2 | El sistema permitirá al jugador repetir la secuencia mediante cuatro pulsadores asociados a los cuatro LEDs. |
-|  | 1.3 | El sistema comparará la secuencia ingresada por el jugador con la secuencia objetivo y determinará si es correcta. |
-|  | 1.4 | En caso de acierto, el sistema incrementará la longitud de la secuencia y avanzará al siguiente nivel. |
-|  | 1.5 | En caso de error, el sistema finalizará la ronda y mostrará el resultado al jugador. |
-|  | 1.6 | En modo Normal, al iniciar cada nivel se reproducirá la secuencia completa acumulada. |
-|  | 1.7 | En modo Difícil, al iniciar cada nivel solo se reproducirá el **nuevo color agregado** a la secuencia. |
-| Interfaz luminosa | 2.1 | Cada LED estará asociado a un color fijo y a un pulsador específico. |
-|  | 2.2 | Durante la reproducción de la secuencia, el LED correspondiente se encenderá de forma claramente distinguible. |
-|  | 2.3 | Al presionar un pulsador, el LED asociado se encenderá mientras dure la pulsación. |
-|  | 2.4 | El sistema implementará antirrebote por software para los cuatro pulsadores. |
-|  | 2.5 | El sistema deberá registrar pulsaciones rápidas sin perder eventos. |
-|  | 2.6 | El brillo de los LEDs se ajustará automáticamente según el valor leído en el sensor LDR. |
-| Sensor LDR | 3.1 | El sistema contará con un sensor de luz LDR conectado a una entrada analógica del STM32. |
-|  | 3.2 | El sistema leerá periódicamente el valor de la LDR mediante el ADC. |
-|  | 3.3 | El sistema ajustará el ciclo de trabajo PWM de los LEDs en función de la luminosidad ambiente. |
-| Pantalla LCD | 4.1 | El sistema contará con una pantalla LCD para mostrar información de estado. |
-|  | 4.2 | Al encender el sistema, el LCD mostrará una pantalla de bienvenida durante unos segundos. |
-|  | 4.3 | Luego de la bienvenida, el LCD mostrará una pantalla de selección de dificultad (Normal / Difícil). |
-|  | 4.4 | Durante el juego, el LCD mostrará el puntaje actual del jugador. |
-|  | 4.5 | Al apagar o finalizar el juego, el LCD mostrará una pantalla de despedida. |
-| Menú con botones | 5.1 | Todos los menús se manejarán exclusivamente con los cuatro botones del juego. |
-|  | 5.2 | Al menos un botón permitirá avanzar entre opciones y otro confirmará la selección. |
-|  | 5.3 | El sistema indicará en pantalla las opciones seleccionadas y confirmadas. |
-| Modos de juego y dificultad | 6.1 | El sistema contará al menos con dos niveles de dificultad: Normal y Difícil. |
-|  | 6.2 | La dificultad podrá afectar la velocidad de reproducción de la secuencia y/o el tiempo de respuesta permitido. |
-|  | 6.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. |
-| Persistencia y estadísticas (EEPROM) | 7.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. |
-|  | 7.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. |
-|  | 7.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. |
-|  | 7.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. |
-| Seguridad y robustez | 8.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. |
-|  | 8.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
-|  | 8.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
+| Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. | Completo |
+|  | 1.2 | El sistema permitirá al jugador repetir la secuencia mediante cuatro pulsadores asociados a los cuatro LEDs. | Completo |
+|  | 1.3 | El sistema comparará la secuencia ingresada por el jugador con la secuencia objetivo y determinará si es correcta. | Completo |
+|  | 1.4 | En caso de acierto, el sistema incrementará la longitud de la secuencia y avanzará al siguiente nivel. | Completo |
+|  | 1.5 | En caso de error, el sistema finalizará la ronda y mostrará el resultado al jugador. | Completo |
+|  | 1.6 | En modo Normal, al iniciar cada nivel se reproducirá la secuencia completa acumulada. | Completo |
+|  | 1.7 | En modo Difícil, al iniciar cada nivel solo se reproducirá el **nuevo color agregado** a la secuencia. | Completo |
+| Interfaz luminosa | 2.1 | Cada LED estará asociado a un color fijo y a un pulsador específico. | Completo |
+|  | 2.2 | Durante la reproducción de la secuencia, el LED correspondiente se encenderá de forma claramente distinguible. | Completo |
+|  | 2.3 | Al presionar un pulsador, el LED asociado se encenderá mientras dure la pulsación. | Completo |
+|  | 2.4 | El sistema implementará antirrebote por software para los cuatro pulsadores. | Completo |
+|  | 2.5 | El sistema deberá registrar pulsaciones rápidas sin perder eventos. | Completo |
+|  | 2.6 | El brillo de los LEDs se ajustará automáticamente según el valor leído en el sensor LDR. | Pendiente |
+| Sensor LDR | 3.1 | El sistema contará con un sensor de luz LDR conectado a una entrada analógica del STM32. | Completo |
+|  | 3.2 | El sistema leerá periódicamente el valor de la LDR mediante el ADC. | Completo |
+|  | 3.3 | El sistema ajustará el ciclo de trabajo PWM de los LEDs en función de la luminosidad ambiente. | Completo |
+| Pantalla LCD | 4.1 | El sistema contará con una pantalla LCD para mostrar información de estado. | Completo |
+|  | 4.2 | Al encender el sistema, el LCD mostrará una pantalla de bienvenida durante unos segundos. | Completo |
+|  | 4.3 | Luego de la bienvenida, el LCD mostrará una pantalla de selección de dificultad (Normal / Difícil). | Completo |
+|  | 4.4 | Durante el juego, el LCD mostrará el puntaje actual del jugador. | Completo |
+|  | 4.5 | Al apagar o finalizar el juego, el LCD mostrará una pantalla de despedida. | Completo |
+| Menú con botones | 5.1 | Todos los menús se manejarán exclusivamente con los cuatro botones del juego. | Completo |
+|  | 5.2 | Al menos un botón permitirá avanzar entre opciones y otro confirmará la selección. | Completo |
+|  | 5.3 | El sistema indicará en pantalla las opciones seleccionadas y confirmadas. | Completo |
+| Audio | 6.1 | El sistema contará con un buzzer para producir señales sonoras. | Cancelado |
+|  | 6.2 | Cada color del juego tendrá asignado un tono característico reproducido por el buzzer. | Cancelado |
+|  | 6.3 | El sistema reproducirá una melodía corta al superar un nivel. | Cancelado |
+|  | 6.4 | El sistema reproducirá una secuencia de error cuando el jugador falle la secuencia. | Cancelado |
+|  | 6.5 | El sistema podrá emitir sonidos breves al navegar por el menú. | Cancelado |
+| Modos de juego y dificultad | 7.1 | El sistema contará al menos con dos niveles de dificultad: Normal y Difícil. | Completo |
+|  | 7.2 | La dificultad podrá afectar la velocidad de reproducción de la secuencia y/o el tiempo de respuesta permitido. | Completo |
+|  | 7.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. | Completo |
+| Persistencia y estadísticas (EEPROM) | 8.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. | Pendiente |
+|  | 8.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. | Pendiente |
+|  | 8.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. | Pendiente |
+|  | 8.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. | Pendiente |
+| Seguridad y robustez | 9.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. | Completo |
+|  | 9.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. | Completo |
+|  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. | Completo |
+
+<p align="center"><em>Tabla 2.1: Requisitos del proyecto</em></p>
 
 **Tabla 4.2**: Requisitos del proyecto y estados de cumplimiento.
 
-Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio.
+Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto.
 
 ## **4.3 Comparación con otros sistemas similares**   
 
@@ -317,16 +329,50 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 
 ## **4.4 Documentación del desarrollo realizado**
 
-La tabla 4.4 muestra la documentación del desarrollo de este proyecto.
-| Nombre                 | Fecha de Finalización     | Referencia         |
-|------------------------|---------------------------|--------------------|
-| Trabajo Práctico 1    | 11 de Octubre del 2024    | README_TP1.md      |
-| Trabajo Práctico 2    | 17 de Octubre del 2024    | README_TP2.md      |
-| Trabajo Práctico 3    | 17 de Noviembre del 2024  | README_TP3.md      |
-| Requisitos y casos   | 18 de Noviembre del 2024  | Readme_requisitos_y_casos.md      |
-| Informe de Avance   | 29 de Noviembre del 2024  | Informe de Avance del Trabajo Final.md      |
-| Trabajo Práctico Final | 9 de Diciembre del 2024   | README_TP_FINAL.md |
-| Memoria del trabajo | 13 de Diciembre del 2024   | Memoria del trabajo final.md |
+<table><thead>
+  <tr>
+    <th>Elemento</th>
+    <th>Referencia</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td>Presentación del proyecto</td>
+    <td>Capı́tulo 1</td>
+  </tr>
+  <tr>
+    <td>Listado de requisitos</td>
+    <td>Tabla 2.1</td>
+  </tr>
+  <tr>
+    <td>Casos de uso del proyecto</td>
+    <td>Tablas 2.2 a 2.3</td>
+  </tr>
+  <tr>
+    <td>Diagrama en bloques del sistema</td>
+    <td>Figura 3.1</td>
+  </tr>
+  <tr>
+    <td>Lista de señales</td>
+    <td>Tabla 3.1</td>
+  </tr>
+  <tr>
+    <td>Implementación del hardware</td>
+    <td>Sección 3.1</td>
+  </tr>
+  <tr>
+    <td>Módulos de software</td>
+    <td>Sección 3.2</td>
+  </tr>
+  <tr>
+    <td>Cumplimiento de requisitos</td>
+    <td>Tabla 4.1</td>
+  </tr>
+  <tr>
+    <td>Conclusiones finales</td>
+    <td>Capı́tulo 5</td>
+  </tr>
+</tbody>
+</table>
 
 **Tabla 4.4**: Desarrollo del proyecto.
 
