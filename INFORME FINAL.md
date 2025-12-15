@@ -175,6 +175,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 El sistema utiliza una memoria At24c256 que se muestra en la siguiente imagen:
 
 <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
+
 **Figura 2.3.1**: Memoria At24c256.
 
 Tiene comunicación I2c y dispone de 256 Kb, organizados en 32.768.
@@ -268,15 +269,19 @@ Este modulo se encarga de a partir de los datos adquiridos guardarlo a la memori
 Este modulo se usa para atravesar los distintos menus del juego, es el mas complejo ya que se encarga de pasar de menu a menu, y tomar los inputs del usurio para que este pueda hacer lo que desee, sea ver el puntaje o jugar con el modo de juego que desee.
 
 <img width="595" height="650" alt="image" src="https://github.com/user-attachments/assets/3063c507-be19-461a-a3a5-0cbb49dc899f" />
+
 **Figura 3.2.3.a**: Menu inicial
 
 <img width="457" height="451" alt="image" src="https://github.com/user-attachments/assets/7e953a48-337c-46ba-8d72-411874d5cefc" />
+
 **Figura 3.2.3.b**: Segundo menu elección entre Juego y puntaje
 
 <img width="660" height="621" alt="image" src="https://github.com/user-attachments/assets/2249eb3f-5650-4055-9e25-7c03506e8bb2" />
+
 **Figura 3.2.3.c**: Trasición a menu de juego u puntajes
 
 <img width="467" height="705" alt="image" src="https://github.com/user-attachments/assets/740c5fac-0ab0-441e-9040-94a016c48955" />
+
 **Figura 3.2.3.d**: Menu elección de juego
 
 Para todos los menus se sigue la misma logica, toma los datos que introduce el usuario a base de los pulsadores, siendo asignados cada color como una opcion, ENTER, NEXT, y ESC donde enter se usa para introducir la opción deseada, next para cambiar de selección, y esc para volcer al menu anterior. De esa manera moviendo un indice que cambia entre las opciones del menu en el que actualmente esta el usaurio.
@@ -286,22 +291,26 @@ En este modulo podemos ver el gameplay en su de los distintos modos de juego com
 
 
 <img width="766" height="578" alt="image" src="https://github.com/user-attachments/assets/67f0e6a7-ffab-4aca-8efc-6af20b910081" />
+
 **Figura 3.2.4.a**: Logica para mostrar la secuencia
 
 El juego dependiendo de que modo de juego es el qeu selecciono el usuario, sea este normal o dificl, muestra la secuencia añadiendo un color más por nivel para el modo de juego normal, o solo muestra el nuevo color para el dificil. Y luego se muestra en el display un mensaje, "Tu Turno" para que el jugador sepa que ahora puede volver a introducir la secuencia. Se utilizan la función led_control para prender y apagar las luces led correspondientes, y para añadir un nuevo color a la secuencia se usa game.sequence[game.seq_length] = rand() % 4, que a medida que se vaya aumentando el nivel se eligira aleatoriamente un nuevo color para la secuencia.
 
 <img width="427" height="448" alt="image" src="https://github.com/user-attachments/assets/253b4d48-8132-4f8a-9c83-2aa85d643a96" />
+
 **Figura 3.2.4.b**: Introducción de secuencia por el usuario
 
 Aqui pasa al estado de input donde aguarda a que el usuario introduzca la secuencia correcta, y una vez que sea presionado un boton se mandara el estado a ser corroborado de que fue el correcto.
 
 
 <img width="345" height="225" alt="image" src="https://github.com/user-attachments/assets/0a79ee43-c06c-40b0-b6cc-d2f880938636" />
+
 **Figura 3.2.4.c**: Chequeo de secuencia
 
 Aqui se pasa a revisar luego de cada input si lo introducido por el usaurio es correcto, si introdujo bien la secuencia se pasara de nivel y comenzara el ciclo nuevamente, en cmabio si no es asi pasara al estado de game over.
 
 <img width="482" height="518" alt="image" src="https://github.com/user-attachments/assets/db4af8e0-6c39-412f-a7d9-ae81273f5153" />
+
 **Figura 3.2.4.d**: Estado de GAME OVER
 
 Finalmente, luego de que el usuario haya introducido mal la secuencia el juego terminara, se mostrara su puntuación final y como se compara con los top 3 puntajes y se volvera al menu principal.
@@ -310,9 +319,11 @@ Finalmente, luego de que el usuario haya introducido mal la secuencia el juego t
 Este modulo se encarga de que sea minimizar el rebote y registrar los inputs del usuario. Decimos que cuando el sietema esta en estado idle el boton esta arriba, y luego de qeu es presionado pasara por los eventos, falling, down, y rising en ese orden.
 
 <img width="483" height="592" alt="image" src="https://github.com/user-attachments/assets/7098b785-2301-4527-b962-dde13d69d5bc" />
+
 **Figura 3.2.5.a**: Estados boton abajo y cayendo 
 
 <img width="448" height="357" alt="image" src="https://github.com/user-attachments/assets/8747c982-5afa-4bdf-90a2-1cdcc0d0598e" />
+
 **Figura 3.2.5.b**: Estados boton subiendo
 
 # **CAPÍTULO 4** 
@@ -427,8 +438,20 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 # **Conclusiones** 
 
 ## **5.1 Resultados obtenidos**
-
+Pudimos utilizando los esquematicos soldar y armar el juego, se puede ver en las siguientes imagenes: 
  
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/2c723df3-fae7-4dc8-9fd2-f3bba5a00451" />
+
+**Figura 5.1.a**: Placa completa
+
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/f4339288-c7a9-48e7-bb29-b9b3b09779f2" />
+
+**Figura 5.1.b**: Placa sin display y placa nucleo
+
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/1468ce48-de36-4c78-9ecc-c05b97675642" />
+
+**Figura 5.1.c**: Conexiones de soldadura
+
 ## **5.2 Próximos pasos** 
 
 Para continuar este proyecto podemos rediseñar la interfaz del usuario para que con mayor presupuesto podamos agregar una caracasa exterior y botones más grandes que sean más satisfactorios para presionar y asi brindar una mejor experiencia al usuario. Tambien consideramos agregar el sonido que no pudimos incluir por restricciones de tiempo.
