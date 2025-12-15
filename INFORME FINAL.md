@@ -219,11 +219,22 @@ Finalmente utilizamos los siguientes pulsadores como dispositivos de entrada par
 Para el diseño y montaje de la placa se siguio el siguiente esquematico:
 
 <img width="1126" height="1107" alt="image" src="https://github.com/user-attachments/assets/3990b17a-3344-4455-83da-e05cc1961415" />
-**Figura 3.1a**: Esquematico hadrware.
+
+**Figura 3.1.a**: Esquematico hadrware.
 
 Y luego lo soldamos a una placa y lo juntamos con la placa nucelo
+ 
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/2c723df3-fae7-4dc8-9fd2-f3bba5a00451" />
 
-**Figura 3.1b**: Montaje.
+**Figura 3.1.b**: Placa completa
+
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/f4339288-c7a9-48e7-bb29-b9b3b09779f2" />
+
+**Figura 3.1.c**: Placa sin display y placa nucleo
+
+<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/1468ce48-de36-4c78-9ecc-c05b97675642" />
+
+**Figura 3.1.d**: Conexiones de soldadura
 
 
 ## **3.1.1 Diseño de la memoria** 
@@ -438,19 +449,7 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 # **Conclusiones** 
 
 ## **5.1 Resultados obtenidos**
-Pudimos utilizando los esquematicos soldar y armar el juego, se puede ver en las siguientes imagenes: 
- 
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/2c723df3-fae7-4dc8-9fd2-f3bba5a00451" />
 
-**Figura 5.1.a**: Placa completa
-
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/f4339288-c7a9-48e7-bb29-b9b3b09779f2" />
-
-**Figura 5.1.b**: Placa sin display y placa nucleo
-
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/1468ce48-de36-4c78-9ecc-c05b97675642" />
-
-**Figura 5.1.c**: Conexiones de soldadura
 
 ## **5.2 Próximos pasos** 
 
