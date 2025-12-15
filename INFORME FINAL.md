@@ -182,6 +182,7 @@ Tiene comunicación I2c y dispone de 256 Kb, organizados en 32.768.
 Como controlador principal del sistema se utiliza la placa NUCLEO-F103RBTX. La elección de esta placa recayó en la disponibilidad ya que fue la ofrecida por los profesores, teniendo además como requerimiento la cantidad de memoria, pines y periféricos de la placa. La placa se programó en C++ a través de la plataforma STMCUBE32IDE.
 
 <img width="700" height="500" alt="image" src="https://github.com/user-attachments/assets/a657bf6e-783d-4a81-aee4-6a8a7ba27641" />
+
 **Figura 2.3.2**: Placa NUCLEO-F103RBTX.
 
 ## **2.3.3 LDR**
@@ -189,18 +190,21 @@ Como controlador principal del sistema se utiliza la placa NUCLEO-F103RBTX. La e
 Utilizamos el sensor LDR Gl5539 de la siguiente imagen: 
 
 <img width="442" height="500" alt="image" src="https://github.com/user-attachments/assets/0886f18a-fa2f-44a9-8f7c-94493d16a883" />
+
 **Figura 2.3.3**: LDR.
 
 ## **2.3.4 Pantalla Led**
 Para el display usamos la pantalla Lcd 1602 Hd44780 con Backlight Azul de la siguiente imagen:
 
 <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/925e7613-ac74-4276-904e-c581b1f05a5e" />
+
 **Figura 2.3.4**: Display Lcd 1602 Hd44780.
 
 ## **2.3.4 Pulsadores**
 Finalmente utilizamos los siguientes pulsadores como dispositivos de entrada para que utilice el usuario: 
 
 <img width="360" height="207" alt="image" src="https://github.com/user-attachments/assets/62e9b6a6-9033-4ab8-8a83-9f85e7107e29" />
+
 **Figura 2.3.5**: Pulsadores.
 
 
