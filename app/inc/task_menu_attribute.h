@@ -66,10 +66,13 @@ extern "C" {
 /* Events to excite Task Menu */
 // task_menu_attribute.h
 typedef enum {
+    ST_MEN_XX_IDLE,
     ST_MEN_MAIN,
     ST_MEN_MENU1,
     ST_MEN_MENU2,
-    ST_MEN_MENU3
+    ST_MEN_MENU3,
+    ST_MEN_MENU4,
+    ST_MEN_GAME
 } task_menu_state_t;
 
 typedef enum task_menu_ev {
@@ -79,36 +82,15 @@ typedef enum task_menu_ev {
 	   EV_MEN_NEX_ACTIVE,
 	   EV_MEN_ESC_IDLE,
 	   EV_MEN_ESC_ACTIVE,*/
-
 	   EV_MEN_ENTER,
 	   EV_MEN_NEXT,
 	   EV_MEN_ESC,
-	   EV_MEN_IDLE,
 
-/*Eventos para gameplay*/
-		EV_BTN_AZ_PRESS, // Botón Azul
-    	EV_BTN_RO_PRESS, // Botón Rojo
-    	EV_BTN_AM_PRESS, // Botón Amarillo
-    	EV_BTN_VE_PRESS, //Botón Verde
+	   EV_MEN_IDLE,
 
    } task_menu_ev_t;
 
-/* State of Task Menu */
-typedef enum task_menu_st {ST_MEN_XX_IDLE, ST_MEN_XX_ACTIVE} task_menu_st_t;
 
-//Para posible agregado de actuadores un posible modelo de codigo:
-/*
-typedef enum task_motor_id {ID_MOTOR_1,
-							ID_MOTOR_2}task_motor_id_t;
-
-typedef struct
-{
-	task_motor_id_t	identifier;
-    int power;
-    int spin;           //( 0 LEFT , 1 RIGHT)
-    int speed;          //(0 a 9)
-} task_motor_cfg_t;
-*/
 typedef struct
 {
     uint32_t tick;
@@ -116,9 +98,9 @@ typedef struct
     task_menu_ev_t event;
     bool flag;
 
-    //task_motor_cfg_t*   motores;
     uint8_t index_menu1;
     uint8_t index_menu2;
+    //uint8_t index_menu3;
 
 } task_menu_dta_t;
 

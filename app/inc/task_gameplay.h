@@ -1,27 +1,38 @@
-
 #ifndef TASK_GAMEPLAY_H_
 #define TASK_GAMEPLAY_H_
 
-#include "main.h"
-#include "task_menu_attribute.h"
+/********************** CPP guard ********************************************/
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-// Definición de dificultades
-typedef enum {
-    GAME_DIFF_NORMAL,
-    GAME_DIFF_HARD
-} game_difficulty_t;
+/********************** inclusions *******************************************/
+#include <stdint.h>
+#include <stdbool.h>
+#include "task_gameplay_attribute.h"
 
-// Estructura de datos pública del juego
-typedef struct {
-    uint32_t score;
-    bool active;
-} task_gameplay_dta_t;
+/********************** macros ***********************************************/
 
-extern task_gameplay_dta_t task_gameplay_dta;
+/********************** typedef **********************************************/
 
-// Funciones públicas
+/********************** external data declaration ****************************/
+extern uint32_t g_task_gameplay_cnt;
+extern volatile uint32_t g_task_gameplay_tick_cnt;
+
+/********************** external functions declaration ***********************/
 void task_gameplay_init(void *parameters);
 void task_gameplay_update(void *parameters);
-void gameplay_start(game_difficulty_t difficulty);
 
-#endif 
+//void gameplay_start(game_difficulty_t diff);
+uint16_t gameplay_get_score(void);
+bool gameplay_is_running(void);
+bool gameplay_is_finished(void);
+
+/********************** End of CPP guard *************************************/
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* TASK_INC_TASK_GAMEPLAY_H_ */
+
+/********************** end of file ******************************************/

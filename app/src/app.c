@@ -48,6 +48,7 @@
 #include "board.h"
 #include "task_adc.h"
 #include "task_sensor.h"
+#include "task_actuator.h"
 #include "task_menu.h"
 #include "task_adc.h"
 #include "task_gameplay.h"
@@ -75,6 +76,7 @@ shared_data_type shared_data;
 /********************** internal data declaration ****************************/
 const task_cfg_t task_cfg_list[]	= {
 		{task_sensor_init,	task_sensor_update, 	NULL},
+		{task_actuator_init,	task_actuator_update, 	NULL},
 		{task_menu_init,	task_menu_update, 		NULL},
 		{task_adc_init, task_adc_update, &shared_data},
 		{task_gameplay_init,task_gameplay_update,   NULL},
@@ -201,6 +203,7 @@ void HAL_SYSTICK_Callback(void)
 	g_app_tick_cnt++;
 
 	g_task_sensor_tick_cnt++;
+	g_task_actuator_tick_cnt++;
 	g_task_menu_tick_cnt++;
 	g_task_gameplay_tick_cnt++;
 }

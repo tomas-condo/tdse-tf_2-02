@@ -49,6 +49,8 @@
 #include "task_sensor_attribute.h"
 #include "task_menu_attribute.h"
 #include "task_menu_interface.h"
+#include "task_gameplay_attribute.h"
+#include "task_gameplay_interface.h"
 
 /********************** macros and definitions *******************************/
 #define G_TASK_SEN_CNT_INIT			0ul
@@ -61,13 +63,13 @@
 /********************** internal data declaration ****************************/
 const task_sensor_cfg_t task_sensor_cfg_list[] = {
 	{ID_BTN_AZ,  BTN_AZ_PORT,  BTN_AZ_PIN,  BTN_AZ_PRESSED, DEL_BTN_XX_MAX,
-	 EV_MEN_IDLE,  EV_MEN_ENTER, EV_BTN_AZ_PRESS},
+	 EV_MEN_IDLE,  EV_MEN_ENTER/*, EV_GAME_IDLE, EV_GAME_BTN_AZ*/},
 	{ID_BTN_RO,  BTN_RO_PORT,  BTN_RO_PIN,  BTN_RO_PRESSED, DEL_BTN_XX_MAX,
-	 EV_MEN_IDLE,  EV_MEN_NEXT, EV_BTN_RO_PRESS},
+	 EV_MEN_IDLE,  EV_MEN_NEXT/*, EV_GAME_IDLE, EV_GAME_BTN_RO*/},
 	{ID_BTN_AM,  BTN_AM_PORT,  BTN_AM_PIN,  BTN_AM_PRESSED, DEL_BTN_XX_MAX,
-	 EV_MEN_IDLE,  EV_MEN_ENTER, EV_BTN_AM_PRESS},
+	 EV_MEN_IDLE,  EV_MEN_ESC/*, EV_GAME_IDLE, EV_GAME_BTN_AM*/},
 	{ID_BTN_VE,  BTN_VE_PORT,  BTN_VE_PIN,  BTN_VE_PRESSED, DEL_BTN_XX_MAX,
-	 EV_MEN_IDLE,  EV_MEN_ENTER, EV_BTN_VE_PRESS}
+	 EV_MEN_IDLE,  EV_MEN_NEXT/*, EV_GAME_IDLE, EV_GAME_BTN_VE*/}
 };
 
 #define SENSOR_CFG_QTY	(sizeof(task_sensor_cfg_list)/sizeof(task_sensor_cfg_t))

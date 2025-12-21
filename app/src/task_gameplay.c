@@ -1,14 +1,17 @@
-
-
 /********************** inclusions *******************************************/
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "main.h"
 #include "board.h"
 #include "task_gameplay.h"
+#include "task_gameplay_attribute.h"
+#include "task_gameplay_interface.h"
 #include "task_menu_interface.h"
+#include "task_actuator_attribute.h"
+#include "task_actuator_interface.h"
 #include "display.h"
 #include "logger.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 /********************** macros and definitions *******************************/
 #define G_TASK_GAME_CNT_INI         0ul
@@ -17,251 +20,239 @@
 #define MAX_SEQUENCE_LEN    100
 
 // Tiempos en ms (asumiendo 1 tick = 1 ms)
-#define DELAY_SHOW_ON_NORMAL 1000ul
-#define DELAY_SHOW_OFF_NORMAL 500ul
-#define DELAY_SHOW_ON_HARD    400ul
-#define DELAY_SHOW_OFF_HARD   200ul
+#define DEL_GAME_XX_MIN 0ul
+#define DEL_SHOW_ON_NORMAL  1000ul
+#define DEL_SHOW_OFF_NORMAL 500ul
+#define DEL_SHOW_ON_HARD    400ul
+#define DEL_SHOW_OFF_HARD   200ul
 
-// Estados de la FSM del juego
-typedef enum {
-    ST_GAME_IDLE,
-    ST_GAME_GEN_SEQ,
-    ST_GAME_SHOW_SEQ_ON,
-    ST_GAME_SHOW_SEQ_OFF,
-    ST_GAME_WAIT_INPUT,
-    ST_GAME_CHECK_INPUT,
-    ST_GAME_OVER
-} game_state_t;
+#define GAME_DIFF_NORMAL    0
+#define GAME_DIFF_HARD      1
 
 /********************** internal data declaration ****************************/
-typedef struct {
-    game_state_t state;
-    game_difficulty_t difficulty;
-    
-    uint8_t sequence[MAX_SEQUENCE_LEN];
-    uint8_t seq_length;
-    uint8_t play_index;
-    uint8_t user_index;
-    
-    uint32_t timer_delay; // Contador para retardos no bloqueantes
-} gameplay_internal_t;
+task_gameplay_dta_t task_gameplay_dta =
+{
+    DEL_GAME_XX_MIN,
+	ST_GAME_GEN_SEQ,
+    EV_GAME_IDLE,
+    false,
+    0,
+    {0},
+    0,
+    0,
+    0,
+    true,
+    0,
+    0,
+    0,
+    0,
+};
 
-static gameplay_internal_t game;
-
-/********************** external data declaration ****************************/
-task_gameplay_dta_t task_gameplay_dta;
-
-uint32_t g_task_gameplay_cnt;
-volatile uint32_t g_task_gameplay_tick_cnt;
+#define GAMEPLAY_DTA_QTY	(sizeof(task_gameplay_dta)/sizeof(task_gameplay_dta_t))
 
 /********************** internal functions declaration ***********************/
-void leds_all_off(void);
-void led_control(uint8_t color_code, uint8_t action); // 1 ON, 0 OFF
 
-// Mapeo interno de colores
-#define COLOR_AZ 0
-#define COLOR_RO 1
-#define COLOR_AM 2
-#define COLOR_VE 3
+/********************** internal data definition *****************************/
+const char *p_task_gameplay 		= "Task Gameplay (Interactive Gameplay)";
+const char *p_task_gameplay_ 		= "Non-Blocking & Update By Time Code";
+
+/********************** external data declaration ****************************/
+uint32_t g_task_gameplay_cnt;
+volatile uint32_t g_task_gameplay_tick_cnt;
 
 /********************** external functions definition ************************/
 
 void task_gameplay_init(void *parameters)
 {
-    /* Init Task counters */
-    g_task_gameplay_cnt = G_TASK_GAME_CNT_INI;
-    g_task_gameplay_tick_cnt = G_TASK_GAME_TICK_CNT_INI;
+	task_gameplay_dta_t *p_task_gameplay_dta;
+	task_gameplay_state_t	state;
+	task_gameplay_ev_t	event;
+	bool b_event;
 
-    /* Init Data */
-    task_gameplay_dta.active = false;
-    task_gameplay_dta.score = 0;
-    game.state = ST_GAME_IDLE;
-    
+	/* Print out: Task Initialized */
+	LOGGER_INFO(" ");
+	LOGGER_INFO("  %s is running - %s", GET_NAME(task_gameplay_init), p_task_gameplay);
+	LOGGER_INFO("  %s is a %s", GET_NAME(task_gameplay), p_task_gameplay_);
+
+	/* Init & Print out: Task execution counter */
+	g_task_gameplay_cnt = G_TASK_GAME_CNT_INI;
+	LOGGER_INFO("   %s = %lu", GET_NAME(g_task_gameplay_cnt), g_task_gameplay_cnt);
+
+	init_queue_event_task_gameplay();
+
+	/* Update Task Actuator Configuration & Data Pointer */
+	p_task_gameplay_dta = &task_gameplay_dta;
+
+	/* Init & Print out: Task execution FSM */
+	state = ST_GAME_IDLE;
+	p_task_gameplay_dta->state = state;
+
+	event = EV_GAME_IDLE;
+	p_task_gameplay_dta->event = event;
+
+	b_event = false;
+	p_task_gameplay_dta->flag = b_event;
+
+	LOGGER_INFO(" ");
+	LOGGER_INFO("   %s = %lu   %s = %lu   %s = %s",
+				 GET_NAME(state), (uint32_t)state,
+				 GET_NAME(event), (uint32_t)event,
+				 GET_NAME(b_event), (b_event ? "true" : "false"));
+
+	p_task_gameplay_dta->score = 0;
     srand(HAL_GetTick()); // Inicializar semilla aleatoria
-    
-    LOGGER_INFO("  task_gameplay initialized");
 }
 
-void gameplay_start(game_difficulty_t difficulty) {
-    game.difficulty = difficulty;
-    game.seq_length = 0;
-    game.score = 0;
-    task_gameplay_dta.score = 0;
-    task_gameplay_dta.active = true;
-    game.state = ST_GAME_GEN_SEQ;
+void task_gameplay_statechart(void)
+{
+    task_gameplay_dta_t *p_task_gameplay_dta;
+    /* Update Task Gameplay Data Pointer */
+    p_task_gameplay_dta = &task_gameplay_dta;
+
+    if (true == any_event_task_gameplay()) {
+        p_task_gameplay_dta -> flag = true;
+        p_task_gameplay_dta -> event = get_event_task_gameplay();
+    }
+
+    if (true == p_task_gameplay_dta -> flag){
+    	switch (p_task_gameplay_dta -> state) {
+        	case ST_GAME_GEN_SEQ:
+
+            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AZ);
+            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AM);
+            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_RO);
+            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
+        		p_task_gameplay_dta -> sequence[p_task_gameplay_dta -> seq_length] = rand() % 4;
+        		p_task_gameplay_dta -> seq_length ++;
+
+        		p_task_gameplay_dta -> seq_length = 0;
+        		p_task_gameplay_dta -> tick = DEL_GAME_XX_MIN; // Pausa antes de mostrar
+        		p_task_gameplay_dta -> state = ST_GAME_SHOW_SEQ_ON;
+
+                //char buff[16];
+                //sprintf(buff, "Nivel: %d", game.seq_length);
+                //displayCharPositionWrite(0,2);
+                //displayStringWrite(buff);
+                break;
+
+            case ST_GAME_SHOW_SEQ_ON:
+            	if (p_task_gameplay_dta -> input_index < p_task_gameplay_dta -> seq_length) {
+            		//led_control(game.sequence[game.play_index], 1); // ON
+                    // Configurar tiempo según dificultad
+            		p_task_gameplay_dta -> tick = (p_task_gameplay_dta ->difficulty == GAME_DIFF_NORMAL) ? DEL_SHOW_ON_NORMAL : DEL_SHOW_ON_HARD;
+            		p_task_gameplay_dta -> state = ST_GAME_SHOW_SEQ_OFF;
+                    } else {
+                    p_task_gameplay_dta -> seq_index = 0;
+                    //leds_all_off();
+                    //displayCharPositionWrite(0,1);
+                    //displayStringWrite("  Tu Turno   ");
+
+                    // Limpiar cola de eventos
+                    while(any_event_task_menu()) get_event_task_menu();
+                    p_task_gameplay_dta ->state = ST_GAME_WAIT_INPUT;
+                }
+            	break;
+
+            case ST_GAME_SHOW_SEQ_OFF:
+            	//led_control(game.sequence[game.play_index], 0); // OFF
+            	p_task_gameplay_dta -> seq_index++;
+            	p_task_gameplay_dta -> tick = (p_task_gameplay_dta -> difficulty == GAME_DIFF_NORMAL) ? DEL_SHOW_OFF_NORMAL : DEL_SHOW_OFF_HARD;
+            	p_task_gameplay_dta -> state = ST_GAME_SHOW_SEQ_ON;
+                break;
+
+            case ST_GAME_WAIT_INPUT:
+            	if (any_event_task_menu()) {
+            		//task_menu_ev_t ev = get_event_task_menu();
+                    uint8_t pressed = 255;
+
+                    //if (ev == EV_BTN_AZ_PRESS) pressed = COLOR_AZ;
+                    //else if (ev == EV_BTN_RO_PRESS) pressed = COLOR_RO;
+                    //else if (ev == EV_BTN_AM_PRESS) pressed = COLOR_AM;
+                    //else if (ev == EV_BTN_VE_PRESS) pressed = COLOR_VE;
+
+                    if (pressed != 255) {
+                    	//led_control(pressed, 1); // Feedback visual
+                        if (pressed == p_task_gameplay_dta -> sequence[p_task_gameplay_dta -> seq_index]) {
+                        	p_task_gameplay_dta -> seq_index++;
+                        	p_task_gameplay_dta -> tick = 200;
+                        	p_task_gameplay_dta -> state = ST_GAME_CHECK_INPUT;
+                        } else {
+                        	p_task_gameplay_dta -> state = ST_GAME_OVER;
+                        }
+                    }
+                }
+                break;
+
+            case ST_GAME_CHECK_INPUT:
+            	//leds_all_off();
+                if (p_task_gameplay_dta -> seq_index >= p_task_gameplay_dta -> seq_length) {
+                	p_task_gameplay_dta -> score = p_task_gameplay_dta -> seq_length;
+                	p_task_gameplay_dta -> tick = DEL_GAME_XX_MIN; // etq
+                	p_task_gameplay_dta -> state = ST_GAME_GEN_SEQ;
+                } else {
+                	p_task_gameplay_dta -> state = ST_GAME_WAIT_INPUT;
+                }
+                break;
+
+            case ST_GAME_OVER:
+            	//displayCharPositionWrite(0,0);
+                //displayStringWrite("   GAME OVER    ");
+                //char score_str[16];
+                //sprintf(score_str, "Puntaje: %d     ", task_gameplay_dta.score);
+                //displayCharPositionWrite(0,1);
+                //displayStringWrite(score_str);
+
+                // Parpadeo final simple (usando ACTUATOR)
+                p_task_gameplay_dta -> active = false; // Devuelve control (flag?)
+                p_task_gameplay_dta -> state = ST_GAME_IDLE;
+                break;
+
+            default:
+                p_task_gameplay_dta -> state = ST_GAME_IDLE;
+                break;
+        }
+    }
 }
+
+// ---------------------------------------------------------------------
+// 3. Lógica de Gameplay (para actualizar el juego)
+// ---------------------------------------------------------------------
 
 void task_gameplay_update(void *parameters)
 {
-    bool b_time_update_required = false;
+	bool b_time_update_required = false;
 
-    /* Protect shared resource */
-    __asm("CPSID i");   /* disable interrupts */
+	/* Protect shared resource */
+	__asm("CPSID i");	/* disable interrupts */
     if (G_TASK_GAME_TICK_CNT_INI < g_task_gameplay_tick_cnt)
     {
-        g_task_gameplay_tick_cnt--;
-        b_time_update_required = true;
+		/* Update Tick Counter */
+    	g_task_gameplay_tick_cnt--;
+    	b_time_update_required = true;
     }
-    __asm("CPSIE i");   /* enable interrupts */
+    __asm("CPSIE i");	/* enable interrupts */
 
     while (b_time_update_required)
     {
-        g_task_gameplay_cnt++;
+		/* Update Task Counter */
+		g_task_gameplay_cnt++;
 
-        // Si el juego no está activo, no hacemos nada en la FSM
-        if (!task_gameplay_dta.active) {
-            // Solo consumimos el ciclo
-        } else {
-            
-            // Manejo de Timer No Bloqueante
-            if (game.timer_delay > 0) {
-                game.timer_delay--;
-            } else {
-                
-                // --- FSM del Juego ---
-                switch (game.state) {
-                    case ST_GAME_GEN_SEQ:
-                        game.sequence[game.seq_length] = rand() % 4;
-                        game.seq_length++;
-                        
-                        game.play_index = 0;
-                        game.timer_delay = 500; // Pausa antes de mostrar
-                        game.state = ST_GAME_SHOW_SEQ_ON;
-                        
-                        char buff[16];
-                        sprintf(buff, "Nivel: %d", game.seq_length);
-                        displayCharPositionWrite(0,2);
-                        displayStringWrite(buff);
-                        break;
+		/* Run Task Menu Statechart */
+    	task_gameplay_statechart();
 
-                    case ST_GAME_SHOW_SEQ_ON:
-                        if (game.play_index < game.seq_length) {
-                            led_control(game.sequence[game.play_index], 1); // ON
-                            // Configurar tiempo según dificultad
-                            game.timer_delay = (game.difficulty == GAME_DIFF_NORMAL) ? DELAY_SHOW_ON_NORMAL : DELAY_SHOW_ON_HARD;
-                            game.state = ST_GAME_SHOW_SEQ_OFF;
-                        } else {
-                            game.user_index = 0;
-                            leds_all_off();
-                            displayCharPositionWrite(0,1);
-                            displayStringWrite("  Tu Turno   ");
-                            
-                            // Limpiar cola de eventos
-                            while(any_event_task_menu()) get_event_task_menu();
-                            
-                            game.state = ST_GAME_WAIT_INPUT;
-                        }
-                        break;
-
-                    case ST_GAME_SHOW_SEQ_OFF:
-                        led_control(game.sequence[game.play_index], 0); // OFF
-                        game.play_index++;
-                        game.timer_delay = (game.difficulty == GAME_DIFF_NORMAL) ? DELAY_SHOW_OFF_NORMAL : DELAY_SHOW_OFF_HARD;
-                        game.state = ST_GAME_SHOW_SEQ_ON;
-                        break;
-
-                    case ST_GAME_WAIT_INPUT:
-                        if (any_event_task_menu()) {
-                            task_menu_ev_t ev = get_event_task_menu();
-                            uint8_t pressed = 255;
-                            
-                            if (ev == EV_BTN_AZ_PRESS) pressed = COLOR_AZ;
-                            else if (ev == EV_BTN_RO_PRESS) pressed = COLOR_RO;
-                            else if (ev == EV_BTN_AM_PRESS) pressed = COLOR_AM;
-                            else if (ev == EV_BTN_VE_PRESS) pressed = COLOR_VE;
-
-                            if (pressed != 255) {
-                                led_control(pressed, 1); // Feedback visual
-                                if (pressed == game.sequence[game.user_index]) {
-                                    game.user_index++;
-                                    game.timer_delay = 200; 
-                                    game.state = ST_GAME_CHECK_INPUT;
-                                } else {
-                                    game.state = ST_GAME_OVER;
-                                }
-                            }
-                        }
-                        break;
-
-                    case ST_GAME_CHECK_INPUT:
-                        leds_all_off();
-                        if (game.user_index >= game.seq_length) {
-                            task_gameplay_dta.score = game.seq_length;
-                            game.timer_delay = 800;
-                            game.state = ST_GAME_GEN_SEQ;
-                        } else {
-                            game.state = ST_GAME_WAIT_INPUT;
-                        }
-                        break;
-
-                    case ST_GAME_OVER:
-                        displayCharPositionWrite(0,0);
-                        displayStringWrite("   GAME OVER    ");
-                        char score_str[16];
-                        sprintf(score_str, "Puntaje: %d     ", task_gameplay_dta.score);
-                        displayCharPositionWrite(0,1);
-                        displayStringWrite(score_str);
-                        
-                        // Parpadeo final simple (usando timer)
-                        static int blink_cnt = 0;
-                        if (blink_cnt < 6) {
-                            if (blink_cnt % 2 == 0) led_control(COLOR_RO, 1);
-                            else led_control(COLOR_RO, 0);
-                            blink_cnt++;
-                            game.timer_delay = 200;
-                        } else {
-                            blink_cnt = 0;
-                            task_gameplay_dta.active = false; // Devuelve control
-                            game.state = ST_GAME_IDLE;
-                        }
-                        break;
-                        
-                    default:
-                        game.state = ST_GAME_IDLE;
-                        break;
-                }
-            }
-        }
-
-        /* Check tick again */
-        __asm("CPSID i");   /* disable interrupts */
-        if (G_TASK_GAME_TICK_CNT_INI < g_task_gameplay_tick_cnt)
-        {
-            g_task_gameplay_tick_cnt--;
-            b_time_update_required = true;
-        }
-        else
-        {
-            b_time_update_required = false;
-        }
-        __asm("CPSIE i");   /* enable interrupts */
-    }
-}
-
-/********************** internal functions definition ************************/
-
-void leds_all_off(void) {
-    HAL_GPIO_WritePin(LED_AZ_PORT, LED_AZ_PIN, LED_AZ_OFF);
-    HAL_GPIO_WritePin(LED_RO_PORT, LED_RO_PIN, LED_RO_OFF);
-    HAL_GPIO_WritePin(LED_AM_PORT, LED_AM_PIN, LED_AM_OFF);
-    HAL_GPIO_WritePin(LED_VE_PORT, LED_VE_PIN, LED_VE_OFF);
-}
-
-void led_control(uint8_t color_code, uint8_t action) {
-    // action: 1 = ON, 0 = OFF
-    switch(color_code) {
-        case COLOR_AZ: 
-            HAL_GPIO_WritePin(LED_AZ_PORT, LED_AZ_PIN, action ? LED_AZ_ON : LED_AZ_OFF); 
-            break;
-        case COLOR_RO: 
-            HAL_GPIO_WritePin(LED_RO_PORT, LED_RO_PIN, action ? LED_RO_ON : LED_RO_OFF); 
-            break;
-        case COLOR_AM: 
-            HAL_GPIO_WritePin(LED_AM_PORT, LED_AM_PIN, action ? LED_AM_ON : LED_AM_OFF); 
-            break;
-        case COLOR_VE: 
-            HAL_GPIO_WritePin(LED_VE_PORT, LED_VE_PIN, action ? LED_VE_ON : LED_VE_OFF); 
-            break;
-    }
+    	/* Protect shared resource */
+		__asm("CPSID i");	/* disable interrupts */
+		if (G_TASK_GAME_TICK_CNT_INI < g_task_gameplay_tick_cnt)
+		{
+			/* Update Tick Counter */
+			g_task_gameplay_tick_cnt--;
+			b_time_update_required = true;
+		}
+		else
+		{
+			b_time_update_required = false;
+		}
+		__asm("CPSIE i");	/* enable interrupts */
+	}
 }
 /********************** end of file ******************************************/
