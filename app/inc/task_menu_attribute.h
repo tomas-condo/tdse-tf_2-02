@@ -72,6 +72,7 @@ typedef enum {
     ST_MEN_MENU2,
     ST_MEN_MENU3,
     ST_MEN_MENU4,
+	ST_MEN_GAME_OVER,
     ST_MEN_GAME
 } task_menu_state_t;
 
@@ -82,10 +83,12 @@ typedef enum task_menu_ev {
 	   EV_MEN_NEX_ACTIVE,
 	   EV_MEN_ESC_IDLE,
 	   EV_MEN_ESC_ACTIVE,*/
+	   EV_MEN_IZQ,
 	   EV_MEN_ENTER,
-	   EV_MEN_NEXT,
+	   EV_MEN_DER,
 	   EV_MEN_ESC,
 
+	   EV_MEN_GAME_OVER,
 	   EV_MEN_IDLE,
 
    } task_menu_ev_t;
@@ -98,9 +101,13 @@ typedef struct
     task_menu_ev_t event;
     bool flag;
 
-    uint8_t index_menu1;
-    uint8_t index_menu2;
-    //uint8_t index_menu3;
+    uint8_t index_menu0;     //
+    uint8_t index_menu1;     // Para manejo sobre menu
+    uint8_t index_menu2;     //
+
+    uint32_t input_score;    // Recibido por calculo de gameplay
+
+    uint32_t high_scores[3]; // [0]=Top 1, [1]=Top 2, [2]=Top 3
 
 } task_menu_dta_t;
 

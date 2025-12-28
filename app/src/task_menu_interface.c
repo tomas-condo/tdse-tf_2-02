@@ -109,4 +109,14 @@ bool any_event_task_menu(void)
   return (queue_task_a.head != queue_task_a.tail);
 }
 
+void put_event_with_score_task_menu(task_menu_ev_t event, uint32_t score)
+{
+    // 1. Guardamos el dato en el "buzón" de la estructura global
+    task_menu_dta.input_score = score;
+
+    // 2. Disparamos el evento usando la función estándar
+    // Esto despertará a la tarea menu_task para que procese el evento
+    put_event_task_menu(event);
+}
+
 /********************** end of file ******************************************/

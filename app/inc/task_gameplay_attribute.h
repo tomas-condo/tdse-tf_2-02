@@ -7,21 +7,24 @@ extern "C" {
 #endif
 
 /********************** inclusions *******************************************/
-
+#include <stdbool.h>
 /********************** macros ***********************************************/
 
 /********************** typedef **********************************************/
 
 /* Events to excite Task Gameplay */
 // task_gameplay_attribute.h
+
 typedef enum {
     ST_GAME_IDLE,
-    ST_GAME_GEN_SEQ,
-    ST_GAME_SHOW_SEQ_ON,
-    ST_GAME_SHOW_SEQ_OFF,
-    ST_GAME_WAIT_INPUT,
-    ST_GAME_CHECK_INPUT,
-    ST_GAME_OVER
+
+    // Ciclo de Juego
+    ST_GAME_INIT_ROUND,     // Agrega color a la secuencia
+    ST_GAME_PLAY_SEQ_ON,    // Enciende LED de la secuencia
+    ST_GAME_PLAY_SEQ_OFF,   // Apaga LED (pausa)
+    ST_GAME_WAIT_INPUT,     // Espera pulsación del jugador
+    ST_GAME_VERIFY,         // Valida si la pulsación fue correcta
+    ST_GAME_GAME_OVER       // Fin del juego
 } task_gameplay_state_t;
 
 
@@ -34,6 +37,9 @@ typedef enum task_gameplay_ev {
 	EV_GAME_BTN_VE,
 	EV_GAME_BTN_AZ,
 	EV_GAME_BTN_AM,
+
+	EV_GAME_START_NORMAL,
+	EV_GAME_START_HARD
 } task_gameplay_ev_t;
 
 
@@ -44,18 +50,26 @@ typedef struct
     task_gameplay_ev_t event;
     bool flag;
 
-    bool  difficulty; 			/* 0 es normal, 1 es dificil */
-    uint8_t  sequence[32];   	/* Secuencia máxima (ejemplo) */
-    uint8_t  seq_length;     	/* Largo actual de la secuencia */
-    uint8_t  seq_index;      	/* Índice al mostrar la secuencia */
-    uint8_t  input_index;    	/* Índice mientras el jugador responde */
-    bool     active;
-    uint16_t score;
-    bool     running;
-    bool     finished;
-    /* Manejo de tiempo y fases de LED */
-    bool     led_on_phase;   /* true: LED encendido, false: pausa */
+    // Configuración del Juego
+    bool difficulty;        /* 0: Normal (repite tod), 1: Difícil (solo nuevo) */
+
+    // Variables de la Lógica Simón Dice
+    uint8_t  sequence[32];  /* Array que guarda la secuencia de colores (0-3) */
+    uint8_t  seq_length;    /* Cuántos colores tiene la secuencia actual (Nivel) */
+
+    uint8_t  play_index;    /* Índice usado por la Máquina para mostrar colores */
+    uint8_t  user_index;    /* Índice usado para trackear qué color toca pulsar */
+
+    uint16_t score;         /* Puntaje actual */
+
+    // Auxiliares
+    uint8_t  last_button_pressed; /* Para guardar qué botón se apretó en WAIT_INPUT */
+    int      color;   /* Para control visual */
+
+    bool     led_on_phase;
+
 } task_gameplay_dta_t;
+
 
 /********************** external data declaration ****************************/
 extern task_gameplay_dta_t task_gameplay_dta;

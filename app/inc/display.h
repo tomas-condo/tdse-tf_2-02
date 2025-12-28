@@ -26,6 +26,8 @@ void displayCharPositionWrite( uint8_t charPositionX, uint8_t charPositionY );
 
 void displayStringWrite( const char * str );
 
+void displayCharWrite( uint8_t charByte );
+
 //=====[#include guards - end]=================================================
 
 #endif // _DISPLAY_H_

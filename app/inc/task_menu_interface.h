@@ -60,6 +60,8 @@ extern void put_event_task_menu(task_menu_ev_t event);
 extern task_menu_ev_t get_event_task_menu(void);
 extern bool any_event_task_menu(void);
 
+extern void put_event_with_score_task_menu(task_menu_ev_t event, uint32_t score);
+
 /********************** End of CPP guard *************************************/
 #ifdef __cplusplus
 }

@@ -280,6 +280,11 @@ static void displayPinWrite( uint8_t pinName, int value )
     }
 }
 
+void displayCharWrite( uint8_t charByte )
+{
+    displayCodeWrite( DISPLAY_RS_DATA, charByte );
+}
+
 static void displayDataBusWrite( uint8_t dataBus )
 {
     displayPinWrite( DISPLAY_PIN_EN, OFF );

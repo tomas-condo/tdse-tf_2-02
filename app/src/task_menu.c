@@ -43,7 +43,6 @@
 
 /* Demo includes */
 #include "logger.h"
-#include "dwt.h"
 
 /* Application & Tasks includes */
 #include "board.h"
@@ -51,8 +50,10 @@
 #include "task_menu.h"
 #include "task_menu_attribute.h"
 #include "task_menu_interface.h"
+#include "task_display.h"
 #include "display.h"
 #include "task_gameplay.h"
+#include "task_gameplay_interface.h"
 
 /********************** macros and definitions *******************************/
 #define G_TASK_MEN_CNT_INI			0ul
@@ -67,18 +68,22 @@
 task_menu_dta_t task_menu_dta =
 {
     /* tick         */ DEL_MEN_XX_MIN,
-    /* state        */ ST_MEN_MAIN,          // Usamos ST_MEN_MAIN como estado inicial
+    /* state        */ ST_MEN_MAIN,
     /* event        */ EV_MEN_IDLE,
     /* flag         */ false,
 
 
 
     // CAMPOS DE ÍNDICE AÑADIDOS
+	/* index_menu0  */ 0,
     /* index_menu1  */ 0,
     /* index_menu2  */ 0,
- //   /* index_menu3  */ 0,
 
+	/* input_score  */ 0,
+
+	/* high_scores  */ {100, 50, 10} /*QUEDAN PARA PROBAR PERO CUANDO HAGAMOS EEPROM EN CERO*/
 };
+
 
 #define MENU_DTA_QTY	(sizeof(task_menu_dta)/sizeof(task_menu_dta_t))
 
@@ -115,7 +120,7 @@ void task_menu_init(void *parameters)
 	p_task_menu_dta = &task_menu_dta;
 
 	/* Init & Print out: Task execution FSM */
-	state = ST_MEN_XX_IDLE;
+	state = ST_MEN_MAIN;
 	p_task_menu_dta->state = state;
 
 	event = EV_MEN_IDLE;
@@ -129,9 +134,6 @@ void task_menu_init(void *parameters)
 				 GET_NAME(state), (uint32_t)state,
 				 GET_NAME(event), (uint32_t)event,
 				 GET_NAME(b_event), (b_event ? "true" : "false"));
-
-	/* Init & Print out: LCD Display */
-	displayInit( DISPLAY_CONNECTION_GPIO_4BITS );
 
     displayCharPositionWrite(0, 0);
 	displayStringWrite("     Bienvenido     ");
@@ -148,10 +150,7 @@ void task_menu_statechart(void) {
     // ---------------------------------------------------------------------
     // 1. Manejo de Eventos
     // ---------------------------------------------------------------------
-	//if (task_gameplay_dta.active == true) {
-        // Opcional: Si task_gameplay acaba de terminar, recuperar control
-     //   return;
-    //}
+
     if (true == any_event_task_menu()) {
         p_task_menu_dta -> flag = true;
         p_task_menu_dta -> event = get_event_task_menu();
@@ -162,184 +161,264 @@ void task_menu_statechart(void) {
     // ---------------------------------------------------------------------
     if (true == p_task_menu_dta -> flag) {
         switch (p_task_menu_dta -> state){
+
             // =============================================================
             // ESTADO MAIN
             // =============================================================
-            case ST_MEN_MAIN:
-            	displayCharPositionWrite(0, 0);
-				displayStringWrite("Instrucciones:      ");
-            	displayCharPositionWrite(0, 1);
-				displayStringWrite("      Ro=ON/OFF     ");
-            	displayCharPositionWrite(0, 2);
-				displayStringWrite("  Am=ESC  Az=ENTER  ");
-            	displayCharPositionWrite(0, 3);
-				displayStringWrite("       Ve=NEXT      ");
-                if (p_task_menu_dta -> event == EV_MEN_ENTER ||
-                	p_task_menu_dta -> event == EV_MEN_NEXT  ||
-					p_task_menu_dta -> event == EV_MEN_ESC){
-                    // Transición MAIN -> MENU 1
+        case ST_MEN_MAIN:
+        	// PASO 1: Mostrar instrucciones (Primera vez que se pulsa botón en Bienvenidos)
+            if (p_task_menu_dta->index_menu0 == 0) {
+            	task_display_set_line(0,"Instrucciones:      ");
+            	task_display_set_line(1,"                    ");
+            	task_display_set_line(2,"  Ro=IZQ   Am=DER   ");
+            	task_display_set_line(3,"  Ve=ESC  Az=ENTER  ");
+
+                // Marcamos que ya mostramos el texto
+                p_task_menu_dta->index_menu0 = 1;
+
+                // Así el sistema se queda esperando el SIGUIENTE botón.
+                p_task_menu_dta->flag = false;
+            }
+
+            // PASO 2: Esperar segunda pulsación para salir de Instrucciones
+            else {
+            	if (EV_MEN_ENTER == p_task_menu_dta->event){
+                	task_display_set_line(0,"Menu:               ");
+                	task_display_set_line(1,"                    ");
+                	task_display_set_line(2,">Jugar    Puntajes  ");
+                	task_display_set_line(3,"                    ");
+
                     p_task_menu_dta -> flag = false;
                     p_task_menu_dta -> state = ST_MEN_MENU1;
-                    p_task_menu_dta -> index_menu1 = 0; //reset
+                    p_task_menu_dta -> index_menu1 = 0;
+
+                    // Reseteamos index_menu0 para que si volvemos a este estado, funcione igual
+                    p_task_menu_dta -> index_menu0 = 0;
+
+                } else if (EV_MEN_ESC == p_task_menu_dta->event||
+                		   EV_MEN_DER == p_task_menu_dta->event||
+                           EV_MEN_IZQ == p_task_menu_dta->event){
+                	// Si aprietan otro botón, nos quedamos aquí y consumimos el evento
+                    p_task_menu_dta -> flag = false;
+                    // No cambiamos de estado, seguimos en ST_MEN_MAIN (Instrucciones)
                 }
-                else
-                    // Transición MAIN -> MAIN
-                    p_task_menu_dta->state = ST_MEN_MAIN;
-                break;
+            }
+            break;
             // =============================================================
             // ESTADO MENU 1
             // =============================================================
             case ST_MEN_MENU1:
 
-                if (p_task_menu_dta -> event == EV_MEN_NEXT){
+            	/*************************************************/
+
+                if (p_task_menu_dta -> event == EV_MEN_DER){
                     if (p_task_menu_dta -> index_menu1 == 0){
-                    	displayCharPositionWrite(0, 0);
-                    	displayStringWrite("                    ");
-                    	displayCharPositionWrite(0, 1);
-                    	displayStringWrite("                    ");
-                    	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(">Jugar    Puntajes  ");
-                    	displayCharPositionWrite(0, 3);
-                    	displayStringWrite("                    ");
+                    	task_display_set_line(0,"Menu:               ");
+                    	task_display_set_line(1,"                    ");
+                    	task_display_set_line(2," Jugar   >Puntajes  ");
+                    	task_display_set_line(3,"                    ");
+                        p_task_menu_dta -> flag = false;
                         p_task_menu_dta -> index_menu1++;
                     }
-                    else if (p_task_menu_dta->index_menu1 == 1){
-                    	displayCharPositionWrite(0, 2);
-                        displayStringWrite(" Jugar   >Puntajes  ");
-                        p_task_menu_dta -> index_menu1 = 0;
-                    }
+                    else if (p_task_menu_dta->index_menu1 == 1)
+                        p_task_menu_dta -> flag = false;
+
                     // La transición es a MENU 1 en ambos casos
                     p_task_menu_dta -> state = ST_MEN_MENU1;
                 }
 
                 /*************************************************/
 
+                if (p_task_menu_dta -> event == EV_MEN_IZQ){
+                    if (p_task_menu_dta -> index_menu1 == 0)
+                        p_task_menu_dta -> flag = false;
+
+                    else if (p_task_menu_dta->index_menu1 == 1){
+                    	task_display_set_line(2,">Jugar    Puntajes  ");
+                        p_task_menu_dta -> flag = false;
+                        p_task_menu_dta -> index_menu1 = 0;
+                    }
+                    p_task_menu_dta -> state = ST_MEN_MENU1;
+                }
+
+                /*************************************************/
                 else if (p_task_menu_dta -> event == EV_MEN_ESC){
-                    // Transición MENU 1 -> MAIN
-                    p_task_menu_dta -> state = ST_MEN_MAIN;
+                	task_display_set_line(0,"Instrucciones:      ");
+                	task_display_set_line(1,"                    ");
+                	task_display_set_line(2,"  Ro=IZQ  Am=DER  ");
+                	task_display_set_line(3,"  Ve=ESC  Az=ENTER  ");
+
+                	p_task_menu_dta -> index_menu0 = 1;
+
+                	p_task_menu_dta -> flag = false;
+                	p_task_menu_dta -> state = ST_MEN_MAIN;
                 }
 
                 /*************************************************/
 
                 else if (p_task_menu_dta -> event == EV_MEN_ENTER){
-                    // Transición MENU 1 -> MENU 2
                     if (p_task_menu_dta->index_menu1 == 0){
-                    	displayCharPositionWrite(0, 0);
-                    	displayStringWrite("Dificultad:         ");
-                    	displayCharPositionWrite(0, 1);
-                    	displayStringWrite("                    ");
-                    	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(">Normal    Dificil  ");
-                    	displayCharPositionWrite(0, 3);
-                    	displayStringWrite("                    ");
-                        // La transición es a MENU 2
+                    	task_display_set_line(0,"Dificultad:         ");
+                    	task_display_set_line(1,"                    ");
+                    	task_display_set_line(2,">Normal    Dificil  ");
+                    	task_display_set_line(3,"                    ");
                         p_task_menu_dta -> flag = false;
                         p_task_menu_dta -> state = ST_MEN_MENU2;
-                        p_task_menu_dta -> index_menu2 = 0; // Entramos a MENU 2, iniciamos su índice
+                        p_task_menu_dta -> index_menu2 = 0;
                         }
                     else if (p_task_menu_dta->index_menu1 == 1){
-                        displayCharPositionWrite(0, 0);
-                        displayStringWrite("Puntajes:           ");
-                        displayCharPositionWrite(0, 1);
-                        displayStringWrite("#1 %d1              ");
-                        displayCharPositionWrite(0, 2);
-                        displayStringWrite("#2 %d2              ");
-                        displayCharPositionWrite(0, 3);
-                        displayStringWrite("#3 %d3              ");
+                    	task_display_set_line(0,"Puntajes:           ");
+                    	task_display_printf(1,  "#1 %d", p_task_menu_dta -> high_scores[0]);
+                    	task_display_printf(2,  "#2 %d", p_task_menu_dta -> high_scores[1]);
+                    	task_display_printf(3,  "#3 %d", p_task_menu_dta -> high_scores[2]);
                         // La transición es a MENU 4
                         p_task_menu_dta -> flag = false;
-                        p_task_menu_dta -> state = ST_MEN_MENU4;// Entramos a MENU 4
+                        p_task_menu_dta -> state = ST_MEN_MENU3;
                     }
                 }
                 break;
 
-            // =============================================================
-            // ESTADO MENU 2
-            // =============================================================
+            case ST_MEN_MENU2: //Mostrando Normal Dificil
 
-            case ST_MEN_MENU2:
-
-
-                if (p_task_menu_dta -> event == EV_MEN_NEXT){
+                if (p_task_menu_dta -> event == EV_MEN_DER){
                     if (p_task_menu_dta -> index_menu2 == 0){
-                    	displayCharPositionWrite(0, 2);
-                    	displayStringWrite(">Normal    Dificil  ");
+                    	task_display_set_line(2," Normal   >Dificil  ");
                         p_task_menu_dta -> index_menu2++;
                     }
-                    else if (p_task_menu_dta->index_menu2 == 1){
-                        displayCharPositionWrite(0, 2);
-                    	displayStringWrite(" Normal   >Dificil  ");
-                        p_task_menu_dta -> index_menu2 = 0;
-                    }
-                    // La transición es a MENU 2 en ambos casos
+                    p_task_menu_dta -> flag = false;
                     p_task_menu_dta -> state = ST_MEN_MENU2;
                 }
 
+                /*************************************************/
 
-                else if (p_task_menu_dta -> event == EV_MEN_ESC){
-                    // Transición MENU 2 -> MENU1
-                    p_task_menu_dta -> state = ST_MEN_MENU1;
-                    p_task_menu_dta -> index_menu2 = 0;
-                    p_task_menu_dta -> index_menu1 = 0;
-                }
+                if (p_task_menu_dta -> event == EV_MEN_IZQ){
+                    if (p_task_menu_dta -> index_menu2 == 0)
+                        p_task_menu_dta -> flag = false;
 
-
-                else if (p_task_menu_dta -> event == EV_MEN_ENTER){
-                    if (p_task_menu_dta->index_menu2 == 0){
-                    	//gameplay_start(GAME_DIFF_NORMAL);
-                    }
                     else if (p_task_menu_dta->index_menu2 == 1){
-                    	//gameplay_start(GAME_DIFF_HARD);
+                    	task_display_set_line(2,">Normal    Dificil  ");
+                        p_task_menu_dta -> flag = false;
+                        p_task_menu_dta -> index_menu2 = 0;
+                    }
+                    // La transición es a MENU 1 en ambos casos
+                    p_task_menu_dta -> state = ST_MEN_MENU2;
                 }
-                // La transición es a MENU 2 en ambos casos
-                displayCharPositionWrite(0, 0);
-                displayStringWrite("                    ");
-                displayCharPositionWrite(0, 1);
-                displayStringWrite("Puntaje: 0          ");
-            	displayCharPositionWrite(0, 2);
-            	displayStringWrite("                    ");
-            	displayCharPositionWrite(0, 3);
-            	displayStringWrite("                    ");
-                p_task_menu_dta -> flag = false;
-                p_task_menu_dta -> state = ST_MEN_MENU3;
+
+                /*************************************************/
+
+                if (p_task_menu_dta -> event == EV_MEN_ESC){
+                	task_display_set_line(0,"Menu:               ");
+                	task_display_set_line(1,"                    ");
+                	task_display_set_line(2,">Jugar    Puntajes  ");
+                	task_display_set_line(3,"                    ");
+                    p_task_menu_dta -> flag = false;
+                    p_task_menu_dta -> index_menu1 = 0;
+                    p_task_menu_dta -> state = ST_MEN_MENU1;
                 }
+
+                /*************************************************/
+
+                if (p_task_menu_dta -> event == EV_MEN_ENTER){
+                	p_task_menu_dta->input_score = 0;
+                    if (p_task_menu_dta -> index_menu2 == 0){
+                    	task_display_set_line(0,"Normal:             ");
+                    	task_display_set_line(1,"                    ");
+                    	task_display_printf(2,  "Puntaje: %d", p_task_menu_dta->input_score);
+                    	task_display_set_line(3,"                    ");
+
+                    	put_event_task_gameplay(EV_GAME_START_NORMAL);
+
+                        p_task_menu_dta -> flag = false;
+                        p_task_menu_dta -> state = ST_MEN_MENU4;
+                    }
+                    if (p_task_menu_dta -> index_menu2 == 1){
+                    	task_display_set_line(0,"Dificil:            ");
+                    	task_display_set_line(1,"                    ");
+                    	task_display_printf(2,  "Puntaje: %d", p_task_menu_dta->input_score);
+                    	task_display_set_line(3,"                    ");
+
+                    	put_event_task_gameplay(EV_GAME_START_HARD);
+
+                        p_task_menu_dta -> flag = false;
+                        p_task_menu_dta -> state = ST_MEN_MENU4;
+                    }
+                }
+
                 break;
 
-            // =============================================================
-            // ESTADO MENU 3
-            // =============================================================
+            case ST_MEN_MENU3:	//Mostrando puntajes históricos
 
-            case ST_MEN_MENU3: //Actualización
             	if(p_task_menu_dta -> event == EV_MEN_ESC){
-            		p_task_menu_dta -> flag = false;
-            		p_task_menu_dta -> state = ST_MEN_MENU2;
+                	task_display_set_line(0,"Menu:               ");
+                	task_display_set_line(1,"                    ");
+                	task_display_set_line(2,">Jugar    Puntajes  ");
+                	task_display_set_line(3,"                    ");
+                    p_task_menu_dta -> flag = false;
+                    p_task_menu_dta -> index_menu1 = 0;
+            		p_task_menu_dta -> state = ST_MEN_MENU1;
             	}
-            	//firma: int get_puntaje();
-            	//nuevo_puntaje = get_puntaje();
-            	//if(get_puntaje() == false) salga del estado para reescribir y volver a menu
-                displayCharPositionWrite(0, 1);
-                displayStringWrite("Puntaje: %d         ");
-                break;
+
+            	if(p_task_menu_dta -> event == EV_MEN_ENTER ||
+            	   p_task_menu_dta -> event == EV_MEN_IZQ ||
+            	   p_task_menu_dta -> event == EV_MEN_DER)
+            	p_task_menu_dta -> state = ST_MEN_MENU3;
+
+            	break;
 
             case ST_MEN_MENU4:
-
-            	if (p_task_menu_dta -> event == EV_MEN_NEXT){
-            		// La transición es a MENU 2 en ambos casos
-	                p_task_menu_dta -> flag = false;
-            	    p_task_menu_dta -> state = ST_MEN_MENU4;
+/*
+            	if(p_task_menu_dta -> event == EV_MEN_IZQ ||
+            	   p_task_menu_dta -> event == EV_MEN_DER ||
+				   p_task_menu_dta -> event == EV_MEN_ENTER){
+            		p_task_menu_dta -> flag = false;
+                    p_task_menu_dta -> state = ST_MEN_MENU4;
             	}
 
-            	else if (p_task_menu_dta -> event == EV_MEN_ESC){
-            		// Transición MENU 4 -> MENU1
-            	    p_task_menu_dta -> index_menu1 = 0;
-	                p_task_menu_dta -> flag = false;
-            	    p_task_menu_dta -> state = ST_MEN_MENU1;
+            	if(p_task_menu_dta -> event == EV_MEN_ESC){
+                	task_display_set_line(0,"Menu:               ");
+                	task_display_set_line(1,"                    ");
+                	task_display_set_line(2,">Jugar    Puntajes  ");
+                	task_display_set_line(3,"                    ");
+                    p_task_menu_dta -> flag = false;
+            		p_task_menu_dta -> state = ST_MEN_MENU1;
+            	}
+*/
+            	if (p_task_menu_dta->event == EV_MEN_GAME_OVER)
+            	{
+            		// 2. Leemos el "Buzón" (input_score) y dibujamos
+            	    // Nota: task_menu_dta.input_score ya fue actualizado por la primitiva
+
+            	    task_display_set_line(0, "     GAME OVER      ");
+
+            	    // ¡Aquí usamos el dato recibido!
+            	    task_display_printf(1,   "Puntaje Final: %d   ", p_task_menu_dta->input_score);
+
+            	    task_display_set_line(2, "                    ");
+            	    task_display_set_line(3, "Pulse ESC para salir");
+
+            	    // 3. Transición al estado de visualización de resultado
+            	    p_task_menu_dta->flag = false;
+            	    p_task_menu_dta->state = ST_MEN_GAME_OVER;
+            	}
+            	break;
+
+            case ST_MEN_GAME_OVER:
+            	if(p_task_menu_dta -> event == EV_MEN_IZQ ||
+            	   p_task_menu_dta -> event == EV_MEN_DER ||
+				   p_task_menu_dta -> event == EV_MEN_ENTER){
+            		p_task_menu_dta -> flag = false;
+                    p_task_menu_dta -> state = ST_MEN_GAME_OVER;
             	}
 
-            	else if (p_task_menu_dta -> event == EV_MEN_ENTER){
-            	    p_task_menu_dta -> flag = false;
-            	    p_task_menu_dta -> state = ST_MEN_MENU4;
+            	if(p_task_menu_dta -> event == EV_MEN_ESC){
+                	task_display_set_line(0,"Menu:               ");
+                	task_display_set_line(1,"                    ");
+                	task_display_set_line(2,">Jugar    Puntajes  ");
+                	task_display_set_line(3,"                    ");
+                    p_task_menu_dta -> flag = false;
+            		p_task_menu_dta -> state = ST_MEN_MENU1;
             	}
+
             	break;
 
             default:

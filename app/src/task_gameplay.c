@@ -19,33 +19,41 @@
 
 #define MAX_SEQUENCE_LEN    100
 
-// Tiempos en ms (asumiendo 1 tick = 1 ms)
-#define DEL_GAME_XX_MIN 0ul
-#define DEL_SHOW_ON_NORMAL  1000ul
-#define DEL_SHOW_OFF_NORMAL 500ul
-#define DEL_SHOW_ON_HARD    400ul
-#define DEL_SHOW_OFF_HARD   200ul
+#define DEL_GAME_XX_MIN
+#define DELAY_GAME_START       1000
+#define DELAY_LED_ON_NORMAL    800
+#define DELAY_LED_OFF_NORMAL   400
+#define DELAY_LED_ON_HARD      400
+#define DELAY_LED_OFF_HARD     200
+#define DELAY_BETWEEN_ROUNDS   1000
+#define DELAY_GAME_OVER        3000
 
 #define GAME_DIFF_NORMAL    0
 #define GAME_DIFF_HARD      1
 
+#define OFF      0
+#define ROJO 	 1
+#define VERDE 	 2
+#define AZUL     3
+#define AMARILLO 4
+
 /********************** internal data declaration ****************************/
 task_gameplay_dta_t task_gameplay_dta =
 {
-    DEL_GAME_XX_MIN,
-	ST_GAME_GEN_SEQ,
+    0,
+	ST_GAME_IDLE,
     EV_GAME_IDLE,
     false,
-    0,
+    false,
+
     {0},
     0,
     0,
     0,
-    true,
     0,
     0,
-    0,
-    0,
+    OFF,
+	false,
 };
 
 #define GAMEPLAY_DTA_QTY	(sizeof(task_gameplay_dta)/sizeof(task_gameplay_dta_t))
@@ -84,7 +92,7 @@ void task_gameplay_init(void *parameters)
 	p_task_gameplay_dta = &task_gameplay_dta;
 
 	/* Init & Print out: Task execution FSM */
-	state = ST_GAME_IDLE;
+	state = ST_GAME_IDLE;/**/
 	p_task_gameplay_dta->state = state;
 
 	event = EV_GAME_IDLE;
@@ -101,116 +109,221 @@ void task_gameplay_init(void *parameters)
 
 	p_task_gameplay_dta->score = 0;
     srand(HAL_GetTick()); // Inicializar semilla aleatoria
+
+	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AZ);
+	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AM);
+	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_RO);
+	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
 }
 
 void task_gameplay_statechart(void)
 {
     task_gameplay_dta_t *p_task_gameplay_dta;
-    /* Update Task Gameplay Data Pointer */
     p_task_gameplay_dta = &task_gameplay_dta;
 
-    if (true == any_event_task_gameplay()) {
-        p_task_gameplay_dta -> flag = true;
-        p_task_gameplay_dta -> event = get_event_task_gameplay();
+    /* 1. ACTUALIZACIÓN DE TIEMPO (TICK) */
+    // Fundamental: Si no restamos el tiempo, los delays nunca terminan.
+    if (p_task_gameplay_dta->tick > 0)
+    {
+        p_task_gameplay_dta->tick--;
     }
 
-    if (true == p_task_gameplay_dta -> flag){
-    	switch (p_task_gameplay_dta -> state) {
-        	case ST_GAME_GEN_SEQ:
+    /* 2. LECTURA DE EVENTOS */
+    if (true == any_event_task_gameplay()) {
+        p_task_gameplay_dta->event = get_event_task_gameplay();
+        p_task_gameplay_dta->flag = true;
+    }
 
-            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AZ);
-            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AM);
-            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_RO);
-            	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
-        		p_task_gameplay_dta -> sequence[p_task_gameplay_dta -> seq_length] = rand() % 4;
-        		p_task_gameplay_dta -> seq_length ++;
+    /* 3. LÓGICA GLOBAL DE BOTONES (FEEDBACK VISUAL) */
+    // Esto solo corre si hubo un evento (presionar botón)
+    if (p_task_gameplay_dta->flag == true) {
+        // Tu lógica original para encender LEDs al pulsar teclas
+        if (p_task_gameplay_dta->event == EV_GAME_BTN_RO) {
+            put_event_task_actuator(EV_LED_XX_ON, ID_LED_RO);
+            p_task_gameplay_dta->color = ROJO;
+        }
+        if (p_task_gameplay_dta->event == EV_GAME_BTN_VE) {
+            put_event_task_actuator(EV_LED_XX_ON, ID_LED_VE);
+            p_task_gameplay_dta->color = VERDE;
+        }
+        if (p_task_gameplay_dta->event == EV_GAME_BTN_AZ) {
+            put_event_task_actuator(EV_LED_XX_ON, ID_LED_AZ);
+            p_task_gameplay_dta->color = AZUL;
+        }
+        if (p_task_gameplay_dta->event == EV_GAME_BTN_AM) {
+            put_event_task_actuator(EV_LED_XX_ON, ID_LED_AM);
+            p_task_gameplay_dta->color = AMARILLO;
+        }
+        
+        // Apagar LEDs si se suelta (IDLE event)
+        if (p_task_gameplay_dta->event == EV_GAME_IDLE) {
+            // (Tu lógica original de apagado aquí...)
+             if(p_task_gameplay_dta -> color == ROJO) put_event_task_actuator(EV_LED_XX_OFF, ID_LED_RO);
+             if(p_task_gameplay_dta -> color == VERDE) put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
+             if(p_task_gameplay_dta -> color == AZUL) put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AZ);
+             if(p_task_gameplay_dta -> color == AMARILLO) put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AM);
+             p_task_gameplay_dta -> color = OFF;
+        }
+    }
 
-        		p_task_gameplay_dta -> seq_length = 0;
-        		p_task_gameplay_dta -> tick = DEL_GAME_XX_MIN; // Pausa antes de mostrar
-        		p_task_gameplay_dta -> state = ST_GAME_SHOW_SEQ_ON;
+    /* 4. MÁQUINA DE ESTADOS PRINCIPAL */
+    // ESTA DEBE CORRER SIEMPRE, NO SOLO CUANDO HAY EVENTOS (FLAG)
+    switch (p_task_gameplay_dta->state) {
 
-                //char buff[16];
-                //sprintf(buff, "Nivel: %d", game.seq_length);
-                //displayCharPositionWrite(0,2);
-                //displayStringWrite(buff);
-                break;
+        case ST_GAME_IDLE:
+            // En IDLE, solo hacemos cosas si hay eventos (botones)
+            if (p_task_gameplay_dta->flag == true)
+            {
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_RO) put_event_task_menu(EV_MEN_IZQ);
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_VE) put_event_task_menu(EV_MEN_ESC);
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_AZ) put_event_task_menu(EV_MEN_ENTER);
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_AM) put_event_task_menu(EV_MEN_DER);
 
-            case ST_GAME_SHOW_SEQ_ON:
-            	if (p_task_gameplay_dta -> input_index < p_task_gameplay_dta -> seq_length) {
-            		//led_control(game.sequence[game.play_index], 1); // ON
-                    // Configurar tiempo según dificultad
-            		p_task_gameplay_dta -> tick = (p_task_gameplay_dta ->difficulty == GAME_DIFF_NORMAL) ? DEL_SHOW_ON_NORMAL : DEL_SHOW_ON_HARD;
-            		p_task_gameplay_dta -> state = ST_GAME_SHOW_SEQ_OFF;
-                    } else {
-                    p_task_gameplay_dta -> seq_index = 0;
-                    //leds_all_off();
-                    //displayCharPositionWrite(0,1);
-                    //displayStringWrite("  Tu Turno   ");
-
-                    // Limpiar cola de eventos
-                    while(any_event_task_menu()) get_event_task_menu();
-                    p_task_gameplay_dta ->state = ST_GAME_WAIT_INPUT;
+                if (p_task_gameplay_dta->event == EV_GAME_START_NORMAL)
+                {
+                    p_task_gameplay_dta->difficulty = 0;
+                    p_task_gameplay_dta->score = 0;
+                    p_task_gameplay_dta->seq_length = 0;
+                    p_task_gameplay_dta->tick = DELAY_GAME_START;
+                    p_task_gameplay_dta->state = ST_GAME_INIT_ROUND;
                 }
-            	break;
+                else if (p_task_gameplay_dta->event == EV_GAME_START_HARD) {
+                    p_task_gameplay_dta->difficulty = 1;
+                    p_task_gameplay_dta->score = 0;
+                    p_task_gameplay_dta->seq_length = 0;
+                    p_task_gameplay_dta->tick = DELAY_GAME_START;
+                    p_task_gameplay_dta->state = ST_GAME_INIT_ROUND;
+                }
+                
+                // Consumimos el evento
+                p_task_gameplay_dta->flag = false;
+            }
+            break;
 
-            case ST_GAME_SHOW_SEQ_OFF:
-            	//led_control(game.sequence[game.play_index], 0); // OFF
-            	p_task_gameplay_dta -> seq_index++;
-            	p_task_gameplay_dta -> tick = (p_task_gameplay_dta -> difficulty == GAME_DIFF_NORMAL) ? DEL_SHOW_OFF_NORMAL : DEL_SHOW_OFF_HARD;
-            	p_task_gameplay_dta -> state = ST_GAME_SHOW_SEQ_ON;
-                break;
+        case ST_GAME_INIT_ROUND:
+            // Esta lógica corre por TIEMPO, no requiere flag
+            if (p_task_gameplay_dta->tick == 0)
+            {
+            	p_task_gameplay_dta -> sequence[p_task_gameplay_dta -> seq_length] = (rand() % 4) + 1;;
+                p_task_gameplay_dta->seq_length++;
 
-            case ST_GAME_WAIT_INPUT:
-            	if (any_event_task_menu()) {
-            		//task_menu_ev_t ev = get_event_task_menu();
-                    uint8_t pressed = 255;
+                // Lógica de dificultad
+                if (p_task_gameplay_dta->difficulty == 0) // Normal
+                    p_task_gameplay_dta->play_index = 0;
+                else // Dificil
+                    p_task_gameplay_dta->play_index = p_task_gameplay_dta->seq_length - 1;
 
-                    //if (ev == EV_BTN_AZ_PRESS) pressed = COLOR_AZ;
-                    //else if (ev == EV_BTN_RO_PRESS) pressed = COLOR_RO;
-                    //else if (ev == EV_BTN_AM_PRESS) pressed = COLOR_AM;
-                    //else if (ev == EV_BTN_VE_PRESS) pressed = COLOR_VE;
+                p_task_gameplay_dta->state = ST_GAME_PLAY_SEQ_ON;
+            }
+            break;
 
-                    if (pressed != 255) {
-                    	//led_control(pressed, 1); // Feedback visual
-                        if (pressed == p_task_gameplay_dta -> sequence[p_task_gameplay_dta -> seq_index]) {
-                        	p_task_gameplay_dta -> seq_index++;
-                        	p_task_gameplay_dta -> tick = 200;
-                        	p_task_gameplay_dta -> state = ST_GAME_CHECK_INPUT;
-                        } else {
-                        	p_task_gameplay_dta -> state = ST_GAME_OVER;
-                        }
+        case ST_GAME_PLAY_SEQ_ON:
+            // Entramos aquí, encendemos led, configuramos tick y nos vamos
+            // Nota: Aquí no verificamos tick==0 para entrar, entramos directo por el cambio de estado
+            {
+                uint8_t color_to_show = p_task_gameplay_dta->sequence[p_task_gameplay_dta->play_index];
+                
+                if (color_to_show == ROJO) put_event_task_actuator(EV_LED_XX_ON, ID_LED_RO);
+                else if (color_to_show == VERDE) put_event_task_actuator(EV_LED_XX_ON, ID_LED_VE);
+                else if (color_to_show == AZUL) put_event_task_actuator(EV_LED_XX_ON, ID_LED_AZ);
+                else if (color_to_show == AMARILLO) put_event_task_actuator(EV_LED_XX_ON, ID_LED_AM);
+
+                p_task_gameplay_dta->led_on_phase = true; // Estamos encendiendo
+                
+                // Setear tiempo
+                if (p_task_gameplay_dta->difficulty == 0)
+                    p_task_gameplay_dta->tick = DELAY_LED_ON_NORMAL;
+                else
+                    p_task_gameplay_dta->tick = DELAY_LED_ON_HARD;
+
+                p_task_gameplay_dta->state = ST_GAME_PLAY_SEQ_OFF;
+            }
+            break;
+
+        case ST_GAME_PLAY_SEQ_OFF:
+            // Solo actuamos si se consumió el tiempo
+            if (p_task_gameplay_dta->tick == 0)
+            {
+                if (p_task_gameplay_dta->led_on_phase == true)
+                {
+                    // Apagar todos
+                    put_event_task_actuator(EV_LED_XX_OFF, ID_LED_RO);
+                    put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
+                    put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AZ);
+                    put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AM);
+
+                    // Tiempo de pausa
+                    p_task_gameplay_dta->tick = (p_task_gameplay_dta->difficulty == 0) ? DELAY_LED_OFF_NORMAL : DELAY_LED_OFF_HARD;
+                    p_task_gameplay_dta->led_on_phase = false;
+                }
+                else // Fin de la pausa
+                {
+                    p_task_gameplay_dta->play_index++;
+                    if (p_task_gameplay_dta->play_index < p_task_gameplay_dta->seq_length) {
+                        p_task_gameplay_dta->state = ST_GAME_PLAY_SEQ_ON;
+                    } else {
+                        // Turno del jugador
+                        p_task_gameplay_dta->user_index = 0;
+                        
+                        // Limpiar cola de eventos viejos
+                        while(any_event_task_gameplay()) get_event_task_gameplay();
+                        p_task_gameplay_dta->flag = false;
+                        
+                        p_task_gameplay_dta->state = ST_GAME_WAIT_INPUT;
                     }
                 }
-                break;
+            }
+            break;
 
-            case ST_GAME_CHECK_INPUT:
-            	//leds_all_off();
-                if (p_task_gameplay_dta -> seq_index >= p_task_gameplay_dta -> seq_length) {
-                	p_task_gameplay_dta -> score = p_task_gameplay_dta -> seq_length;
-                	p_task_gameplay_dta -> tick = DEL_GAME_XX_MIN; // etq
-                	p_task_gameplay_dta -> state = ST_GAME_GEN_SEQ;
-                } else {
-                	p_task_gameplay_dta -> state = ST_GAME_WAIT_INPUT;
+        case ST_GAME_WAIT_INPUT:
+            // Aquí SÍ necesitamos el flag, porque esperamos input del usuario
+            if (p_task_gameplay_dta->flag == true)
+            {
+                uint8_t pressed_color = 255;
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_RO) pressed_color = ROJO;
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_VE) pressed_color = VERDE;
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_AZ) pressed_color = AZUL;
+                if (p_task_gameplay_dta->event == EV_GAME_BTN_AM) pressed_color = AMARILLO;
+
+                if (pressed_color != 255) {
+                    p_task_gameplay_dta->last_button_pressed = pressed_color;
+                    p_task_gameplay_dta->state = ST_GAME_VERIFY;
                 }
-                break;
+                p_task_gameplay_dta->flag = false; // Evento consumido
+            }
+            break;
 
-            case ST_GAME_OVER:
-            	//displayCharPositionWrite(0,0);
-                //displayStringWrite("   GAME OVER    ");
-                //char score_str[16];
-                //sprintf(score_str, "Puntaje: %d     ", task_gameplay_dta.score);
-                //displayCharPositionWrite(0,1);
-                //displayStringWrite(score_str);
+        case ST_GAME_VERIFY:
+            // (Tu lógica de verificación original aquí...)
+            // Comparar last_button_pressed vs sequence[user_index]
+            // ...
+            // Importante: No olvides poner flag=false si consumiste algo,
+            // aunque aquí es lógica interna.
+             if (p_task_gameplay_dta -> last_button_pressed == p_task_gameplay_dta -> sequence[p_task_gameplay_dta -> user_index])
+             {
+                 // Correcto
+                 p_task_gameplay_dta -> user_index++;
+                 if (p_task_gameplay_dta -> user_index >= p_task_gameplay_dta -> seq_length) {
+                     p_task_gameplay_dta -> score++;
+                     p_task_gameplay_dta -> tick = DELAY_BETWEEN_ROUNDS;
+                     p_task_gameplay_dta -> state = ST_GAME_INIT_ROUND;
+                 } else {
+                     p_task_gameplay_dta -> state = ST_GAME_WAIT_INPUT;
+                 }
+             } else {
+                 p_task_gameplay_dta -> state = ST_GAME_GAME_OVER;
+             }
+            break;
 
-                // Parpadeo final simple (usando ACTUATOR)
-                p_task_gameplay_dta -> active = false; // Devuelve control (flag?)
-                p_task_gameplay_dta -> state = ST_GAME_IDLE;
-                break;
+        case ST_GAME_GAME_OVER:
+             put_event_with_score_task_menu(EV_MEN_GAME_OVER, p_task_gameplay_dta->score);
+             p_task_gameplay_dta->state = ST_GAME_IDLE;
+             p_task_gameplay_dta->score = 0;
+             break;
 
-            default:
-                p_task_gameplay_dta -> state = ST_GAME_IDLE;
-                break;
-        }
+        default:
+            p_task_gameplay_dta->state = ST_GAME_IDLE;
+            break;
     }
 }
 
