@@ -37,6 +37,10 @@
 #define AZUL     3
 #define AMARILLO 4
 
+/********************** external declarations from main.c ********************/
+extern uint16_t high_score1;
+void eeprom_escribir_record(uint16_t nuevo_valor);
+
 /********************** internal data declaration ****************************/
 task_gameplay_dta_t task_gameplay_dta =
 {
@@ -316,6 +320,7 @@ void task_gameplay_statechart(void)
             break;
 
         case ST_GAME_GAME_OVER:
+        	/*
              put_event_with_score_task_menu(EV_MEN_GAME_OVER, p_task_gameplay_dta->score);
              p_task_gameplay_dta->state = ST_GAME_IDLE;
              p_task_gameplay_dta->score = 0;
@@ -323,7 +328,20 @@ void task_gameplay_statechart(void)
 
         default:
             p_task_gameplay_dta->state = ST_GAME_IDLE;
-            break;
+            break;*/
+
+        	//---NUEVO GAME OVER -> LÓGICA DE MEMORIA EEPROM ---
+			 // Verificamos si el puntaje actual superó al récord histórico
+			 if (p_task_gameplay_dta->score > high_score1) {
+				 high_score1 = p_task_gameplay_dta->score; // Actualizamos la variable en RAM
+				 eeprom_escribir_record(high_score1);      // Guardamos físicamente en la memoria
+			 }
+			 // --------------------------------
+
+			 put_event_with_score_task_menu(EV_MEN_GAME_OVER, p_task_gameplay_dta->score);
+			 p_task_gameplay_dta->state = ST_GAME_IDLE;
+			 p_task_gameplay_dta->score = 0;
+			 break;
     }
 }
 
