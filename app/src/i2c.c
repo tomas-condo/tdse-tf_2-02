@@ -88,7 +88,7 @@ void EEPROM_Write (uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
  * ESCRITURA DE PUNTAJE (Wrapper para uint16_t)
  * Ideal para guardar el nivel máximo alcanzado
  */
-void EEPROM_Write_Score(uint16_t page, uint16_t offset, uint16_t score) {
+void eeprom_write_score(uint16_t page, uint16_t offset, uint16_t score) {
     uint8_t buffer[2];
     // Descomponemos el uint16 en 2 bytes (Little Endian o Big Endian, consistente)
     buffer[0] = (score >> 8) & 0xFF; // High byte
@@ -100,7 +100,7 @@ void EEPROM_Write_Score(uint16_t page, uint16_t offset, uint16_t score) {
 
 // LECTURA DE PUNTAJE (Wrapper para uint16_t)
 
-uint16_t EEPROM_Read_Score(uint16_t page, uint16_t offset) {
+uint16_t eeprom_read_score(uint16_t page, uint16_t offset) {
     uint8_t buffer[2];
     EEPROM_Read(page, offset, buffer, 2);
 

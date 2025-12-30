@@ -20,8 +20,8 @@ extern void EEPROM_Write (uint16_t page, uint16_t offset, uint8_t *data, uint16_
 extern void EEPROM_Read (uint16_t page, uint16_t offset, uint8_t *data, uint16_t size);
 extern void EEPROM_PageErase (uint16_t page);
 
-extern void EEPROM_Write_NUM (uint16_t page, uint16_t offset, float  fdata);
-extern float EEPROM_Read_NUM (uint16_t page, uint16_t offset);
+void eeprom_write_score(uint16_t page, uint16_t offset, uint16_t score);
+uint16_t eeprom_read_score(uint16_t page, uint16_t offset);
 
 /********************** End of CPP guard *************************************/
 #ifdef __cplusplus

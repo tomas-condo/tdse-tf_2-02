@@ -29,14 +29,14 @@
  * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @file   : task_actuator_attribute.h
+ * @file   : task_pwm.h
  * @date   : Set 26, 2023
  * @author : Juan Manuel Cruz <jcruz@fi.uba.ar> <jcruz@frba.utn.edu.ar>
  * @version	v1.0.0
  */
 
-#ifndef TASK_INC_TASK_ACTUATOR_ATTRIBUTE_H_
-#define TASK_INC_TASK_ACTUATOR_ATTRIBUTE_H_
+#ifndef TASK_INC_TASK_PWM_H_
+#define TASK_INC_TASK_PWM_H_
 
 /********************** CPP guard ********************************************/
 #ifdef __cplusplus
@@ -49,54 +49,18 @@ extern "C" {
 
 /********************** typedef **********************************************/
 
-/* Events to excite Task Actuator */
-typedef enum task_actuator_ev {EV_LED_XX_OFF,
-							   EV_LED_XX_ON,
-							   EV_LED_XX_NOT_BLINK,
-							   EV_LED_XX_BLINK,
-							   EV_LED_XX_PULSE} task_actuator_ev_t;
-
-/* States of Task Actuator */
-typedef enum task_actuator_st {ST_LED_XX_OFF,
-							   ST_LED_XX_ON,
-							   ST_LED_XX_BLINK_ON,
-							   ST_LED_XX_BLINK_OFF,
-							   ST_LED_XX_PULSE} task_actuator_st_t;
-
-/* Identifier of Task Actuator */
-typedef enum task_actuator_id {ID_LED_AZ,
-							   ID_LED_RO,
-							   ID_LED_AM,
-							   ID_LED_VE}task_actuator_id_t;
-
-typedef struct {
-	uint32_t led_id;
-	// Agregamos el CANAL del Timer:
-	uint32_t pwm_channel; // Ej: TIM_CHANNEL_1, TIM_CHANNEL_2...
-
-	// Estos valores definen el comportamiento de tiempos
-	uint32_t tick_blink;
-	uint32_t tick_pulse;
-} task_actuator_cfg_t;
-
-typedef struct
-{
-	uint32_t			tick;
-	task_actuator_st_t	state;
-	task_actuator_ev_t	event;
-	bool				flag;
-} task_actuator_dta_t;
-
 /********************** external data declaration ****************************/
-extern task_actuator_dta_t task_actuator_dta_list[];
+extern uint32_t g_task_b_cnt;
 
 /********************** external functions declaration ***********************/
+void task_pwm_init(void *parameters);
+void task_pwm_update(void *parameters);
 
 /********************** End of CPP guard *************************************/
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* TASK_INC_TASK_ACTUATOR_ATTRIBUTE_H_ */
+#endif /* TASK_INC_TASK_PWM_H_ */
 
 /********************** end of file ******************************************/

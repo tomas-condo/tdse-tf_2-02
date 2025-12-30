@@ -96,7 +96,7 @@ extern "C" {
 #define BTN_VE_PORT 	BOTON_VE_GPIO_Port
 #define BTN_VE_PRESSED	GPIO_PIN_RESET
 #define BTN_VE_HOVER	GPIO_PIN_SET
-
+/*
 #define LED_AM_PIN		LED_AM_Pin
 #define LED_AM_PORT		LED_AM_GPIO_Port
 #define LED_AM_ON		GPIO_PIN_SET
@@ -116,7 +116,7 @@ extern "C" {
 #define LED_RO_PORT		LED_RO_GPIO_Port
 #define LED_RO_ON		GPIO_PIN_SET
 #define LED_RO_OFF		GPIO_PIN_RESET
-
+*/
 
 #endif
 

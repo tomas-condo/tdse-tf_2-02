@@ -10,6 +10,9 @@
 #include "task_menu_interface.h"
 #include "task_actuator_attribute.h"
 #include "task_actuator_interface.h"
+#include "i2c.h"
+#include "task_adc.h"
+#include "app.h"
 #include "display.h"
 #include "logger.h"
 
@@ -37,10 +40,6 @@
 #define AZUL     3
 #define AMARILLO 4
 
-/********************** external declarations from main.c ********************/
-extern uint16_t high_score1;
-void eeprom_escribir_record(uint16_t nuevo_valor);
-
 /********************** internal data declaration ****************************/
 task_gameplay_dta_t task_gameplay_dta =
 {
@@ -62,6 +61,10 @@ task_gameplay_dta_t task_gameplay_dta =
 
 #define GAMEPLAY_DTA_QTY	(sizeof(task_gameplay_dta)/sizeof(task_gameplay_dta_t))
 
+uint16_t high_score1 = 0;
+uint16_t high_score2 = 0;
+uint16_t high_score3 = 0;
+uint32_t brillo_juego = 0; // guardamos la luz ambiente
 /********************** internal functions declaration ***********************/
 
 /********************** internal data definition *****************************/
@@ -71,7 +74,7 @@ const char *p_task_gameplay_ 		= "Non-Blocking & Update By Time Code";
 /********************** external data declaration ****************************/
 uint32_t g_task_gameplay_cnt;
 volatile uint32_t g_task_gameplay_tick_cnt;
-
+extern ADC_HandleTypeDef hadc1;
 /********************** external functions definition ************************/
 
 void task_gameplay_init(void *parameters)
@@ -118,6 +121,28 @@ void task_gameplay_init(void *parameters)
 	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_AM);
 	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_RO);
 	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
+
+	// --- LDR CODIGO ---
+	// 1. Leemos el LDR una sola vez al arrancar
+	HAL_ADC_Start(&hadc1);
+	if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK)
+	{
+		brillo_juego = HAL_ADC_GetValue(&hadc1);
+
+		// Ajuste opcional: Si el valor es muy bajo, lo subimos para que se vea algo
+		if(brillo_juego < 500) brillo_juego = 500;
+	}
+	HAL_ADC_Stop(&hadc1);
+
+
+	high_score1 = eeprom_read_score(0, 0);
+	high_score2 = eeprom_read_score(0, 2);
+	high_score3 = eeprom_read_score(0, 4);
+
+	// Si la EEPROM es nueva, asignar cero
+	if(high_score1 == 0xFFFF) high_score1 = 0;
+	if(high_score2 == 0xFFFF) high_score2 = 0;
+	if(high_score3 == 0xFFFF) high_score3 = 0;
 }
 
 void task_gameplay_statechart(void)
@@ -320,28 +345,46 @@ void task_gameplay_statechart(void)
             break;
 
         case ST_GAME_GAME_OVER:
-        	/*
-             put_event_with_score_task_menu(EV_MEN_GAME_OVER, p_task_gameplay_dta->score);
-             p_task_gameplay_dta->state = ST_GAME_IDLE;
-             p_task_gameplay_dta->score = 0;
-             break;
+        	uint16_t current_score = p_task_gameplay_dta->score;
 
-        default:
+            // CASO 1: Supera el Récord #1
+            if (current_score > high_score1) {
+            	// Desplazamos los puntajes hacia abajo
+                high_score3 = high_score2;
+                high_score2 = high_score1;
+                high_score1 = current_score;
+
+                // Guardamos el podio completo en EEPROM
+                // Nota: Los offsets van de 2 en 2 porque son uint16_t
+                eeprom_write_score(0, 0, high_score1); // Offset 0
+                eeprom_write_score(0, 2, high_score2); // Offset 2
+                eeprom_write_score(0, 4, high_score3); // Offset 4
+            }
+            // CASO 2: No supera el #1, pero supera al #2
+            else if (current_score > high_score2) {
+            	// Desplazamos el 2 al 3
+                high_score3 = high_score2;
+                high_score2 = current_score;
+
+                // Solo hace falta actualizar el 2 y el 3 en EEPROM
+                eeprom_write_score(0, 2, high_score2);
+                eeprom_write_score(0, 4, high_score3);
+            }
+            // CASO 3: Solo supera al #3
+            else if (current_score > high_score3) {
+            	high_score3 = current_score;
+                // Solo actualizamos el 3 en EEPROM
+                eeprom_write_score(0, 4, high_score3);
+            }
+            put_event_with_score_task_menu(EV_MEN_GAME_OVER, current_score);
+
             p_task_gameplay_dta->state = ST_GAME_IDLE;
-            break;*/
 
-        	//---NUEVO GAME OVER -> LÓGICA DE MEMORIA EEPROM ---
-			 // Verificamos si el puntaje actual superó al récord histórico
-			 if (p_task_gameplay_dta->score > high_score1) {
-				 high_score1 = p_task_gameplay_dta->score; // Actualizamos la variable en RAM
-				 eeprom_escribir_record(high_score1);      // Guardamos físicamente en la memoria
-			 }
-			 // --------------------------------
+            break;
 
-			 put_event_with_score_task_menu(EV_MEN_GAME_OVER, p_task_gameplay_dta->score);
-			 p_task_gameplay_dta->state = ST_GAME_IDLE;
-			 p_task_gameplay_dta->score = 0;
-			 break;
+         default:
+             p_task_gameplay_dta->state = ST_GAME_IDLE;
+             break;
     }
 }
 

@@ -56,6 +56,7 @@ extern "C" {
 typedef struct {
 	bool adc_end_of_conversion;
 	uint16_t adc_value;
+	uint16_t pwm_active;
 } shared_data_type;
 /********************** external data declaration ****************************/
 extern uint32_t g_app_cnt;

@@ -47,6 +47,7 @@
 #include "app.h"
 #include "board.h"
 #include "task_adc.h"
+#include "task_pwm.h"
 #include "task_sensor.h"
 #include "task_actuator.h"
 #include "task_display.h"
@@ -81,6 +82,7 @@ const task_cfg_t task_cfg_list[]	= {
 		{task_display_init,	 task_display_update,  NULL},
 		{task_menu_init,	 task_menu_update, 	   NULL},
 		{task_adc_init,      task_adc_update,      &shared_data},
+		//{task_pwm_init,		 task_pwm_update, 	   &shared_data},
 		{task_gameplay_init, task_gameplay_update, NULL},
 };
 
@@ -90,7 +92,7 @@ const task_cfg_t task_cfg_list[]	= {
 
 /********************** internal data definition *****************************/
 const char *p_sys	= " Bare Metal - Event-Triggered Systems (ETS)";
-const char *p_app	= " App - Interactive Menu";
+const char *p_app	= " App - Simon dice";
 
 /********************** external data declaration ****************************/
 uint32_t g_app_cnt;
