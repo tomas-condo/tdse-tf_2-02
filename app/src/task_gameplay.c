@@ -334,6 +334,9 @@ void task_gameplay_statechart(void)
                  p_task_gameplay_dta -> user_index++;
                  if (p_task_gameplay_dta -> user_index >= p_task_gameplay_dta -> seq_length) {
                      p_task_gameplay_dta -> score++;
+
+
+                     put_event_with_score_task_menu(EV_MEN_UPDATE_SCORE, p_task_gameplay_dta->score);
                      p_task_gameplay_dta -> tick = DELAY_BETWEEN_ROUNDS;
                      p_task_gameplay_dta -> state = ST_GAME_INIT_ROUND;
                  } else {

@@ -47,7 +47,6 @@
 #include "app.h"
 #include "board.h"
 #include "task_adc.h"
-#include "task_pwm.h"
 #include "task_sensor.h"
 #include "task_actuator.h"
 #include "task_display.h"

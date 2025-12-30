@@ -88,6 +88,7 @@ typedef enum task_menu_ev {
 	   EV_MEN_DER,
 	   EV_MEN_ESC,
 
+	   EV_MEN_UPDATE_SCORE,
 	   EV_MEN_GAME_OVER,
 	   EV_MEN_IDLE,
 

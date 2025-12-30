@@ -376,23 +376,7 @@ void task_menu_statechart(void) {
             	break;
 
             case ST_MEN_MENU4:
-/*
-            	if(p_task_menu_dta -> event == EV_MEN_IZQ ||
-            	   p_task_menu_dta -> event == EV_MEN_DER ||
-				   p_task_menu_dta -> event == EV_MEN_ENTER){
-            		p_task_menu_dta -> flag = false;
-                    p_task_menu_dta -> state = ST_MEN_MENU4;
-            	}
 
-            	if(p_task_menu_dta -> event == EV_MEN_ESC){
-                	task_display_set_line(0,"Menu:               ");
-                	task_display_set_line(1,"                    ");
-                	task_display_set_line(2,">Jugar    Puntajes  ");
-                	task_display_set_line(3,"                    ");
-                    p_task_menu_dta -> flag = false;
-            		p_task_menu_dta -> state = ST_MEN_MENU1;
-            	}
-*/
             	if (p_task_menu_dta->event == EV_MEN_GAME_OVER)
             	{
             		// 2. Leemos el "Buzón" (input_score) y dibujamos
@@ -410,6 +394,15 @@ void task_menu_statechart(void) {
             	    p_task_menu_dta->flag = false;
             	    p_task_menu_dta->state = ST_MEN_GAME_OVER;
             	}
+
+            	else if (p_task_menu_dta->event == EV_MEN_UPDATE_SCORE)
+            	{
+            	// Solo actualizamos la línea del puntaje.
+            	task_display_printf(2,  "Puntaje: %d", p_task_menu_dta->input_score);
+            	p_task_menu_dta->flag = false;
+            	//seguimos en ST_MEN_MENU4
+            	}
+
             	break;
 
             case ST_MEN_GAME_OVER:
