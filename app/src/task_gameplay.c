@@ -40,6 +40,15 @@
 #define AZUL     3
 #define AMARILLO 4
 
+// Array: Indice 0=OFF, 1=ROJO, 2=VERDE, 3=AZUL, 4=AMARILLO
+const task_actuator_ev_t LED_MAP[] = {
+    0,           // OFF
+    ID_LED_RO,   // 1
+    ID_LED_VE,   // 2
+    ID_LED_AZ,   // 3
+    ID_LED_AM    // 4
+};
+
 /********************** internal data declaration ****************************/
 task_gameplay_dta_t task_gameplay_dta =
 {
@@ -125,7 +134,7 @@ void task_gameplay_init(void *parameters)
 	// --- LDR CODIGO ---
 	// 1. Leemos el LDR una sola vez al arrancar
 	HAL_ADC_Start(&hadc1);
-	if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK)
+	if (HAL_ADC_PollForConversion(&hadc1, 20) == HAL_OK)
 	{
 		brillo_juego = HAL_ADC_GetValue(&hadc1);
 
@@ -246,6 +255,27 @@ void task_gameplay_statechart(void)
             }
             break;
 
+        	/*case ST_GAME_PLAY_SEQ_ON:
+				{
+					// Obtenemos el color (1,2,3,4)
+					uint8_t color_idx = p_task_gameplay_dta->sequence[p_task_gameplay_dta->play_index];
+
+					// Mapeamos directo al ID del LED usando la tabla
+					// Asegúrate que color_idx esté entre 1 y 4 para no salir del array
+					if(color_idx >= 1 && color_idx <= 4) {
+						put_event_task_actuator(EV_LED_XX_ON, LED_MAP[color_idx]);
+					}
+
+					p_task_gameplay_dta->led_on_phase = true;
+
+					// Operador ternario para limpiar el if-else de dificultad
+					p_task_gameplay_dta->tick = (p_task_gameplay_dta->difficulty == 0) ?
+												 DELAY_LED_ON_NORMAL : DELAY_LED_ON_HARD;
+
+					p_task_gameplay_dta->state = ST_GAME_PLAY_SEQ_OFF;
+				}
+				break;*/
+
         case ST_GAME_PLAY_SEQ_ON:
             // Entramos aquí, encendemos led, configuramos tick y nos vamos
             // Nota: Aquí no verificamos tick==0 para entrar, entramos directo por el cambio de estado
@@ -305,7 +335,27 @@ void task_gameplay_statechart(void)
             break;
 
         case ST_GAME_WAIT_INPUT:
-            // Aquí SÍ necesitamos el flag, porque esperamos input del usuario
+            if (p_task_gameplay_dta->flag == true)
+            {
+                uint8_t pressed_color = OFF;
+
+                // Mapeo directo de Evento -> Color
+                switch(p_task_gameplay_dta->event) {
+                    case EV_GAME_BTN_RO: pressed_color = ROJO; break;
+                    case EV_GAME_BTN_VE: pressed_color = VERDE; break;
+                    case EV_GAME_BTN_AZ: pressed_color = AZUL; break;
+                    case EV_GAME_BTN_AM: pressed_color = AMARILLO; break;
+                    default: pressed_color = OFF; break;
+                }
+
+                if (pressed_color != OFF) {
+                    p_task_gameplay_dta->last_button_pressed = pressed_color;
+                    p_task_gameplay_dta->state = ST_GAME_VERIFY;
+                }
+                p_task_gameplay_dta->flag = false;
+            }
+            break;
+            /*// Aquí SÍ necesitamos el flag, porque esperamos input del usuario
             if (p_task_gameplay_dta->flag == true)
             {
                 uint8_t pressed_color = 255;
@@ -320,7 +370,7 @@ void task_gameplay_statechart(void)
                 }
                 p_task_gameplay_dta->flag = false; // Evento consumido
             }
-            break;
+            break;*/
 
         case ST_GAME_VERIFY:
             // (Tu lógica de verificación original aquí...)
@@ -348,6 +398,40 @@ void task_gameplay_statechart(void)
             break;
 
         case ST_GAME_GAME_OVER:
+            uint16_t current_score = p_task_gameplay_dta->score;
+            //bool new_record = false; // Flag para saber si avisamos al usuario
+
+            if (current_score > high_score1) {
+                // Desplazamos memoria RAM
+                high_score3 = high_score2;
+                high_score2 = high_score1;
+                high_score1 = current_score;
+                // Escribimos en orden (optimización: escribir todo el bloque de una si la función lo permite, sino una por una)
+                eeprom_write_score(0, 0, high_score1);
+                eeprom_write_score(0, 2, high_score2);
+                eeprom_write_score(0, 4, high_score3);
+                //new_record = true;
+            }
+            else if (current_score > high_score2) {
+                high_score3 = high_score2;
+                high_score2 = current_score;
+                eeprom_write_score(0, 2, high_score2);
+                eeprom_write_score(0, 4, high_score3);
+                //new_record = true;
+            }
+            else if (current_score > high_score3) {
+                high_score3 = current_score;
+                eeprom_write_score(0, 4, high_score3);
+                //new_record = true;
+            }
+
+            // Aquí podrías mostrar un mensaje diferente si hubo récord nuevo
+            put_event_with_score_task_menu(EV_MEN_GAME_OVER, current_score);
+
+            p_task_gameplay_dta->state = ST_GAME_IDLE;
+            break;
+
+        /*case ST_GAME_GAME_OVER:
         	uint16_t current_score = p_task_gameplay_dta->score;
 
             // CASO 1: Supera el Récord #1
@@ -387,7 +471,7 @@ void task_gameplay_statechart(void)
 
          default:
              p_task_gameplay_dta->state = ST_GAME_IDLE;
-             break;
+             break;*/
     }
 }
 

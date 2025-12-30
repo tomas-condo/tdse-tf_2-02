@@ -79,14 +79,72 @@ void task_display_init(void *parameters)
 				 GET_NAME(b_event), (b_event ? "true" : "false"));
 }
 
+// --------------------------------------------------------------------------
+// OPTIMIZACIÓN 1: Comparar antes de copiar ("Lazy Update")
+// OPTIMIZACIÓN 2: Sección Crítica (Atomicidad)
+// --------------------------------------------------------------------------
+
 void task_display_set_line(uint8_t row, const char *str)
+{
+    if (row >= DISPLAY_ROWS) return;
+
+    // Preparamos una línea temporal en la pila (Stack) para ver cómo quedaría el texto nuevo.
+    char temp_buffer[DISPLAY_COLS];
+    int i;
+
+    // Copiamos el texto al temporal
+    for(i = 0; i < DISPLAY_COLS; i++) {
+        if(str[i] != '\0') {
+            temp_buffer[i] = str[i];
+        } else {
+            break;
+        }
+    }
+    // Rellenamos con espacios el resto (Padding)
+    for(; i < DISPLAY_COLS; i++) { temp_buffer[i] = ' '; }
+
+    // Verificamos si la línea nueva es IGUAL a la que ya tenemos en memoria.
+    if (memcmp(task_display_dta.screen_buffer[row], temp_buffer, DISPLAY_COLS) == 0)
+        return;
+
+    // Si son diferentes, procedemos a copiar, pero protegemos la operación.
+    __asm("CPSID i"); // Deshabilitar interrupciones
+
+    // Copiamos del temporal al buffer real (memcopy es más rápido que el for)
+    memcpy(task_display_dta.screen_buffer[row], temp_buffer, DISPLAY_COLS);
+
+    // Activamos la bandera para que la máquina de estados trabaje
+    task_display_dta.flag = true;
+
+    __asm("CPSIE i"); // Habilitar interrupciones
+}
+
+void task_display_printf(uint8_t row, const char *fmt, ...)
+{
+    if (row >= DISPLAY_ROWS) return;
+
+    // Buffer temporal local
+    char local_buffer[DISPLAY_COLS + 1];
+
+    va_list args;
+    va_start(args, fmt);
+
+    // Formateo seguro
+    vsnprintf(local_buffer, sizeof(local_buffer), fmt, args);
+
+    va_end(args);
+
+    // Llamamos a set_line optimizado
+    task_display_set_line(row, local_buffer);
+}
+
+/*void task_display_set_line(uint8_t row, const char *str)
 {
     if (row >= DISPLAY_ROWS) return;
 
     int i;
     for(i = 0; i < DISPLAY_COLS; i++) {
         if(str[i] != '\0') {
-            // CORRECCIÓN: Usamos la variable global con punto (.)
             task_display_dta.screen_buffer[row][i] = str[i];
         } else {
             break;
@@ -94,11 +152,9 @@ void task_display_set_line(uint8_t row, const char *str)
     }
 
     for(; i < DISPLAY_COLS; i++) {
-        // CORRECCIÓN: Usamos punto (.)
         task_display_dta.screen_buffer[row][i] = ' ';
     }
 
-    // CORRECCIÓN: Usamos punto (.) y el nombre correcto del campo
     task_display_dta.flag = true;
 }
 
@@ -122,7 +178,7 @@ void task_display_printf(uint8_t row, const char *fmt, ...)
     // Reutilizamos la función set_line para copiar al buffer real
     // y rellenar con espacios si es necesario
     task_display_set_line(row, local_buffer);
-}
+}*/
 
 // --- Máquina de Estados (Se llama cada 1ms) ---
 

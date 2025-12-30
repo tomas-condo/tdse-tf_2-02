@@ -134,6 +134,10 @@ int main(void)
 
     /* Application Update */
     app_update();
+
+    // DORMIR CPU (BAJO CONSUMO)
+    HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+
   }
   /* USER CODE END 3 */
 }
