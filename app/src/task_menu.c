@@ -107,13 +107,13 @@ void task_menu_init(void *parameters)
 	bool b_event;
 
 	/* Print out: Task Initialized */
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("  %s is running - %s", GET_NAME(task_menu_init), p_task_menu);
-	LOGGER_INFO("  %s is a %s", GET_NAME(task_menu), p_task_menu_);
+	LOGGER_INFO("  %s is a %s", GET_NAME(task_menu), p_task_menu_);*/
 
 	/* Init & Print out: Task execution counter */
 	g_task_menu_cnt = G_TASK_MEN_CNT_INI;
-	LOGGER_INFO("   %s = %lu", GET_NAME(g_task_menu_cnt), g_task_menu_cnt);
+	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_menu_cnt), g_task_menu_cnt);
 
 	init_queue_event_task_menu();
 
@@ -134,11 +134,11 @@ void task_menu_init(void *parameters)
 	b_event = false;
 	p_task_menu_dta->flag = b_event;
 
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("   %s = %lu   %s = %lu   %s = %s",
 				 GET_NAME(state), (uint32_t)state,
 				 GET_NAME(event), (uint32_t)event,
-				 GET_NAME(b_event), (b_event ? "true" : "false"));
+				 GET_NAME(b_event), (b_event ? "true" : "false"));*/
 
     displayCharPositionWrite(0, 0);
 	displayStringWrite("     Bienvenido     ");

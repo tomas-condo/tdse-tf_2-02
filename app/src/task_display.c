@@ -53,13 +53,13 @@ void task_display_init(void *parameters)
 	bool b_event;
 
 	/* Print out: Task Initialized */
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("  %s is running - %s", GET_NAME(task_display_init), p_task_display);
-	LOGGER_INFO("  %s is a %s", GET_NAME(task_display), p_task_display_);
+	LOGGER_INFO("  %s is a %s", GET_NAME(task_display), p_task_display_);*/
 
 	/* Init & Print out: Task execution counter */
 	g_task_display_cnt = G_TASK_DIS_CNT_INI;
-	LOGGER_INFO("   %s = %lu", GET_NAME(g_task_display_cnt), g_task_display_cnt);
+	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_display_cnt), g_task_display_cnt);
 
 	/* Update Task Actuator Configuration & Data Pointer */
 	p_task_display_dta = &task_display_dta;
@@ -73,10 +73,10 @@ void task_display_init(void *parameters)
 
 	displayInit( DISPLAY_CONNECTION_GPIO_4BITS );
 
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("   %s = %lu   %s = %s",
 				 GET_NAME(state), (uint32_t)state,
-				 GET_NAME(b_event), (b_event ? "true" : "false"));
+				 GET_NAME(b_event), (b_event ? "true" : "false"));*/
 }
 
 // --------------------------------------------------------------------------

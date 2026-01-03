@@ -101,13 +101,13 @@ void task_sensor_init(void *parameters)
 	task_sensor_ev_t event;
 
 	/* Print out: Task Initialized */
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("  %s is running - %s", GET_NAME(task_sensor_init), p_task_sensor);
-	LOGGER_INFO("  %s is a %s", GET_NAME(task_sensor), p_task_sensor_);
+	LOGGER_INFO("  %s is a %s", GET_NAME(task_sensor), p_task_sensor_);*/
 
 	/* Init & Print out: Task execution counter */
 	g_task_sensor_cnt = G_TASK_SEN_CNT_INIT;
-	LOGGER_INFO("   %s = %lu", GET_NAME(g_task_sensor_cnt), g_task_sensor_cnt);
+	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_sensor_cnt), g_task_sensor_cnt);
 
 	for (index = 0; SENSOR_DTA_QTY > index; index++)
 	{
@@ -121,11 +121,11 @@ void task_sensor_init(void *parameters)
 		event = EV_BTN_XX_UP;
 		p_task_sensor_dta->event = event;
 
-		LOGGER_INFO(" ");
+		/*LOGGER_INFO(" ");
 		LOGGER_INFO("   %s = %lu   %s = %lu   %s = %lu",
 				    GET_NAME(index), index,
 					GET_NAME(state), (uint32_t)state,
-					GET_NAME(event), (uint32_t)event);
+					GET_NAME(event), (uint32_t)event);*/
 	}
 }
 

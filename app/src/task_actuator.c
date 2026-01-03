@@ -103,13 +103,13 @@ void task_actuator_init(void *parameters)
 	bool b_event;
 
 	/* Print out: Task Initialized */
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("  %s is running - %s", GET_NAME(task_actuator_init), p_task_actuator);
-	LOGGER_INFO("  %s is a %s", GET_NAME(task_actuator), p_task_actuator_);
+	LOGGER_INFO("  %s is a %s", GET_NAME(task_actuator), p_task_actuator_);*/
 
 	/* Init & Print out: Task execution counter */
 	g_task_actuator_cnt = G_TASK_ACT_CNT_INIT;
-	LOGGER_INFO("   %s = %lu", GET_NAME(g_task_actuator_cnt), g_task_actuator_cnt);
+	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_actuator_cnt), g_task_actuator_cnt);
 
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
@@ -132,12 +132,12 @@ void task_actuator_init(void *parameters)
 		b_event = false;
 		p_task_actuator_dta->flag = b_event;
 
-		LOGGER_INFO(" ");
+		/*LOGGER_INFO(" ");
 		LOGGER_INFO("   %s = %lu   %s = %lu   %s = %lu   %s = %s",
 					 GET_NAME(index), index,
 					 GET_NAME(state), (uint32_t)state,
 					 GET_NAME(event), (uint32_t)event,
-					 GET_NAME(b_event), (b_event ? "true" : "false"));
+					 GET_NAME(b_event), (b_event ? "true" : "false"));*/
 
 		__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
 	}

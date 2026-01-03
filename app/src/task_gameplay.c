@@ -94,13 +94,13 @@ void task_gameplay_init(void *parameters)
 	bool b_event;
 
 	/* Print out: Task Initialized */
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("  %s is running - %s", GET_NAME(task_gameplay_init), p_task_gameplay);
-	LOGGER_INFO("  %s is a %s", GET_NAME(task_gameplay), p_task_gameplay_);
+	LOGGER_INFO("  %s is a %s", GET_NAME(task_gameplay), p_task_gameplay_);*/
 
 	/* Init & Print out: Task execution counter */
 	g_task_gameplay_cnt = G_TASK_GAME_CNT_INI;
-	LOGGER_INFO("   %s = %lu", GET_NAME(g_task_gameplay_cnt), g_task_gameplay_cnt);
+	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_gameplay_cnt), g_task_gameplay_cnt);
 
 	init_queue_event_task_gameplay();
 
@@ -117,11 +117,11 @@ void task_gameplay_init(void *parameters)
 	b_event = false;
 	p_task_gameplay_dta->flag = b_event;
 
-	LOGGER_INFO(" ");
+	/*LOGGER_INFO(" ");
 	LOGGER_INFO("   %s = %lu   %s = %lu   %s = %s",
 				 GET_NAME(state), (uint32_t)state,
 				 GET_NAME(event), (uint32_t)event,
-				 GET_NAME(b_event), (b_event ? "true" : "false"));
+				 GET_NAME(b_event), (b_event ? "true" : "false"));*/
 
 	p_task_gameplay_dta->score = 0;
     srand(HAL_GetTick()); // Inicializar semilla aleatoria
