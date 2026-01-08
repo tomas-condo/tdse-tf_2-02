@@ -1,5 +1,5 @@
-#ifndef TASK_INC_TASK_DISPLAY_ATTRIBUTE_H_
-#define TASK_INC_TASK_DISPLAY_ATTRIBUTE_H_
+#ifndef TASK_INC_TASK_STORAGE_H_
+#define TASK_INC_TASK_STORAGE_H_
 
 /********************** CPP guard ********************************************/
 #ifdef __cplusplus
@@ -7,40 +7,24 @@ extern "C" {
 #endif
 
 /********************** inclusions *******************************************/
-#include <stdint.h>
-#include <stdbool.h>
-
+#include "task_storage_attribute.h"
 /********************** macros ***********************************************/
-#define DISPLAY_ROWS 4
-#define DISPLAY_COLS 20
 
 /********************** typedef **********************************************/
-typedef enum {
-    ST_DISP_IDLE,
-    ST_DISP_SET_CURSOR,
-    ST_DISP_WRITE_CHAR
-} task_display_state_t;
-
-typedef struct
-{
-    task_display_state_t state;
-
-    char screen_buffer[DISPLAY_ROWS][DISPLAY_COLS + 1];
-
-    uint8_t curr_row;
-    uint8_t curr_col;
-
-    bool dirty_rows[DISPLAY_ROWS];
-
-} task_display_dta_t;
 
 /********************** external data declaration ****************************/
-extern task_display_dta_t task_display_dta;
+extern uint32_t g_task_storage_cnt;
+extern volatile uint32_t g_task_storage_tick_cnt;
+
+/********************** external functions declaration ***********************/
+extern void task_storage_init(void *parameters);
+extern void task_storage_update(void *parameters);
 
 /********************** End of CPP guard *************************************/
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* TASK_INC_TASK_DISPLAY_ATTRIBUTE_H_ */
+#endif /* TASK_INC_TASK_STORAGE_H_ */
+
 /********************** end of file ******************************************/

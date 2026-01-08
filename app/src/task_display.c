@@ -32,7 +32,7 @@ task_display_dta_t task_display_dta =
     /* curr_row       */ INITROW,
     /* curr_col       */ INITCOL,
 
-    /* flag */ 			 false
+    /* flag */ 			 {false,false,false,false}
 };
 
 #define DISPLAY_DTA_QTY	(sizeof(task_display_dta)/sizeof(task_display_dta_t))
@@ -68,8 +68,8 @@ void task_display_init(void *parameters)
 	state = ST_DISP_IDLE;
     p_task_display_dta->state = state;
 
-	b_event = false;
-    p_task_display_dta->flag = b_event;
+    for(int i=0; i<DISPLAY_ROWS; i++)
+    	p_task_display_dta->dirty_rows[i] = false;
 
 	displayInit( DISPLAY_CONNECTION_GPIO_4BITS );
 
@@ -114,7 +114,7 @@ void task_display_set_line(uint8_t row, const char *str)
     memcpy(task_display_dta.screen_buffer[row], temp_buffer, DISPLAY_COLS);
 
     // Activamos la bandera para que la máquina de estados trabaje
-    task_display_dta.flag = true;
+    task_display_dta.dirty_rows[row] = true;
 
     __asm("CPSIE i"); // Habilitar interrupciones
 }
@@ -189,26 +189,28 @@ void task_display_statechart(void){
 
     switch (p_task_display_dta->state)
     {
-        case ST_DISP_IDLE:
-            // Si alguien actualizó el buffer, empezamos el ciclo de refresco
-            if (p_task_display_dta->flag) {
-            	p_task_display_dta->curr_row = 0;
-            	p_task_display_dta->curr_col = 0;
-                p_task_display_dta->state = ST_DISP_SET_CURSOR;
+    case ST_DISP_IDLE:
+                for (int i = 0; i < DISPLAY_ROWS; i++) {
+                    if (p_task_display_dta->dirty_rows[i] == true) {
 
-                // Opcional: bajamos la bandera aquí si queremos un solo refresco
-                // o la gestionamos al final. Por seguridad, la bajamos al terminar.
-            }
-            break;
+                        p_task_display_dta->curr_row = i; // Usar 'i', no '0'
+                        p_task_display_dta->curr_col = 0;
+                        p_task_display_dta->state = ST_DISP_SET_CURSOR;
+
+                        // IMPORTANTE: Salir de la función inmediatamente.
+                        // Esto asegura que el costo de IDLE sea casi cero.
+                        return;
+                    }
+                }
+                break;
+
 
         case ST_DISP_SET_CURSOR:
-            // Configura la posición del cursor para la fila actual
-            // Nota: curr_col siempre debería ser 0 al entrar aquí
             displayCharPositionWrite(0, p_task_display_dta->curr_row);
 
-            // Pasamos a escribir caracteres
             p_task_display_dta->state = ST_DISP_WRITE_CHAR;
             break;
+
 
         case ST_DISP_WRITE_CHAR:
             // Escribimos UN solo caracter
@@ -219,20 +221,9 @@ void task_display_statechart(void){
 
             // Verificamos si terminamos la fila
             if (p_task_display_dta->curr_col >= DISPLAY_COLS) {
-            	p_task_display_dta->curr_col = 0;
-            	p_task_display_dta->curr_row++;
-
-                // Verificamos si terminamos todas las filas
-                if (p_task_display_dta->curr_row >= DISPLAY_ROWS) {
-                	p_task_display_dta->flag = false; // Refresco completo
-                	p_task_display_dta->state = ST_DISP_IDLE;
-                } else {
-                    // Si faltan filas, siguiente ciclo movemos cursor
-                	p_task_display_dta->state = ST_DISP_SET_CURSOR;
-                }
+            	p_task_display_dta->dirty_rows[p_task_display_dta->curr_row] = false;
+            	p_task_display_dta->state = ST_DISP_IDLE;
             }
-            // Si no hemos terminado la fila, en el siguiente tick (1ms después)
-            // volveremos a entrar a ST_DISP_WRITE_CHAR para el siguiente caracter.
             break;
 
         default:
@@ -243,39 +234,28 @@ void task_display_statechart(void){
 
 void task_display_update(void *parameters)
 {
-    bool b_time_update_required = false;
+    // Eliminamos la variable local b_time_update_required y el while complejo
 
-    /* Protect shared resource */
-    __asm("CPSID i");   /* disable interrupts */
+    /* Sección Crítica: Verificar y descontar SOLO UN tick */
+    __asm("CPSID i");   /* Deshabilitar interrupciones */
+
+    // CAMBIO CLAVE: Usamos IF, no WHILE.
+    // Si hay 1, 5 o 20 ticks acumulados, solo atendemos UNO por vuelta de loop.
     if (G_TASK_DIS_TICK_CNT_INI < g_task_display_tick_cnt)
     {
-        /* Update Tick Counter */
         g_task_display_tick_cnt--;
-        b_time_update_required = true;
-    }
-    __asm("CPSIE i");   /* enable interrupts */
 
-    while (b_time_update_required)
-    {
-        /* Update Task Counter */
+        // Habilitamos interrupciones ANTES de ejecutar la lógica pesada
+        __asm("CPSIE i");
+
         g_task_display_cnt++;
 
-        /* Run Task Display Statechart */
+        // Ejecutamos la máquina UNA sola vez (Costo fijo: ~130us)
         task_display_statechart();
-
-        /* Protect shared resource */
-        __asm("CPSID i");   /* disable interrupts */
-        if (G_TASK_DIS_TICK_CNT_INI < g_task_display_tick_cnt)
-        {
-            /* Update Tick Counter */
-            g_task_display_tick_cnt--;
-            b_time_update_required = true;
-        }
-        else
-        {
-            b_time_update_required = false;
-        }
-        __asm("CPSIE i");   /* enable interrupts */
+    }
+    else
+    {
+        // Si no había ticks, habilitamos interrupciones y salimos
+        __asm("CPSIE i");
     }
 }
-

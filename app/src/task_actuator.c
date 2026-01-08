@@ -48,23 +48,23 @@
 #include "app.h"
 #include "task_actuator_attribute.h"
 #include "task_actuator_interface.h"
+#include "task_pwm.h"
 
 /********************** macros and definitions *******************************/
 #define G_TASK_ACT_CNT_INIT			0ul
 #define G_TASK_ACT_TICK_CNT_INI		0ul
 
-#define DEL_LED_XX_MAX				250ul
-#define DEL_LED_XX_PUL				250ul
-#define DEL_LED_XX_BLI				500ul
+#define DEL_LED_XX_MAX				62ul  // (Original: 250)
+#define DEL_LED_XX_PUL				62ul  // (Original: 250)
+#define DEL_LED_XX_BLI				125ul // (Original: 500)
 #define DEL_LED_XX_MIN				0ul
 
 /********************** internal data declaration ****************************/
 const task_actuator_cfg_t task_actuator_cfg_list[] = {
-	// ID             CANAL          TIEMPO BLINK    TIEMPO PULSE
-	{ID_LED_AZ,  TIM_CHANNEL_2,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL},
-	{ID_LED_RO,  TIM_CHANNEL_1,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL},
-	{ID_LED_AM,  TIM_CHANNEL_3,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL},
-	{ID_LED_VE,  TIM_CHANNEL_4,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL}
+	{ID_LED_AZ,  ACTUATOR_CH_1,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL},
+	{ID_LED_RO,  ACTUATOR_CH_0,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL},
+	{ID_LED_AM,  ACTUATOR_CH_2,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL},
+	{ID_LED_VE,  ACTUATOR_CH_3,   DEL_LED_XX_BLI,  DEL_LED_XX_PUL}
 };
 
 #define ACTUATOR_CFG_QTY	(sizeof(task_actuator_cfg_list)/sizeof(task_actuator_cfg_t))
@@ -92,6 +92,8 @@ volatile uint32_t g_task_actuator_tick_cnt;
 extern TIM_HandleTypeDef htim3; // Importamos el handle del timer
 extern uint32_t brillo_juego;
 
+static uint32_t g_current_actuator_idx = 0;
+
 /********************** external functions definition ************************/
 void task_actuator_init(void *parameters)
 {
@@ -111,10 +113,7 @@ void task_actuator_init(void *parameters)
 	g_task_actuator_cnt = G_TASK_ACT_CNT_INIT;
 	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_actuator_cnt), g_task_actuator_cnt);
 
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
+	g_current_actuator_idx = 0;
 
 	for (index = 0; ACTUATOR_DTA_QTY > index; index++)
 	{
@@ -139,180 +138,169 @@ void task_actuator_init(void *parameters)
 					 GET_NAME(event), (uint32_t)event,
 					 GET_NAME(b_event), (b_event ? "true" : "false"));*/
 
-		__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
+		task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
 	}
 }
 
 void task_actuator_update(void *parameters)
 {
-	bool b_time_update_required = false;
+	// OPTIMIZACIÓN ANTI-BURST: Usamos IF en lugar de WHILE
+	// Esto previene picos de WCET si se acumulan ticks.
 
-	/* Protect shared resource */
 	__asm("CPSID i");	/* disable interrupts*/
     if (G_TASK_ACT_TICK_CNT_INI < g_task_actuator_tick_cnt)
     {
 		/* Update Tick Counter */
     	g_task_actuator_tick_cnt--;
-    	b_time_update_required = true;
-    }
-    __asm("CPSIE i");	/* enable interrupts */
 
-    while (b_time_update_required)
-    {
-		/* Update Task Counter */
+        // Habilitamos interrupciones ANTES de la carga de trabajo
+        __asm("CPSIE i");
+
 		g_task_actuator_cnt++;
 
-		/* Run Task Statechart */
+		/* Run Task Statechart (Solo procesará 1 LED) */
     	task_actuator_statechart();
-
-    	/* Protect shared resource */
-		__asm("CPSID i");	/* disable interrupts */
-		if (G_TASK_ACT_TICK_CNT_INI < g_task_actuator_tick_cnt)
-		{
-			/* Update Tick Counter */
-			g_task_actuator_tick_cnt--;
-			b_time_update_required = true;
-		}
-		else
-		{
-			b_time_update_required = false;
-		}
-		__asm("CPSIE i");	/* enable interrupts */
+    }
+    else
+    {
+        __asm("CPSIE i");
     }
 }
 
 void task_actuator_statechart(void)
 {
-	uint32_t index;
 	const task_actuator_cfg_t *p_task_actuator_cfg;
 	task_actuator_dta_t *p_task_actuator_dta;
 
-	for (index = 0; ACTUATOR_DTA_QTY > index; index++)
-	{
-		/* Update Task Actuator Configuration & Data Pointer */
-		p_task_actuator_cfg = &task_actuator_cfg_list[index];
-		p_task_actuator_dta = &task_actuator_dta_list[index];
+    // OPTIMIZACIÓN ROUND ROBIN
+    // En lugar de un bucle 'for', usamos el índice estático para procesar
+    // SOLO UN actuador por llamada.
 
-		switch (p_task_actuator_dta->state)
-		{
-			case ST_LED_XX_OFF:
+    // 1. Configuramos punteros para el LED actual
+    p_task_actuator_cfg = &task_actuator_cfg_list[g_current_actuator_idx];
+    p_task_actuator_dta = &task_actuator_dta_list[g_current_actuator_idx];
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_ON == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, brillo_juego);
-					p_task_actuator_dta->state = ST_LED_XX_ON;
-				}
+    // 2. Ejecutamos la lógica SOLO para este LED
+    switch (p_task_actuator_dta->state)
+    {
+        case ST_LED_XX_OFF:
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_BLINK == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					p_task_actuator_dta->tick = DEL_LED_XX_MAX;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, brillo_juego);
-					p_task_actuator_dta->state = ST_LED_XX_BLINK_ON;
-				}
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_ON == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, brillo_juego);
+                p_task_actuator_dta->state = ST_LED_XX_ON;
+            }
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_PULSE == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					p_task_actuator_dta->tick = DEL_LED_XX_MAX;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, brillo_juego);
-					p_task_actuator_dta->state = ST_LED_XX_PULSE;
-				}
-				break;
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_BLINK == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                p_task_actuator_dta->tick = DEL_LED_XX_MAX; // ~250ms reales (62 * 4)
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, brillo_juego);
+                p_task_actuator_dta->state = ST_LED_XX_BLINK_ON;
+            }
 
-			case ST_LED_XX_ON:
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_PULSE == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                p_task_actuator_dta->tick = DEL_LED_XX_MAX;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, brillo_juego);
+                p_task_actuator_dta->state = ST_LED_XX_PULSE;
+            }
+            break;
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_OFF == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
-					p_task_actuator_dta->state = ST_LED_XX_OFF;
-				}
+        case ST_LED_XX_ON:
 
-				break;
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_OFF == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
+                p_task_actuator_dta->state = ST_LED_XX_OFF;
+            }
+            break;
 
-			case ST_LED_XX_BLINK_ON:
-				if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
-				{
-					p_task_actuator_dta->tick --;
-				}
+        case ST_LED_XX_BLINK_ON:
+            // Decremento del tick (ahora ocurre cada 4ms reales)
+            if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
+            {
+                p_task_actuator_dta->tick --;
+            }
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_OFF == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
-					p_task_actuator_dta->state = ST_LED_XX_OFF;
-				}
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_OFF == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
+                p_task_actuator_dta->state = ST_LED_XX_OFF;
+            }
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_ON == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, brillo_juego);
-					p_task_actuator_dta->state = ST_LED_XX_ON;
-				}
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_ON == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, brillo_juego);
+                p_task_actuator_dta->state = ST_LED_XX_ON;
+            }
 
-				if(p_task_actuator_dta->tick == DEL_LED_XX_MIN)
-				{
-					p_task_actuator_dta->tick = DEL_LED_XX_MAX;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
-					p_task_actuator_dta->state = ST_LED_XX_BLINK_OFF;
-				}
+            if(p_task_actuator_dta->tick == DEL_LED_XX_MIN)
+            {
+                p_task_actuator_dta->tick = DEL_LED_XX_MAX;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
+                p_task_actuator_dta->state = ST_LED_XX_BLINK_OFF;
+            }
+            break;
 
-				break;
+        case ST_LED_XX_BLINK_OFF:
+            if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
+            {
+                p_task_actuator_dta->tick --;
+            }
 
-			case ST_LED_XX_BLINK_OFF:
-				if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
-				{
-					p_task_actuator_dta->tick --;
-				}
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_OFF == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
+                p_task_actuator_dta->state = ST_LED_XX_OFF;
+            }
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_OFF == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
-					p_task_actuator_dta->state = ST_LED_XX_OFF;
-				}
+            if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_ON == p_task_actuator_dta->event))
+            {
+                p_task_actuator_dta->flag = false;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, brillo_juego);
+                p_task_actuator_dta->state = ST_LED_XX_ON;
+            }
 
-				if ((true == p_task_actuator_dta->flag) && (EV_LED_XX_ON == p_task_actuator_dta->event))
-				{
-					p_task_actuator_dta->flag = false;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, brillo_juego);
-					p_task_actuator_dta->state = ST_LED_XX_ON;
-				}
+            if(p_task_actuator_dta->tick == DEL_LED_XX_MIN)
+            {
+                p_task_actuator_dta->tick = DEL_LED_XX_MAX;
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, brillo_juego);
+                p_task_actuator_dta->state = ST_LED_XX_BLINK_ON;
+            }
+            break;
 
-				if(p_task_actuator_dta->tick == DEL_LED_XX_MIN)
-				{
-					p_task_actuator_dta->tick = DEL_LED_XX_MAX;
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, brillo_juego);
-					p_task_actuator_dta->state = ST_LED_XX_BLINK_ON;
-				}
+        case ST_LED_XX_PULSE:
+            if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
+            {
+                p_task_actuator_dta->tick --;
+            }
 
-				break;
+            if(p_task_actuator_dta->tick == DEL_LED_XX_MIN)
+            {
+                task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
+                p_task_actuator_dta->state = ST_LED_XX_OFF;
+            }
+            break;
 
-			case ST_LED_XX_PULSE:
-				if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
-				{
-					p_task_actuator_dta->tick --;
-				}
+        default:
+            p_task_actuator_dta->tick  = DEL_LED_XX_MIN;
+            p_task_actuator_dta->state = ST_LED_XX_OFF;
+            p_task_actuator_dta->event = EV_LED_XX_OFF;
+            p_task_actuator_dta->flag = false;
+            break;
+    }
 
-				if(p_task_actuator_dta->tick == DEL_LED_XX_MIN)
-				{
-					__HAL_TIM_SET_COMPARE(&htim3, p_task_actuator_cfg->pwm_channel, 0);
-					p_task_actuator_dta->state = ST_LED_XX_OFF;
-				}
-
-				break;
-
-			default:
-
-				p_task_actuator_dta->tick  = DEL_LED_XX_MIN;
-				p_task_actuator_dta->state = ST_LED_XX_OFF;
-				p_task_actuator_dta->event = EV_LED_XX_OFF;
-				p_task_actuator_dta->flag = false;
-
-				break;
-		}
-	}
+    // 3. Preparamos el índice para el siguiente ciclo (Round Robin)
+    g_current_actuator_idx++;
+    if (g_current_actuator_idx >= ACTUATOR_DTA_QTY) {
+        g_current_actuator_idx = 0;
+    }
 }
 /********************** end of file ******************************************/

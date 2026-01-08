@@ -79,7 +79,7 @@ void EEPROM_Write (uint16_t page, uint16_t offset, uint8_t *data, uint16_t size)
 		size = size-bytesremaining;  // reduce the size of the bytes
 		pos += bytesremaining;  // update the position for the data buffer
 
-		HAL_Delay (5);  // Write cycle delay (5ms)
+		//HAL_Delay (5);  // Write cycle delay (5ms)
 	}
 }
 
@@ -148,7 +148,7 @@ void EEPROM_PageErase (uint16_t page)
 
 	// create a buffer to store the reset values
 	uint8_t data[PAGE_SIZE];
-	memset(data,0xff,PAGE_SIZE);
+	memset(data,0x0,PAGE_SIZE);
 
 	// write the data to the EEPROM
 	HAL_I2C_Mem_Write(EEPROM_I2C, EEPROM_ADDR, MemAddress, 2, data, PAGE_SIZE, 1000);

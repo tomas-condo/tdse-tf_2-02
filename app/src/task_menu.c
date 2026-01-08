@@ -55,6 +55,7 @@
 #include "task_gameplay.h"
 #include "task_gameplay_interface.h"
 #include "i2c.h"
+#include "task_storage_interface.h"
 
 /********************** macros and definitions *******************************/
 #define G_TASK_MEN_CNT_INI			0ul
@@ -98,6 +99,10 @@ const char *p_task_menu_ 		= "Non-Blocking & Update By Time Code";
 uint32_t g_task_menu_cnt;
 volatile uint32_t g_task_menu_tick_cnt;
 
+extern uint16_t high_score1;
+extern uint16_t high_score2;
+extern uint16_t high_score3;
+
 /********************** external functions definition ************************/
 void task_menu_init(void *parameters)
 {
@@ -120,9 +125,11 @@ void task_menu_init(void *parameters)
 	/* Update Task Actuator Configuration & Data Pointer */
 	p_task_menu_dta = &task_menu_dta;
 
-	p_task_menu_dta->high_scores[0] = eeprom_read_score(0, 0); // Top 1
-	p_task_menu_dta->high_scores[1] = eeprom_read_score(0, 2); // Top 2
-	p_task_menu_dta->high_scores[2] = eeprom_read_score(0, 4); // Top 3
+	//p_task_menu_dta->high_scores[0] = eeprom_read_score(0, 0); // Top 1
+	//p_task_menu_dta->high_scores[1] = eeprom_read_score(0, 2); // Top 2
+	//p_task_menu_dta->high_scores[2] = eeprom_read_score(0, 4); // Top 3
+
+	put_event_task_storage(EV_STORAGE_READ_SCORES);
 
 	/* Init & Print out: Task execution FSM */
 	state = ST_MEN_MAIN;
@@ -273,9 +280,10 @@ void task_menu_statechart(void) {
                         }
                     else if (p_task_menu_dta->index_menu1 == 1){
 
-                    	p_task_menu_dta->high_scores[0] = eeprom_read_score(0, 0);
-                    	p_task_menu_dta->high_scores[1] = eeprom_read_score(0, 2);
-                    	p_task_menu_dta->high_scores[2] = eeprom_read_score(0, 4);
+                    	//p_task_menu_dta->high_scores[0] = eeprom_read_score(0, 0);
+                    	//p_task_menu_dta->high_scores[1] = eeprom_read_score(0, 2);
+                    	//p_task_menu_dta->high_scores[2] = eeprom_read_score(0, 4);
+                    	put_event_task_storage(EV_STORAGE_READ_SCORES);
 
                     	task_display_set_line(0,"Puntajes:           ");
                     	task_display_printf(1,  "#1 %d", p_task_menu_dta -> high_scores[0]);
@@ -286,6 +294,14 @@ void task_menu_statechart(void) {
                         p_task_menu_dta -> state = ST_MEN_MENU3;
                     }
                 }
+
+                if (p_task_menu_dta->event == EV_MEN_SCORES_UPDATED) {
+                	p_task_menu_dta->high_scores[0] = high_score1;
+                    p_task_menu_dta->high_scores[1] = high_score2;
+                    p_task_menu_dta->high_scores[2] = high_score3;
+                    p_task_menu_dta->flag = false;
+                }
+
                 break;
 
             case ST_MEN_MENU2: //Mostrando Normal Dificil
@@ -357,6 +373,21 @@ void task_menu_statechart(void) {
                 break;
 
             case ST_MEN_MENU3:	//Mostrando puntajes históricos
+
+
+            	if (p_task_menu_dta->event == EV_MEN_SCORES_UPDATED) {
+
+            	p_task_menu_dta->high_scores[0] = high_score1;
+            	p_task_menu_dta->high_scores[1] = high_score2;
+            	p_task_menu_dta->high_scores[2] = high_score3;
+
+            	task_display_set_line(0,"Puntajes:           ");
+            	task_display_printf(1,  "#1 %d", p_task_menu_dta -> high_scores[0]);
+            	task_display_printf(2,  "#2 %d", p_task_menu_dta -> high_scores[1]);
+            	task_display_printf(3,  "#3 %d", p_task_menu_dta -> high_scores[2]);
+
+            	p_task_menu_dta->flag = false;
+            	}
 
             	if(p_task_menu_dta -> event == EV_MEN_ESC){
                 	task_display_set_line(0,"Menu:               ");

@@ -48,17 +48,22 @@
 #include "app.h"
 
 /********************** macros and definitions *******************************/
-
+#define ADC_REFRESH_RATE_MS  200
 
 /********************** internal data declaration ****************************/
+// Puntero estático para acceder a los datos compartidos desde la ISR (Interrupción)
+static shared_data_type *p_adc_shared_data = NULL;
 
+// Flag para evitar reentrancia o iniciar conversión si ya hay una en curso
+static volatile bool adc_is_converting = false;
+
+// Variables para control de tiempo (Frecuencia de muestreo)
+static uint32_t adc_last_tick = 0;
 
 /********************** internal functions declaration ***********************/
-HAL_StatusTypeDef ADC_Poll_Read(uint16_t *value);
+//HAL_StatusTypeDef ADC_Poll_Read(uint16_t *value);
 
 /********************** internal data definition *****************************/
-
-const char *p_task_adc 		= "Task ADC";
 
 /********************** external data declaration *****************************/
 
@@ -67,17 +72,24 @@ extern ADC_HandleTypeDef hadc1;
 /********************** external functions definition ************************/
 void task_adc_init(void *parameters)
 {
-	shared_data_type *shared_data = (shared_data_type *) parameters;
+	/*shared_data_type *shared_data = (shared_data_type *) parameters;
 
-	/* Print out: Task Initialized */
 	//LOGGER_LOG("  %s is running - %s\r\n", GET_NAME(task_adc_init), p_task_adc);
 
-	shared_data->adc_end_of_conversion = false;
+	// shared_data->adc_end_of_conversion = false;
+
+*/
+	    p_adc_shared_data = (shared_data_type *) parameters;
+
+	    p_adc_shared_data->adc_end_of_conversion = false;
+
+	    adc_is_converting = false;
+	    adc_last_tick = HAL_GetTick();
 }
 
 void task_adc_update(void *parameters)
 {
-
+/*
 	shared_data_type *shared_data = (shared_data_type *) parameters;
 
 	if (HAL_OK==ADC_Poll_Read(&shared_data->adc_value)) {
@@ -101,9 +113,49 @@ HAL_StatusTypeDef ADC_Poll_Read(uint16_t *value) {
 			*value = HAL_ADC_GetValue(&hadc1);
 		}
 	}
-	return res;
+	return res;*/
+
+	// 1. OPTIMIZACIÓN DE FRECUENCIA:
+	    // Solo iniciamos conversión si pasó el tiempo definido (ej. 200ms)
+	    // Esto reduce drásticamente el consumo de CPU comparado con hacerlo en cada loop.
+	    if ((HAL_GetTick() - adc_last_tick) >= ADC_REFRESH_RATE_MS)
+	    {
+	        // 2. PROTECCIÓN DE ESTADO:
+	        // Solo iniciamos si el ADC no está ocupado
+	        if (adc_is_converting == false)
+	        {
+	            // Iniciamos la conversión por INTERRUPCIÓN (No bloqueante)
+	            if (HAL_ADC_Start_IT(&hadc1) == HAL_OK)
+	            {
+	                adc_is_converting = true;
+	                adc_last_tick = HAL_GetTick(); // Reiniciamos timer
+	            }
+	            else
+	            {
+	                // Manejo de error ligero si no pudo iniciar
+	            }
+	        }
+	    }
 }
 
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+    // Verificamos que sea nuestro ADC (por si hay más de uno en el futuro)
+    if (hadc->Instance == ADC1)
+    {
+        // Verificamos que el puntero esté inicializado
+        if (p_adc_shared_data != NULL)
+        {
+            // Leemos el valor (operación rápida)
+            p_adc_shared_data->adc_value = HAL_ADC_GetValue(hadc);
 
+            // Avisamos que hay dato nuevo
+            p_adc_shared_data->adc_end_of_conversion = true;
+        }
+
+        // Liberamos el semáforo
+        adc_is_converting = false;
+    }
+}
 
 /********************** end of file ******************************************/

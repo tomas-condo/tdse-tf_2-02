@@ -10,6 +10,8 @@
 #include "task_menu_interface.h"
 #include "task_actuator_attribute.h"
 #include "task_actuator_interface.h"
+#include "task_storage_attribute.h"
+#include "task_storage_interface.h"
 #include "i2c.h"
 #include "task_adc.h"
 #include "app.h"
@@ -152,6 +154,10 @@ void task_gameplay_init(void *parameters)
 	if(high_score1 == 0xFFFF) high_score1 = 0;
 	if(high_score2 == 0xFFFF) high_score2 = 0;
 	if(high_score3 == 0xFFFF) high_score3 = 0;
+
+	//EEPROM_PageErase(0);
+	//EEPROM_PageErase(2);
+	//EEPROM_PageErase(4);
 }
 
 void task_gameplay_statechart(void)
@@ -397,7 +403,7 @@ void task_gameplay_statechart(void)
              }
             break;
 
-        case ST_GAME_GAME_OVER:
+   /*     case ST_GAME_GAME_OVER:
             uint16_t current_score = p_task_gameplay_dta->score;
             //bool new_record = false; // Flag para saber si avisamos al usuario
 
@@ -430,7 +436,7 @@ void task_gameplay_statechart(void)
 
             p_task_gameplay_dta->state = ST_GAME_IDLE;
             break;
-
+*/
         /*case ST_GAME_GAME_OVER:
         	uint16_t current_score = p_task_gameplay_dta->score;
 
@@ -468,10 +474,48 @@ void task_gameplay_statechart(void)
             p_task_gameplay_dta->state = ST_GAME_IDLE;
 
             break;
+*/
+        case ST_GAME_GAME_OVER:
+        {
+            uint16_t current_score = p_task_gameplay_dta->score;
+            bool new_record = false;
+
+            // 1. Actualización INSTANTÁNEA en RAM (WCET despreciable)
+            if (current_score > high_score1) {
+                high_score3 = high_score2;
+                high_score2 = high_score1;
+                high_score1 = current_score;
+                new_record = true;
+            }
+            else if (current_score > high_score2) {
+                high_score3 = high_score2;
+                high_score2 = current_score;
+                new_record = true;
+            }
+            else if (current_score > high_score3) {
+                high_score3 = current_score;
+                new_record = true;
+            }
+
+            // 2. Si hubo cambios, delegamos el trabajo sucio a Storage
+            if (new_record) {
+                // ¡Esta línea reemplaza todos tus estados ST_GAME_SAVE_SCORE_x!
+                put_event_task_storage(EV_STORAGE_SAVE_SCORES);
+            }
+
+            // 3. Feedback inmediato al usuario
+            put_event_with_score_task_menu(EV_MEN_GAME_OVER, p_task_gameplay_dta->score);
+
+            // Regresamos a IDLE inmediatamente. Storage guardará en background.
+            p_task_gameplay_dta->state = ST_GAME_IDLE;
+            break;
+        }
+
+
 
          default:
              p_task_gameplay_dta->state = ST_GAME_IDLE;
-             break;*/
+             break;
     }
 }
 

@@ -15,7 +15,7 @@ extern "C" {
 /* Events to excite Task Gameplay */
 // task_gameplay_attribute.h
 
-typedef enum {
+/*typedef enum {
     ST_GAME_IDLE,
 
     // Ciclo de Juego
@@ -26,7 +26,21 @@ typedef enum {
     ST_GAME_VERIFY,         // Valida si la pulsación fue correcta
     ST_GAME_GAME_OVER       // Fin del juego
 } task_gameplay_state_t;
+*/
 
+typedef enum {
+	ST_GAME_IDLE,
+	ST_GAME_INIT_ROUND,
+	ST_GAME_PLAY_SEQ_ON,
+	ST_GAME_PLAY_SEQ_OFF,
+	ST_GAME_WAIT_INPUT,
+	ST_GAME_VERIFY,
+	ST_GAME_GAME_OVER,     // <--- Tu estado actual
+    ST_GAME_SAVE_SCORE_1,  // <--- NUEVO
+    ST_GAME_SAVE_SCORE_2,  // <--- NUEVO
+    ST_GAME_SAVE_SCORE_3,  // <--- NUEVO
+    ST_GAME_FINISH_OVER    // <--- NUEVO
+} task_gameplay_state_t;
 
 typedef enum task_gameplay_ev {
 	EV_GAME_IDLE,
