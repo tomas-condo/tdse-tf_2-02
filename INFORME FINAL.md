@@ -247,7 +247,8 @@ En la figura 3.1.1 se muestra el circuito esquemático del hardware de la memori
 
 En la figura 3.1.2 se ve el esquematico de como se conectan los pulsadores, luces led y LDR a la placa nucleo.
 
-<img width="649" height="729" alt="image" src="https://github.com/user-attachments/assets/d8b3c91b-32d7-4609-9030-e4f96dee3a26" />
+![WhatsApp Image 2025-12-29 at 19 45 05](https://github.com/user-attachments/assets/aed0ac79-74b7-4d58-9a46-c2d75eb80a89)
+
 **Figura 3.1.2**: Esquematico para pulsadores, LDR, y luces led del sistema.
 
 
@@ -258,21 +259,34 @@ Para la impementacion del firmaware del juego utilizamos el lenguaje C++. Con el
 ## **3.2.1 Módulo display** 
 Este módulo se encarda de mostrarle al usuario la informacion del estado del juego u menu utilizando el display. Lo primero que hace este moódulo es generar las conexiones de la placa experimental con el display como se muestra en la siguiente figura: 
 <img width="665" height="283" alt="image" src="https://github.com/user-attachments/assets/bca28950-2379-4853-8c99-fcfa59e57d7d" />
+
 **Figura 3.2.1.a**: Conexiones de pines
 
 Con esas conexiones se realiza un data bus para que la informacion pueda ser transmitida al display:
 <img width="552" height="725" alt="image" src="https://github.com/user-attachments/assets/d4a41a73-12b8-4d5a-847a-f2ca6c641509" />
+
 **Figura 3.2.1.b**: Data Bus
 
 <img width="472" height="746" alt="image" src="https://github.com/user-attachments/assets/592fd532-e6b3-409d-acd4-32b77b594d04" />
+
 **Figura 3.2.1.c**: Logica del display
 
 Y luego finalmente dependiendo del estado utiliza el tipo de función **displayCodeWrite** para mostrar en el display la pantalla deseada. 
 
 ## **3.2.2 Módulo Memoria** 
-Este modulo se encarga de a partir de los datos adquiridos guardarlo a la memoria EEPROM utilizada.
+Este modulo se encarga de a partir de los datos adquiridos guardarlo a la memoria EEPROM utilizada. La gestión de la memoria no volátil (EEPROM) se trata como una tarea de almacenamiento utilizando la función (task_storage). Esta tarea se encarga de garantizar la persistencia de datos, como puntajes o configuraciones, utilizando el bus I2C.
 
+En el archivo app.c, la memoria se gestiona a través de task_cfg_list, que define el ciclo de vida de cada componente del software.
 
+Se inicializa con task_storage_init el cual se ejecuta una sola vez al arrancar el sistema dentro de app_init() este verificar la presencia de la memoria y cargar los datos guardados. Periodicamente se actualizan los datos con task_storage_update, esta función es llamada en app_update(), en lugar de escribir constantemente, lo que dañaría la vida útil de la EEPROM, esta tarea suele revisar si hubo cambios en los datos del juego y solo realiza la escritura cuando haya algun cambio.
+
+La tarea de almacenamiento depende directamente del periférico I2C1 configurado en el archivo principal main.c. Esto lo hace la función MX_I2C1_Init(), esta funcion tambien configura los pines físicos. Tiene una velocidad de 100,000 Hz el cual es el modo estándar de comunicación I2C. Tambien aparece como tick de Control g_task_storage_tick_cnt, el contador que sincroniza la frecuencia de ejecución de la tarea. La interacción con la EEPROM sigue un flujo estrictamente controlado por el sistema de ticks. Como cada milisegundo, la función HAL_SYSTICK_Callback() incrementa el contador g_task_storage_tick_cnt, el bucle principal en app_update() detecta que el tiempo ha transcurrido y cede el control a task_storage_update() pero para evitar que la escritura en la EEPROM detenga el juego, la lógica de app.c mide el tiempo de ejecución de cada tarea con el WCET para asegurar que el sistema no se sature.
+
+Dentro de task_storage.c vemos que se realizan 2 cosas importantes, la lectura de los datos de puntaje más altos recuperar los tres mejores puntajes de la EEPROM al iniciar o cuando se solicita. Y tambien realiza la escritura de ellos guardar de forma permanente los nuevos puntajes cuando el juego termina, evitando la pérdida de datos al apagar el equipo. 
+
+No hace estas cosas todo a la vez cuando se le solicitan, sino que llama a la función task_storage_statechart() donde para escribir sigue los siguientes pasos, con EV_STORAGE_SAVE_SCORES, pasa al estado WRITE_SCORE_1 el cual envía el comando de escritura para el primer puntaje y carga el valor de tick con 5 ms, luego pasa a WAIT_1 aqui el sistema sale de la función y permite que otras tareas sigan funcionando; solo cuando el tick llega a cero, avanza al siguiente estado. Este proceso se repite para los puntajes 2 y 3 hasta regresar al estado IDLE. El ciclo de lectura funciona de manera similar, pero con tiempos de espera menores de 1 ms. Al finalizar la lectura de los tres puntajes, la tarea ejecuta una acción de comunicación entre procesos envia put_event_task_menu(EV_MEN_SCORES_UPDATED) para avisar a la tarea del manu que los puntajes ya están listos para ser mostrados en pantalla.
+
+Esta logica es importante ya que lo hace mas eficiente ya que el procesador no gasta ciclos esperando al bus I2C y al respetar los tiempos de STORAGE_WRITE_DELAY_MS, se asegura que la EEPROM termine de grabar físicamente los electrones en la celda de memoria antes de recibir el siguiente dato.
 
 **Figura 3.2.2**:
 
