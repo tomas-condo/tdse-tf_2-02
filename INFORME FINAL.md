@@ -1,7 +1,7 @@
 
 <img width="1071" height="358" alt="387361653-15600b18-f73b-4ba3-a959-47f0048a1ab6" src="https://github.com/user-attachments/assets/783185ee-f430-4c1f-96fa-2ac4ad3de8b4" />
 
-# **Juego Interactivo "Simón dice  INFORME FINAL"** 
+# **Juego Interactivo "Simón dice"  INFORME FINAL** 
 
 **Autores: Tomás Ignacio Condo, Camila Trinidad Morasso y Francisco Javier Briones**
 
@@ -11,9 +11,12 @@
 
 ### **RESUMEN**
 
-En este trabajo se realizo un juego del estilo "Simón dice" donde se iluminan luces led para que luego el jugador continue la secuencia mostrada por el juego utilizando pulsadores correspondientes a cada uno de las luces. Para agregarle más dinamica al juego tambien se le agrego un menu para selección de juego con una pantalla LED y un LDR para, a partir de la luz del ambiente cambiar el brillo de la pantalla. En el menu mencionado se puede seleccionar entre las opciones de juego principal y puntajes más altos previos luego de que se le da una introducción al jugador y se le explicaron las instrucciones de como manejar el menu. En el menu de juego se pueden elegir entre 2 opciones, Normal y Dificil, donde el modo dificil es igual al normal con la diferencia de que la secuencia no es mostrada por completo para cada nuevo nivel y solo se muestra la luz correspondiente al nuevo color añadido a la secuencia. Mientras continua el juego se mostrara en el display el puntaje actual del jugador con tambien el puntaje máximo global. Luego de terminar el juego se mostrara el puntaje final del jugador y este será devuelto al menu inicial. Durante todo el proceso el juego utiliza una memoria EEPROM externa que almacena datos persistentes como puntajes máximos,o las configuraciones de dificultad. 
+  En este trabajo se realizó un juego del estilo "Simón dice" donde se iluminan luces led para que luego el jugador continue la secuencia mostrada, utilizando pulsadores correspondientes a cada una de las luces. 
+Este, cuenta con un display LCD y un Light Dependent Resistor (Resistencia Dependiente de la Luz), un componente que cambia su valor de resistencia según la luz que recibe para cambiar el brillo de los leds. 
+Al encenderlo cuenta con una pantalla de bienvenida para luego, dar paso a las instrucciones del manejo del "menú". Incorporado para agregar dinamismo, donde se pueden elegir las opciones "Jugar", para seleccionar la dificultad del mismo, y "Puntajes", donde se mostrarán las puntaciones alcanzadas más altas. 
+En el menu de "Jugar" se pueden elegir entre 2 opciones, Normal y Difícil, donde el modo difícil es igual al normal con la diferencia de que la secuencia no es mostrada por completo para cada nuevo nivel y solo se muestra la luz correspondiente al nuevo color añadido a la secuencia. Mientras se juega la partida, se visualiza en el display el puntaje actual del jugador. Al perder se muestra el puntaje final junto a la pantalla "Game Over" indicando la finalización de la partida, al presionar "Escape", este será devuelto al menu inicial. Se utiliza una memoria EEPROM externa que almacena los tres puntajes máximos. 
 
-La implementación del mismo se realizó utilizando los lenguajes de código C++ y Python mediante el uso del entorno de desarrollo de Mbed en una placa Núcleo-F103RBTX proporcionada por la cátedra de Sistemas Embebidos de la Facultad de Ingeniería de la Universidad de Buenos Aires, y se utilizaron además diferentes módulos para el desarrollo del proyecto.
+  La implementación del mismo se realizó utilizando los lenguajes de código C++ y Python mediante el uso del entorno de desarrollo de Mbed en una placa Núcleo-F103RBTX proporcionada por la cátedra de Sistemas Embebidos de la Facultad de Ingeniería de la Universidad de Buenos Aires, y se utilizaron además diferentes módulos para el desarrollo del proyecto.
 
 
 # Índice General
@@ -53,31 +56,30 @@ La implementación del mismo se realizó utilizando los lenguajes de código C++
 # **Introducción general** 
 ## **1.1 Análisis de objetivos**
 
-El objetivo del proyecto es crear un juego del estilo de simon dice parar su uso en competencias, capaz de garantizar calidad, precisión y consistencia en el proceso, bajo estándares de competencias profesionales y amateur de el juego de memoria.
+?  El objetivo del proyecto es crear un juego del estilo "Simon dice" para su uso en competencias, capaz de garantizar calidad, precisión y consistencia en el proceso, bajo estándares de competencias profesionales y amateur del juego de memoria.
 
-En el mercado argentino existen diversos productos relacionados con juegos de memoria y reflejos, desde el clásico “Simon” de Hasbro hasta juguetes electrónicos genéricos y aplicaciones móviles que imitan el mismo concepto. Estos dispositivos suelen ofrecer distintas combinaciones de luces y sonidos, pero en general son sistemas cerrados, con lógica de juego fija y sin posibilidad de modificación por parte del usuario.
+  En el mercado existen diversos productos relacionados con juegos de memoria y reflejos, desde el clásico “Simon” de Hasbro hasta juguetes electrónicos genéricos y aplicaciones móviles que imitan el mismo concepto. Estos dispositivos suelen ofrecer distintas combinaciones de luces y sonidos, pero en general son sistemas cerrados, con lógica de juego fija y sin posibilidad de modificación por parte del usuario.
 
-Como primer competidor puede mencionarse el juego electrónico comercial tipo “Simon”, que ofrece una secuencia de luces y sonidos que el jugador debe repetir. Si bien la experiencia es entretenida, el usuario no tiene acceso al hardware ni al software interno, por lo que no puede cambiar reglas, niveles de dificultad ni integrar el juego con otros sistemas. Nuestro proyecto se diferencia en que está completamente implementado sobre una plataforma de desarrollo STM32, permitiendo modificar el firmware y experimentar con nuevas funciones.
+  Como primer competidor puede mencionarse el juego electrónico comercial tipo “Simon”, que ofrece una secuencia de luces y sonidos que el jugador debe repetir. Si bien la experiencia es entretenida, el usuario no tiene acceso al hardware ni al software interno, por lo que no puede cambiar reglas, niveles de dificultad ni integrar el juego con otros sistemas. Nuestro proyecto se diferencia en que está completamente implementado sobre una plataforma de desarrollo STM32, permitiendo modificar el firmware y experimentar con nuevas funciones.
 
-Un segundo competidor lo constituyen las aplicaciones de juego de memoria para teléfonos celulares, ampliamente disponibles en tiendas digitales. Estas aplicaciones pueden ofrecer gráficos y sonidos avanzados, pero pierden el componente tangible de interactuar con botones físicos y LEDs reales, y no permiten practicar el diseño de sistemas embebidos. El presente proyecto recupera ese aspecto físico y educativo, brindando un entorno ideal para ejercitar programación en C sobre STM32 y diseño de interfaces hombre-máquina simples pero efectivas.
+  Un segundo competidor lo constituyen las aplicaciones de juego de memoria para teléfonos celulares, ampliamente disponibles en tiendas digitales. Estas aplicaciones pueden ofrecer gráficos y sonidos avanzados, pero pierden el componente tangible de interactuar con botones físicos y LEDs reales, y no permiten practicar el diseño de sistemas embebidos. El presente proyecto recupera ese aspecto físico y educativo, brindando un entorno ideal para ejercitar programación en C++ sobre STM32 y diseño de interfaces hombre-máquina simples pero efectivas.
 
-En resumen, el mercado de juegos electrónicos de memoria es amplio y competitivo, pero la posibilidad de personalización y experimentación técnica que ofrece un prototipo basado en STM32 permite desarrollar un producto único, orientado tanto al entretenimiento como a la formación académica, destacándose además por el ajuste dinámico de brillo (LDR), el menú manejado solo con botones y la presencia de memoria EEPROM externa.
-
+  En resumen, el mercado de juegos electrónicos de memoria es amplio y competitivo, pero la posibilidad de personalización y experimentación técnica que ofrece un prototipo basado en STM32 permite desarrollar un producto único, orientado tanto al entretenimiento como a la formación académica, destacándose además por el ajuste dinámico de brillo (LDR), el menú manejado solo con botones y la presencia de memoria EEPROM externa.
 
 
 ## **1.2. Equipo y estructura**
 
-El Proyecto se puede visualizar en el siguiente esquematicos:
+  Las conexiones de los componentes se pueden visualizar en el siguiente esquema:
+  
+<img width="724" height="726" alt="image" src="https://github.com/user-attachments/assets/a1e3b36f-eb38-4426-bb8a-c1dbc95ac64c" />
+Imagen 1: Esquema de conexiones.
 
- 
+  Cada pulsador cuenta con una resistencia pull-up de 10 kΩ y cada diodo LED cuenta con una resistencia de polarización de 100 Ω. También se observa la conexión del LDR y, además, se indicó a través de etiquetas los diversos pines correspondientes a la placa Núcleo-F103RBTX. 
 
-Vemos que esta contectado un pulsador con su led designada, cada pulsador y led correspondiendo a uno de los puertos de la placa Núcleo-F103RBTX. Fisicamente una vez que se presione un pulsador se enviara una señal a la placa. El LDR tambien se contecta a la placa por su respectivo puerto enviandole información sobre el ambiente.
-
-Por otro lado el juego esta divido en varios estados donde cada uno se ve reflejado en la pantalla durante su uso. Se pueden vizualisar en el siguinte statechart:
+MODIFICAR ITEMIS -> Por otro lado, el juego esta dividido en varios estados donde cada uno se ve reflejado en la pantalla durante su uso. Se pueden visualizar en el siguinte statechart:
 
 <img width="1075" height="650" alt="image" src="https://github.com/user-attachments/assets/e5fc5258-00b3-48d0-beeb-8da4056bef89" />
 
-Luego de los estados de bienvenida e instrucciones donde se muestran en el display dos mensajes para que el usuario se familiarice con el juego, el sistema entra en el menu principal donde se muestran las opciones de puntaje y juego. En la sección de puntaje se visualizan los 3 mejores puntajes historicos, y la sección de juego nos lleva a un segundo menu donde ahi se selcciona la dificultad del juego que se desea. Finalmente luego de que termine el juego se vuelve al menu principal.
 
 # **Introducción específica** 
 
