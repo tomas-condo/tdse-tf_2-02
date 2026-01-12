@@ -9,15 +9,18 @@
 
 **Fecha: 2do cuatrimestre 2025**
 
-### **RESUMEN**
+<div align="justify">
 
-  En este trabajo se realizó un juego del estilo "Simón dice" donde se iluminan luces led para que luego el jugador continue la secuencia mostrada, utilizando pulsadores correspondientes a cada una de las luces. 
-Este, cuenta con un display LCD y un Light Dependent Resistor (Resistencia Dependiente de la Luz), un componente que cambia su valor de resistencia según la luz que recibe para cambiar el brillo de los leds. 
+### **RESUMEN**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En este trabajo se realizó un juego del estilo "Simón dice" donde se iluminan luces led para que luego el jugador continue la secuencia mostrada, utilizando pulsadores correspondientes a cada una de las luces.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este, cuenta con un display LCD y un Light Dependent Resistor (Resistencia Dependiente de la Luz), un componente que cambia su valor de resistencia según la luz que recibe para cambiar el brillo de los leds. 
 Al encenderlo cuenta con una pantalla de bienvenida para luego, dar paso a las instrucciones del manejo del "menú". Incorporado para agregar dinamismo, donde se pueden elegir las opciones "Jugar", para seleccionar la dificultad del mismo, y "Puntajes", donde se mostrarán las puntaciones alcanzadas más altas. 
 En el menu de "Jugar" se pueden elegir entre 2 opciones, Normal y Difícil, donde el modo difícil es igual al normal con la diferencia de que la secuencia no es mostrada por completo para cada nuevo nivel y solo se muestra la luz correspondiente al nuevo color añadido a la secuencia. Mientras se juega la partida, se visualiza en el display el puntaje actual del jugador. Al perder se muestra el puntaje final junto a la pantalla "Game Over" indicando la finalización de la partida, al presionar "Escape", este será devuelto al menu inicial. Se utiliza una memoria EEPROM externa que almacena los tres puntajes máximos. 
 
-  La implementación del mismo se realizó utilizando los lenguajes de código C++ y Python mediante el uso del entorno de desarrollo de Mbed en una placa Núcleo-F103RBTX proporcionada por la cátedra de Sistemas Embebidos de la Facultad de Ingeniería de la Universidad de Buenos Aires, y se utilizaron además diferentes módulos para el desarrollo del proyecto.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La implementación del mismo se realizó utilizando los lenguajes de código C++ y Python mediante el uso del entorno de desarrollo de Mbed en una placa Núcleo-F103RBTX proporcionada por la cátedra de Sistemas Embebidos de la Facultad de Ingeniería de la Universidad de Buenos Aires, y se utilizaron además diferentes módulos para el desarrollo del proyecto.
 
+## FALTA HABLAR DEL PMW, AGREGAR EL IOC, CÓMO SE CONFIGURARON LOS PINES (GPIO, ETC) 
 
 # Índice General
 
@@ -58,34 +61,38 @@ En el menu de "Jugar" se pueden elegir entre 2 opciones, Normal y Difícil, dond
 
 ?  El objetivo del proyecto es crear un juego del estilo "Simon dice" para su uso en competencias, capaz de garantizar calidad, precisión y consistencia en el proceso, bajo estándares de competencias profesionales y amateur del juego de memoria.
 
-  En el mercado existen diversos productos relacionados con juegos de memoria y reflejos, desde el clásico “Simon” de Hasbro hasta juguetes electrónicos genéricos y aplicaciones móviles que imitan el mismo concepto. Estos dispositivos suelen ofrecer distintas combinaciones de luces y sonidos, pero en general son sistemas cerrados, con lógica de juego fija y sin posibilidad de modificación por parte del usuario.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En el mercado existen diversos productos relacionados con juegos de memoria y reflejos, desde el clásico “Simon” de Hasbro hasta juguetes electrónicos genéricos y aplicaciones móviles que imitan el mismo concepto. Estos dispositivos suelen ofrecer distintas combinaciones de luces y sonidos, pero en general son sistemas cerrados, con lógica de juego fija y sin posibilidad de modificación por parte del usuario.
 
-  Como primer competidor puede mencionarse el juego electrónico comercial tipo “Simon”, que ofrece una secuencia de luces y sonidos que el jugador debe repetir. Si bien la experiencia es entretenida, el usuario no tiene acceso al hardware ni al software interno, por lo que no puede cambiar reglas, niveles de dificultad ni integrar el juego con otros sistemas. Nuestro proyecto se diferencia en que está completamente implementado sobre una plataforma de desarrollo STM32, permitiendo modificar el firmware y experimentar con nuevas funciones.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Como primer competidor puede mencionarse el juego electrónico comercial tipo “Simon”, que ofrece una secuencia de luces y sonidos que el jugador debe repetir. Si bien la experiencia es entretenida, el usuario no tiene acceso al hardware ni al software interno, por lo que no puede cambiar reglas, niveles de dificultad ni integrar el juego con otros sistemas. Nuestro proyecto se diferencia en que está completamente implementado sobre una plataforma de desarrollo STM32, permitiendo modificar el firmware y experimentar con nuevas funciones.
 
-  Un segundo competidor lo constituyen las aplicaciones de juego de memoria para teléfonos celulares, ampliamente disponibles en tiendas digitales. Estas aplicaciones pueden ofrecer gráficos y sonidos avanzados, pero pierden el componente tangible de interactuar con botones físicos y LEDs reales, y no permiten practicar el diseño de sistemas embebidos. El presente proyecto recupera ese aspecto físico y educativo, brindando un entorno ideal para ejercitar programación en C++ sobre STM32 y diseño de interfaces hombre-máquina simples pero efectivas.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Un segundo competidor lo constituyen las aplicaciones de juego de memoria para teléfonos celulares, ampliamente disponibles en tiendas digitales. Estas aplicaciones pueden ofrecer gráficos y sonidos avanzados, pero pierden el componente tangible de interactuar con botones físicos y LEDs reales, y no permiten practicar el diseño de sistemas embebidos. El presente proyecto recupera ese aspecto físico y educativo, brindando un entorno ideal para ejercitar programación en C++ sobre STM32 y diseño de interfaces hombre-máquina simples pero efectivas.
 
-  En resumen, el mercado de juegos electrónicos de memoria es amplio y competitivo, pero la posibilidad de personalización y experimentación técnica que ofrece un prototipo basado en STM32 permite desarrollar un producto único, orientado tanto al entretenimiento como a la formación académica, destacándose además por el ajuste dinámico de brillo (LDR), el menú manejado solo con botones y la presencia de memoria EEPROM externa.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En resumen, el mercado de juegos electrónicos de memoria es amplio y competitivo, pero la posibilidad de personalización y experimentación técnica que ofrece un prototipo basado en STM32 permite desarrollar un producto único, orientado tanto al entretenimiento como a la formación académica, destacándose además por el ajuste dinámico de brillo (LDR), el menú manejado solo con botones y la presencia de memoria EEPROM externa.
 
 
 ## **1.2. Equipo y estructura**
 
-  Las conexiones de los componentes se pueden visualizar en el siguiente esquema:
-  
-<img width="724" height="726" alt="image" src="https://github.com/user-attachments/assets/a1e3b36f-eb38-4426-bb8a-c1dbc95ac64c" />
-Imagen 1: Esquema de conexiones.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Las conexiones de los componentes se pueden visualizar en el siguiente esquema:
+  <div align="center">
+  <img width="398.89" height="450" alt="image" src="https://github.com/user-attachments/assets/a1e3b36f-eb38-4426-bb8a-c1dbc95ac64c" />
+  <p><em>Imagen 1: Esquema de conexiones.</em></p>
+</div>
 
-  Cada pulsador cuenta con una resistencia pull-up de 10 kΩ y cada diodo LED cuenta con una resistencia de polarización de 100 Ω. También se observa la conexión del LDR y, además, se indicó a través de etiquetas los diversos pines correspondientes a la placa Núcleo-F103RBTX. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cada pulsador cuenta con una resistencia pull-up de 10 kΩ y cada diodo LED cuenta con una resistencia de polarización de 100 Ω. También se observa la conexión del LDR y, además, se indicó a través de etiquetas los diversos pines correspondientes a la placa Núcleo-F103RBTX. 
 
 MODIFICAR ITEMIS -> Por otro lado, el juego esta dividido en varios estados donde cada uno se ve reflejado en la pantalla durante su uso. Se pueden visualizar en el siguinte statechart:
 
-<img width="1075" height="650" alt="image" src="https://github.com/user-attachments/assets/e5fc5258-00b3-48d0-beeb-8da4056bef89" />
+  <div align="center">
+  <img width="1075" height="650" alt="image" src="https://github.com/user-attachments/assets/e5fc5258-00b3-48d0-beeb-8da4056bef89" />
+  <p><em>Imagen 2: Itemis.</em></p>
+</div>
 
 
 # **Introducción específica** 
 
 #### **2.1 Requisitos del proyecto**
 
-En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 | Grupo | ID | Descripción |
 | :---- | :---- | :---- |
 | Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. |
@@ -128,7 +135,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 |  | 9.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
 |  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
 
-<p align="center"><em>Tabla 2.1: Requisitos del proyecto</em></p>
+<p align="center"><em>Tabla 2.1: Requisitos del proyecto.</em></p>
 
 ## ** Casos de uso** 
 
@@ -137,15 +144,14 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 | Elemento | Definición |
 | :---- | :---- |
 | Disparador | El jugador quiere iniciar una nueva partida en modo clásico (Normal o Difícil). |
-| Precondiciones | El sistema está encendido. Se ha mostrado la pantalla de bienvenida. El jugador ha seleccionado una dificultad en la pantalla correspondiente utilizando los botones del juego. Todos los LEDs están apagados y el buzzer en silencio. |
-| Flujo principal | El jugador navega el menú utilizando los botones y selecciona la opción “Nuevo juego”. El sistema genera una secuencia pseudoaleatoria inicial de un solo LED y la reproduce con luz y sonido (según el modo: secuencia completa o solo el nuevo color). El jugador repite la secuencia utilizando los cuatro pulsadores; por cada pulsación correcta se enciende el LED correspondiente y se reproduce su tono. Si el jugador ingresa correctamente toda la secuencia, el sistema incrementa la longitud en un elemento, actualiza el nivel y el puntaje y muestra el nuevo puntaje en la pantalla LCD. Este ciclo se repite hasta que el jugador comete un error o decide abandonar la partida. |
+| Precondiciones | El sistema está encendido. Se ha mostrado la pantalla de bienvenida. El jugador ha seleccionado la opción "Jugar" propuesta por el menú utilizando los botones del juego. Todos los LEDs se encuentran apagados. |
+| Flujo principal | El jugador navega el menú utilizando los botones y selecciona la dificultad. El sistema genera una secuencia pseudoaleatoria inicial de un solo LED y la reproduce con luz y sonido (según el modo: secuencia completa o solo el nuevo color). El jugador repite la secuencia utilizando los cuatro pulsadores; por cada pulsación correcta se enciende el LED correspondiente y se reproduce su tono. Si el jugador ingresa correctamente toda la secuencia, el sistema incrementa la longitud en un elemento, actualiza el nivel y el puntaje y muestra el nuevo puntaje en la pantalla LCD. Este ciclo se repite hasta que el jugador comete un error o decide abandonar la partida. |
 | Flujos alternativos | a) El jugador se equivoca en alguna pulsación: el sistema reproduce un sonido de error, muestra un mensaje de “Secuencia incorrecta” en el LCD y finaliza la partida mostrando el puntaje final.  b) El jugador excede el tiempo máximo para ingresar la secuencia: el sistema considera la jugada como incorrecta, reproduce un sonido de error y finaliza la partida.  c) El jugador presiona una combinación de botones para cancelar la partida: el sistema detiene el juego, guarda el puntaje si corresponde (por ejemplo, si es un nuevo récord) y vuelve al menú principal. |
 
 <p align="center"><em>Tabla 2.2: Caso de uso 1: El usuario juega una partida</em></p>
 
 
-
- ** Caso de uso 2: El usuario cambia la dificultad del juego**
+ ## ** Caso de uso 2: El usuario cambia la dificultad del juego**
 
 | Elemento | Definición |
 | :---- | :---- |
@@ -157,8 +163,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 <p align="center"><em>Tabla 2.3: Caso de uso 2: El usuario cambia la dificultad del juego</em></p>
 
 
-
- ** Caso de uso 3: El usuario consulta o reinicia el puntaje máximo**
+ ## ** Caso de uso 3: El usuario consulta o reinicia el puntaje máximo**
 
 | Elemento | Definición |
 | :---- | :---- |
@@ -169,44 +174,58 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema.
 
 <p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta o reinicia el puntaje máximo</em></p>
 
-
 ## **2.3 Descripción de los Módulos del sistema**
 ## **2.3.1 Memoria**
 
-El sistema utiliza una memoria At24c256 que se muestra en la siguiente imagen:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El sistema utiliza una memoria At24c256 correspondiente a una memoria no volatil ya que se desea que las puntaciones máximas alcanzadas permanezcan una vez apagado el juego. Se muestra en la siguiente imagen:
 
-<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
+  <div align="center">
+  <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
+  <p><em>Imagen 3: Memoria externa utilizada.</em></p>
+</div>
 
 **Figura 2.3.1**: Memoria At24c256.
 
 Tiene comunicación I2c y dispone de 256 Kb, organizados en 32.768.
 
 ## **2.3.2 Microcontrolador**
-Como controlador principal del sistema se utiliza la placa NUCLEO-F103RBTX. La elección de esta placa recayó en la disponibilidad ya que fue la ofrecida por los profesores, teniendo además como requerimiento la cantidad de memoria, pines y periféricos de la placa. La placa se programó en C++ a través de la plataforma STMCUBE32IDE.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Como controlador principal del sistema se utiliza la placa NUCLEO-F103RBTX, por elección de la cátedra. La placa se programó en C++ a través de la plataforma STMCUBE32IDE.
 
-<img width="700" height="500" alt="image" src="https://github.com/user-attachments/assets/a657bf6e-783d-4a81-aee4-6a8a7ba27641" />
+  <div align="center">
+  <img width="280" height="200" alt="image" src="https://github.com/user-attachments/assets/a657bf6e-783d-4a81-aee4-6a8a7ba27641" />
+  <p><em>Imagen 4: Placa NUCLEO-F103RBTX utilizada.</em></p>
+</div>
 
 **Figura 2.3.2**: Placa NUCLEO-F103RBTX.
 
 ## **2.3.3 LDR**
 
-Utilizamos el sensor LDR Gl5539 de la siguiente imagen: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Utilizamos el sensor LDR Gl5539 de la siguiente imagen: 
 
-<img width="442" height="500" alt="image" src="https://github.com/user-attachments/assets/0886f18a-fa2f-44a9-8f7c-94493d16a883" />
+  <div align="center">
+  <img width="176.8" height="200" alt="image" src="https://github.com/user-attachments/assets/0886f18a-fa2f-44a9-8f7c-94493d16a883" />
+  <p><em>Imagen 5: Sensor LDR utilizado.</em></p>
+</div>
 
 **Figura 2.3.3**: LDR.
 
-## **2.3.4 Pantalla Led**
-Para el display usamos la pantalla Lcd 1602 Hd44780 con Backlight Azul de la siguiente imagen:
+## **2.3.4 Display LCD**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para el display usamos la pantalla Lcd 1602 Hd44780 con Backlight Azul de la siguiente imagen:
 
-<img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/925e7613-ac74-4276-904e-c581b1f05a5e" />
+  <div align="center">
+  <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/925e7613-ac74-4276-904e-c581b1f05a5e" />
+  <p><em>Imagen 6: Display LCD utilizado.</em></p>
+</div>
 
 **Figura 2.3.4**: Display Lcd 1602 Hd44780.
 
 ## **2.3.4 Pulsadores**
-Finalmente utilizamos los siguientes pulsadores como dispositivos de entrada para que utilice el usuario: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finalmente utilizamos los siguientes pulsadores como dispositivos de entrada para que utilice el usuario: 
 
-<img width="360" height="207" alt="image" src="https://github.com/user-attachments/assets/62e9b6a6-9033-4ab8-8a83-9f85e7107e29" />
+  <div align="center">
+  <img width="300" height="200" alt="image" src="https://github.com/user-attachments/assets/70dbbb43-39b2-4bab-8014-2569d698b4a3" />
+  <p><em>Imagen 7: TOUCH SWITCH BASE GRANDE 7.5mm BOTON REDONDO.</em></p>
+</div>
 
 **Figura 2.3.5**: Pulsadores.
 
@@ -217,48 +236,48 @@ Finalmente utilizamos los siguientes pulsadores como dispositivos de entrada par
 
 ## **3.1 Diseño del Hardware** 
 
-Para el diseño y montaje de la placa se siguio el siguiente esquematico:
-
-<img width="1126" height="1107" alt="image" src="https://github.com/user-attachments/assets/3990b17a-3344-4455-83da-e05cc1961415" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para el diseño y montaje de la placa se siguio el siguiente esquematico:
+## está desactualizado y dijeron que los esquemas tienen que ser "profesionales" digamos -> para mi esta imagen no va
+<img width="508.6" height="500" alt="image" src="https://github.com/user-attachments/assets/3990b17a-3344-4455-83da-e05cc1961415" />
 
 **Figura 3.1.a**: Esquematico hadrware.
 
-Y luego lo soldamos a una placa y lo juntamos con la placa nucelo
+Se soldó a una placa experimental de (15 x 20) cm.
  
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/2c723df3-fae7-4dc8-9fd2-f3bba5a00451" />
+<img width="280" height="500" alt="image" src="https://github.com/user-attachments/assets/2c723df3-fae7-4dc8-9fd2-f3bba5a00451" />
 
 **Figura 3.1.b**: Placa completa
 
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/f4339288-c7a9-48e7-bb29-b9b3b09779f2" />
+<img width="280" height="500" alt="image" src="https://github.com/user-attachments/assets/f4339288-c7a9-48e7-bb29-b9b3b09779f2" />
 
 **Figura 3.1.c**: Placa sin display y placa nucleo
 
-<img width="720" height="1280" alt="image" src="https://github.com/user-attachments/assets/1468ce48-de36-4c78-9ecc-c05b97675642" />
+<img width="280" height="500" alt="image" src="https://github.com/user-attachments/assets/1468ce48-de36-4c78-9ecc-c05b97675642" />
 
 **Figura 3.1.d**: Conexiones de soldadura
 
 
 ## **3.1.1 Diseño de los indicadores e interruptores** 
 
-En la figura 3.1.1 se ve el esquematico de como se conectan los pulsadores, luces led y LDR a la placa nucleo.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En la figura 3.1.1 se ve el esquematico de como se conectan los pulsadores, luces led y LDR a la placa nucleo.
 
 ![WhatsApp Image 2025-12-29 at 19 45 05](https://github.com/user-attachments/assets/aed0ac79-74b7-4d58-9a46-c2d75eb80a89)
 
 **Figura 3.1.1**: Esquematico para pulsadores, LDR, y luces led del sistema.
 
-Las luces led y los interruptes se configuraron de manera que cuando un boton es precionado esto libere la corriente y a su vez se mande una señal a los pines correspondiente a interruptor para notificar al sistema que efectivamente hubo una interaccion con el boton. Una vez que esta señal es recibida por el sistema se manda una al pin correspondiente para que la luz led del boton presionado se encienda.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Las luces led y los interruptes se configuraron de manera que cuando un boton es precionado esto libere la corriente y a su vez se mande una señal a los pines correspondiente a interruptor para notificar al sistema que efectivamente hubo una interaccion con el boton. Una vez que esta señal es recibida por el sistema se manda una al pin correspondiente para que la luz led del boton presionado se encienda.
 
 ## **3.2 Firmware del *juego*** 
 
-Para la impementacion del firmaware del juego utilizamos el lenguaje C++. Con el y utilizando archivos usados para otros trabajos previos pudimos programarlo para su funcionamiento.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para la impementacion del firmaware del juego utilizamos el lenguaje C++. Con el y utilizando archivos usados para otros trabajos previos pudimos programarlo para su funcionamiento.
 
 ## **3.2.1 Módulo display** 
-Este módulo se encarda de mostrarle al usuario la informacion del estado del juego u menu utilizando el display. Lo primero que hace este moódulo es generar las conexiones de la placa experimental con el display como se muestra en la siguiente figura: 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este módulo se encarda de mostrarle al usuario la informacion del estado del juego u menu utilizando el display. Lo primero que hace este moódulo es generar las conexiones de la placa experimental con el display como se muestra en la siguiente figura: 
 <img width="665" height="283" alt="image" src="https://github.com/user-attachments/assets/bca28950-2379-4853-8c99-fcfa59e57d7d" />
 
 **Figura 3.2.1.a**: Conexiones de pines
 
-Con esas conexiones se realiza un data bus para que la informacion pueda ser transmitida al display:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Con esas conexiones se realiza un data bus para que la informacion pueda ser transmitida al display:
 
 <img width="552" height="725" alt="image" src="https://github.com/user-attachments/assets/d4a41a73-12b8-4d5a-847a-f2ca6c641509" />
 
@@ -271,40 +290,40 @@ Con esas conexiones se realiza un data bus para que la informacion pueda ser tra
 Y luego finalmente dependiendo del estado utiliza el tipo de función **displayCodeWrite** para mostrar en el display la pantalla deseada. 
 
 ## **3.2.2 Módulo Memoria** 
-Este modulo se encarga de a partir de los datos adquiridos guardarlo a la memoria EEPROM utilizada. La gestión de la memoria no volátil (EEPROM) se trata como una tarea de almacenamiento utilizando la función (task_storage). Esta tarea se encarga de garantizar la persistencia de datos, como puntajes o configuraciones, utilizando el bus I2C.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este modulo se encarga de a partir de los datos adquiridos guardarlo a la memoria EEPROM utilizada. La gestión de la memoria no volátil (EEPROM) se trata como una tarea de almacenamiento utilizando la función (task_storage). Esta tarea se encarga de garantizar la persistencia de datos, como puntajes o configuraciones, utilizando el bus I2C.
 
 En el archivo app.c, la memoria se gestiona a través de task_cfg_list, que define el ciclo de vida de cada componente del software.
 
-Se inicializa con task_storage_init el cual se ejecuta una sola vez al arrancar el sistema dentro de app_init() este verificar la presencia de la memoria y cargar los datos guardados. Periodicamente se actualizan los datos con task_storage_update, esta función es llamada en app_update(), en lugar de escribir constantemente, lo que dañaría la vida útil de la EEPROM, esta tarea suele revisar si hubo cambios en los datos del juego y solo realiza la escritura cuando haya algun cambio.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se inicializa con task_storage_init el cual se ejecuta una sola vez al arrancar el sistema dentro de app_init() este verificar la presencia de la memoria y cargar los datos guardados. Periodicamente se actualizan los datos con task_storage_update, esta función es llamada en app_update(), en lugar de escribir constantemente, lo que dañaría la vida útil de la EEPROM, esta tarea suele revisar si hubo cambios en los datos del juego y solo realiza la escritura cuando haya algun cambio.
 
-La tarea de almacenamiento depende directamente del periférico I2C1 configurado en el archivo principal main.c. Esto lo hace la función MX_I2C1_Init(), esta funcion tambien configura los pines físicos. Tiene una velocidad de 100,000 Hz el cual es el modo estándar de comunicación I2C. Tambien aparece como tick de Control g_task_storage_tick_cnt, el contador que sincroniza la frecuencia de ejecución de la tarea. La interacción con la EEPROM sigue un flujo estrictamente controlado por el sistema de ticks. Como cada milisegundo, la función HAL_SYSTICK_Callback() incrementa el contador g_task_storage_tick_cnt, el bucle principal en app_update() detecta que el tiempo ha transcurrido y cede el control a task_storage_update() pero para evitar que la escritura en la EEPROM detenga el juego, la lógica de app.c mide el tiempo de ejecución de cada tarea con el WCET para asegurar que el sistema no se sature.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La tarea de almacenamiento depende directamente del periférico I2C1 configurado en el archivo principal main.c. Esto lo hace la función MX_I2C1_Init(), esta funcion tambien configura los pines físicos. Tiene una velocidad de 100,000 Hz el cual es el modo estándar de comunicación I2C. Tambien aparece como tick de Control g_task_storage_tick_cnt, el contador que sincroniza la frecuencia de ejecución de la tarea. La interacción con la EEPROM sigue un flujo estrictamente controlado por el sistema de ticks. Como cada milisegundo, la función HAL_SYSTICK_Callback() incrementa el contador g_task_storage_tick_cnt, el bucle principal en app_update() detecta que el tiempo ha transcurrido y cede el control a task_storage_update() pero para evitar que la escritura en la EEPROM detenga el juego, la lógica de app.c mide el tiempo de ejecución de cada tarea con el WCET para asegurar que el sistema no se sature.
 
-Dentro de task_storage.c vemos que se realizan 2 cosas importantes, la lectura de los datos de puntaje más altos recuperar los tres mejores puntajes de la EEPROM al iniciar o cuando se solicita. Y tambien realiza la escritura de ellos guardar de forma permanente los nuevos puntajes cuando el juego termina, evitando la pérdida de datos al apagar el equipo.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dentro de task_storage.c vemos que se realizan 2 cosas importantes, la lectura de los datos de puntaje más altos recuperar los tres mejores puntajes de la EEPROM al iniciar o cuando se solicita. Y tambien realiza la escritura de ellos guardar de forma permanente los nuevos puntajes cuando el juego termina, evitando la pérdida de datos al apagar el equipo.
 
-No hace estas cosas todo a la vez cuando se le solicitan, sino que llama a la función task_storage_statechart() donde para escribir sigue los siguientes pasos, con EV_STORAGE_SAVE_SCORES, pasa al estado WRITE_SCORE_1 el cual envía el comando de escritura para el primer puntaje y carga el valor de tick con 5 ms, luego pasa a WAIT_1 aqui el sistema sale de la función y permite que otras tareas sigan funcionando; solo cuando el tick llega a cero, avanza al siguiente estado. Este proceso se repite para los puntajes 2 y 3 hasta regresar al estado IDLE. El ciclo de lectura funciona de manera similar, pero con tiempos de espera menores de 1 ms. Al finalizar la lectura de los tres puntajes, la tarea ejecuta una acción de comunicación entre procesos envia put_event_task_menu(EV_MEN_SCORES_UPDATED) para avisar a la tarea del manu que los puntajes ya están listos para ser mostrados en pantalla.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No hace estas cosas todo a la vez cuando se le solicitan, sino que llama a la función task_storage_statechart() donde para escribir sigue los siguientes pasos, con EV_STORAGE_SAVE_SCORES, pasa al estado WRITE_SCORE_1 el cual envía el comando de escritura para el primer puntaje y carga el valor de tick con 5 ms, luego pasa a WAIT_1 aqui el sistema sale de la función y permite que otras tareas sigan funcionando; solo cuando el tick llega a cero, avanza al siguiente estado. Este proceso se repite para los puntajes 2 y 3 hasta regresar al estado IDLE. El ciclo de lectura funciona de manera similar, pero con tiempos de espera menores de 1 ms. Al finalizar la lectura de los tres puntajes, la tarea ejecuta una acción de comunicación entre procesos envia put_event_task_menu(EV_MEN_SCORES_UPDATED) para avisar a la tarea del manu que los puntajes ya están listos para ser mostrados en pantalla.
 
-Esta logica es importante ya que lo hace mas eficiente ya que el procesador no gasta ciclos esperando al bus I2C y al respetar los tiempos de STORAGE_WRITE_DELAY_MS, se asegura que la EEPROM termine de grabar físicamente los electrones en la celda de memoria antes de recibir el siguiente dato.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Esta logica es importante ya que lo hace mas eficiente ya que el procesador no gasta ciclos esperando al bus I2C y al respetar los tiempos de STORAGE_WRITE_DELAY_MS, se asegura que la EEPROM termine de grabar físicamente los electrones en la celda de memoria antes de recibir el siguiente dato.
 
 
 ## **3.2.3 Módulo Menu** 
-Este modulo se usa para atravesar los distintos menus del juego, es el mas complejo ya que se encarga de pasar de menu a menu, y tomar los inputs del usurio para que este pueda hacer lo que desee, sea ver el puntaje o jugar con el modo de juego que desee. Para todos los menus se sigue la misma logica, toma los datos que introduce el usuario a base de los pulsadores, siendo asignados cada color como una opcion, ENTER, NEXT, y ESC donde enter se usa para introducir la opción deseada, next para cambiar de selección, y esc para volcer al menu anterior. De esa manera moviendo un indice que cambia entre las opciones del menu en el que actualmente esta el usaurio. Esto qeuda en los eventos EV_MEN_DER, EV_MEN_IZQ, EV_MEN_ENTER y EV_MEN_ESC. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este modulo se usa para atravesar los distintos menus del juego, es el mas complejo ya que se encarga de pasar de menu a menu, y tomar los inputs del usurio para que este pueda hacer lo que desee, sea ver el puntaje o jugar con el modo de juego que desee. Para todos los menus se sigue la misma logica, toma los datos que introduce el usuario a base de los pulsadores, siendo asignados cada color como una opcion, ENTER, NEXT, y ESC donde enter se usa para introducir la opción deseada, next para cambiar de selección, y esc para volcer al menu anterior. De esa manera moviendo un indice que cambia entre las opciones del menu en el que actualmente esta el usaurio. Esto qeuda en los eventos EV_MEN_DER, EV_MEN_IZQ, EV_MEN_ENTER y EV_MEN_ESC. 
 
-Se utiliza task_display_set_line(n, "texto") para actualizar dinámicamente las líneas del display LCD. El contenido de la pantalla cambia según el estado actual por ejemplo, mostrando "SIMON SAYS" en reposo o el puntaje en tiempo real durante el juego.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se utiliza task_display_set_line(n, "texto") para actualizar dinámicamente las líneas del display LCD. El contenido de la pantalla cambia según el estado actual por ejemplo, mostrando "SIMON SAYS" en reposo o el puntaje en tiempo real durante el juego.
 
-Un evento del sistema presente en este modulo es EV_MEN_UPDATE_SCORE que actualiza los puntajes cuando hay uno nuevo que supera algun record, una vez finalizado pasa a EV_MEN_SCORES_UPDATED que indica que la tarea de almacenamiento ha terminado de leer los puntajes de la EEPROM y ya se pueden mostrar en el ranking.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Un evento del sistema presente en este modulo es EV_MEN_UPDATE_SCORE que actualiza los puntajes cuando hay uno nuevo que supera algun record, una vez finalizado pasa a EV_MEN_SCORES_UPDATED que indica que la tarea de almacenamiento ha terminado de leer los puntajes de la EEPROM y ya se pueden mostrar en el ranking.
 
 ## **3.2.4 Módulo Gameplay**
-En este modulo podemos ver el gameplay en su de los distintos modos de juego como tambien como luego de terminar de jugar se pasa a memoria el puntaje que pueda considerarse lo suficientemente bueno como para ser mostrado en el ranking.El juego dependiendo de que modo de juego es el que selecciono el usuario, sea este normal o dificl, muestra la secuencia añadiendo un color más por nivel para el modo de juego normal, o solo muestra el nuevo color para el dificil. Y luego se muestra en el display un mensaje, "Tu Turno" para que el jugador sepa que ahora puede volver a introducir la secuencia.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En este modulo podemos ver el gameplay en su de los distintos modos de juego como tambien como luego de terminar de jugar se pasa a memoria el puntaje que pueda considerarse lo suficientemente bueno como para ser mostrado en el ranking.El juego dependiendo de que modo de juego es el que selecciono el usuario, sea este normal o dificl, muestra la secuencia añadiendo un color más por nivel para el modo de juego normal, o solo muestra el nuevo color para el dificil. Y luego se muestra en el display un mensaje, "Tu Turno" para que el jugador sepa que ahora puede volver a introducir la secuencia.
 
-Para comenzar task_gameplay_dta es la estructura central que almacena el estado actual de la máquina de estados, el evento activo, la secuencia de colores, que llega hasta 100, la puntuación actual y el nivel de dificultad. Toma como variables los puntajes mas altos como high_score1, 2, 3 que son almacenadas para ser mostradas cuando el usuario lo deseo o al finalizar una partida. brillo_juego almacena el valor capturado del sensor LDR al inicio del juego para ajustar opcionalmente la respuesta visual.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para comenzar task_gameplay_dta es la estructura central que almacena el estado actual de la máquina de estados, el evento activo, la secuencia de colores, que llega hasta 100, la puntuación actual y el nivel de dificultad. Toma como variables los puntajes mas altos como high_score1, 2, 3 que son almacenadas para ser mostradas cuando el usuario lo deseo o al finalizar una partida. brillo_juego almacena el valor capturado del sensor LDR al inicio del juego para ajustar opcionalmente la respuesta visual.
 
-Al iniciar el modulo realiza una lectura del entorno con el ADC1 para calibrar el sensor LDR según la luz ambiente. Luego recupera los puntajes máximos almacenados en la EEPROM mediante eeprom_read_score. Si la memoria es nueva y tiene el valor 0xFFFF, los inicializa en cero.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Al iniciar el modulo realiza una lectura del entorno con el ADC1 para calibrar el sensor LDR según la luz ambiente. Luego recupera los puntajes máximos almacenados en la EEPROM mediante eeprom_read_score. Si la memoria es nueva y tiene el valor 0xFFFF, los inicializa en cero.
 
-El flujo del juego se gestiona mediante la función task_gameplay_statechart, que opera de forma no bloqueante utilizando los siguientes estados principales, ST_GAME_IDLE cuando el sistema esta en reposo. ST_GAME_INIT_ROUND genera un nuevo color aleatorio y lo añade a la secuencia. ST_GAME_PLAY_SEQ_ON/OFF controla el encendido y apagado de los LEDs con ticks que varían según la dificultad 400ms para el modo dificil y 800 para el normal. ST_GAME_WAIT_INPUT donde el sistema queda a la espera de que el usuario presione los botones, ST_GAME_VERIFY que verifica que los inputs del usuario son correctos si falla este es mandado al ultimo estado ST_GAME_GAME_OVER que compara el puntaje actual con los historicos y si hay un nuevo récord, actualiza la lista y envía el evento EV_STORAGE_SAVE_SCORES para que la tarea de almacenamiento guarde los datos en la EEPROM en segundo plano; finalmente notifica para que sean mostrados los puntajes finales.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El flujo del juego se gestiona mediante la función task_gameplay_statechart, que opera de forma no bloqueante utilizando los siguientes estados principales, ST_GAME_IDLE cuando el sistema esta en reposo. ST_GAME_INIT_ROUND genera un nuevo color aleatorio y lo añade a la secuencia. ST_GAME_PLAY_SEQ_ON/OFF controla el encendido y apagado de los LEDs con ticks que varían según la dificultad 400ms para el modo dificil y 800 para el normal. ST_GAME_WAIT_INPUT donde el sistema queda a la espera de que el usuario presione los botones, ST_GAME_VERIFY que verifica que los inputs del usuario son correctos si falla este es mandado al ultimo estado ST_GAME_GAME_OVER que compara el puntaje actual con los historicos y si hay un nuevo récord, actualiza la lista y envía el evento EV_STORAGE_SAVE_SCORES para que la tarea de almacenamiento guarde los datos en la EEPROM en segundo plano; finalmente notifica para que sean mostrados los puntajes finales.
 
 
 ## **3.2.5 Módulo Sensores**
-Este modulo se encarga de que sea minimizar el rebote y registrar los inputs del usuario. Decimos que cuando el sietema esta en estado idle el boton esta arriba, y luego de qeu es presionado pasara por los eventos, falling, down, y rising en ese orden.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Este modulo se encarga de que sea minimizar el rebote y registrar los inputs del usuario. Decimos que cuando el sietema esta en estado idle el boton esta arriba, y luego de qeu es presionado pasara por los eventos, falling, down, y rising en ese orden.
 
 <img width="407" height="176" alt="image" src="https://github.com/user-attachments/assets/fead9fdf-bcdc-4300-b34f-80211c47cb12" />
 
@@ -322,15 +341,15 @@ Este modulo se encarga de que sea minimizar el rebote y registrar los inputs del
 
 **Figura 3.2.5.b**: Estados boton subiendo
 
-Para todos los botones p_task_sensor_dta es utilizado para almacenar datos como el estado actual del botón en la máquina de estados, el evento detectado por el hardware y finalmente p_task_sensor_dta->tick funciona como un temporizador para el proceso de antirebote, asegurando que el botón se mantenga en un estado estable antes de confirmar una pulsación.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para todos los botones p_task_sensor_dta es utilizado para almacenar datos como el estado actual del botón en la máquina de estados, el evento detectado por el hardware y finalmente p_task_sensor_dta->tick funciona como un temporizador para el proceso de antirebote, asegurando que el botón se mantenga en un estado estable antes de confirmar una pulsación.
 
-El ultimo sensor usado es el LDR, el cual funciona mediante la conversión de una señal analógica de luz en un valor digital que el microcontrolador puede procesar. El sensor LDR entrega una variación de voltaje proporcional a la intensidad de luz ambiental. Para capturar esto, el archivo main.c configura el periférico ADC1, se utiliza el ADC_CHANNEL_1.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El ultimo sensor usado es el LDR, el cual funciona mediante la conversión de una señal analógica de luz en un valor digital que el microcontrolador puede procesar. El sensor LDR entrega una variación de voltaje proporcional a la intensidad de luz ambiental. Para capturar esto, el archivo main.c configura el periférico ADC1, se utiliza el ADC_CHANNEL_1.
 
-Está configurado en modo simple con ADC_SCAN_DISABLE y ContinuousConvMode = DISABLE, el sistema solicita una lectura específica cada vez que la necesita, en lugar de leer constantemente. La conversión se inicia por software mediante la instrucción ADC_SOFTWARE_START y esta configurado en 1.5 ciclos usando ADC_SAMPLETIME_1CYCLE_5, lo que permite una captura rápida de la señal.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Está configurado en modo simple con ADC_SCAN_DISABLE y ContinuousConvMode = DISABLE, el sistema solicita una lectura específica cada vez que la necesita, en lugar de leer constantemente. La conversión se inicia por software mediante la instrucción ADC_SOFTWARE_START y esta configurado en 1.5 ciclos usando ADC_SAMPLETIME_1CYCLE_5, lo que permite una captura rápida de la señal.
 
-En task_adc.c a diferencia de una lectura simple que detiene el procesador, aquí se utiliza una técnica de interrupciones y temporización, utilizando ADC_REFRESH_RATE_MS el sensor no se lee en cada ciclo del programa. Se definio un tiempo de refresco de 200 ms, esto optimiza el uso del CPU. Antes de iniciar una lectura, el sistema verifica si el ADC está ocupado utilizando el booleando adc_is_converting. Tambien se utiliza la función HAL_ADC_Start_IT(&hadc1) que permite que el microcontrolador siga ejecutando otras tareas mientras el hardware del ADC realiza la conversión por su cuenta.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En task_adc.c a diferencia de una lectura simple que detiene el procesador, aquí se utiliza una técnica de interrupciones y temporización, utilizando ADC_REFRESH_RATE_MS el sensor no se lee en cada ciclo del programa. Se definio un tiempo de refresco de 200 ms, esto optimiza el uso del CPU. Antes de iniciar una lectura, el sistema verifica si el ADC está ocupado utilizando el booleando adc_is_converting. Tambien se utiliza la función HAL_ADC_Start_IT(&hadc1) que permite que el microcontrolador siga ejecutando otras tareas mientras el hardware del ADC realiza la conversión por su cuenta.
 
-Una vez que el hardware termina la conversión, se ejecuta automáticamente la función de callback con HAL_ADC_ConvCpltCallback, esta función recupera el valor digital (de 0 a 4095) mediante HAL_ADC_GetValue. Finalmente adc_value almacena el valor numerico de la intensidad de luz y adc_end_of_conversion se pone en true para avisar a otras tareas que hay un dato nuevo listo.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Una vez que el hardware termina la conversión, se ejecuta automáticamente la función de callback con HAL_ADC_ConvCpltCallback, esta función recupera el valor digital (de 0 a 4095) mediante HAL_ADC_GetValue. Finalmente adc_value almacena el valor numerico de la intensidad de luz y adc_end_of_conversion se pone en true para avisar a otras tareas que hay un dato nuevo listo.
 
 # **CAPÍTULO 4** 
 
@@ -338,15 +357,15 @@ Una vez que el hardware termina la conversión, se ejecuta automáticamente la f
 
 ## **4.1 Pruebas funcionales de funcionamiento**  
 
-Las pruebas funcionales del hardware se realizaron por módulos. Todas se pueden ver en el video demostrativo.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Las pruebas funcionales del hardware se realizaron por módulos. Todas se pueden ver en el video demostrativo.
 
-Para verificar el funcionamiento del modulo display se verifico que este enciende correctamente y muestre los menus iniciales. En conjunto se verifico la funcionalidad del modulo de menu que pase de pantalla en panatlla como debecon el input de los botones. Justamente los sensores son probados con ambos modelos anteriores para navegar el menu con los botones y para ajustar el brillo con el sensor LDR acorde al entorno. El modelo de game play se verifica entrando al mismo menu de juego y seleccionando ambas dificultades y probandolas, al finalizar se prueba el funcionamiento de la memoria para poder grabar y mostrar algun nuevo "high score". 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para verificar el funcionamiento del modulo display se verifico que este enciende correctamente y muestre los menus iniciales. En conjunto se verifico la funcionalidad del modulo de menu que pase de pantalla en panatlla como debecon el input de los botones. Justamente los sensores son probados con ambos modelos anteriores para navegar el menu con los botones y para ajustar el brillo con el sensor LDR acorde al entorno. El modelo de game play se verifica entrando al mismo menu de juego y seleccionando ambas dificultades y probandolas, al finalizar se prueba el funcionamiento de la memoria para poder grabar y mostrar algun nuevo "high score". 
 
-Para las pruebas de software se debuggearon los archivos tal que cada funcion realice su trabajo como es esperado, siguiendo los estados y procesos en el orden en el que deben estar.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para las pruebas de software se debuggearon los archivos tal que cada funcion realice su trabajo como es esperado, siguiendo los estados y procesos en el orden en el que deben estar.
 
 ## **4.2 Cumplimiento de requisitos**  
 
-Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciales, agregando el estado de los mismos. Esto se observa en la tabla 4.2.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciales, agregando el estado de los mismos. Esto se observa en la tabla 4.2.
 | Grupo | ID | Descripción | Estado |
 | :---- | :---- | :---- | :---- |
 | Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. | Completo |
@@ -393,7 +412,7 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 
 **Tabla 4.2**: Requisitos del proyecto y estados de cumplimiento.
 
-Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto. Este siendo el requisito mas inconsequente de todos, por mas que sea una aydua al jugador una indicacion de audio esto no impide el juego al usuario y puede ser usado de todas maneras.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto. Este siendo el requisito mas inconsequente de todos, por mas que sea una aydua al jugador una indicacion de audio esto no impide el juego al usuario y puede ser usado de todas maneras.
 
 ## **4.3 Documentación del desarrollo realizado**
 
@@ -450,11 +469,22 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 
 ## **5.1 Resultados obtenidos**
 
-Se obtuve el juego deseado, nos comprometio el tiempo como para poder finalizar el modulo de audio. Pero a pesar de este percanse de no poder agregar ese modulo pudimos generar el juego y circuito que deseabamos. Se logro el funcionamiento de todos los modulos y sensores de manera que todos funcionan interconectados perfectamente. Cada modulo depende de otro y trabajan casi en simultaneo sin pisarse utilizando el contador interno donde se ordenan para que todo pueda funcionar como debe.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se obtuve el juego deseado, nos comprometio el tiempo como para poder finalizar el modulo de audio. Pero a pesar de este percanse de no poder agregar ese modulo pudimos generar el juego y circuito que deseabamos. Se logro el funcionamiento de todos los modulos y sensores de manera que todos funcionan interconectados perfectamente. Cada modulo depende de otro y trabajan casi en simultaneo sin pisarse utilizando el contador interno donde se ordenan para que todo pueda funcionar como debe.
 
 ## **5.2 Próximos pasos** 
 
-Para continuar este proyecto podemos rediseñar la interfaz del usuario para que con mayor presupuesto podamos agregar una caracasa exterior y botones más grandes que sean más satisfactorios para presionar y asi brindar una mejor experiencia al usuario. Tambien consideramos agregar el sonido que no pudimos incluir por restricciones de tiempo.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Para continuar este proyecto podemos rediseñar la interfaz del usuario para que con mayor presupuesto podamos agregar una caracasa exterior y botones más grandes que sean más satisfactorios para presionar y asi brindar una mejor experiencia al usuario. Tambien consideramos agregar el sonido que no pudimos incluir por restricciones de tiempo.
 
 # **Bibliografía** 
+## Hojas de datos: 
+Led ->  https://www.alldatasheet.com/datasheet-pdf/view/75272/MICRO-ELECTRONICS/MBB51D.html
+Memoria externa -> https://www.alldatasheet.com/datasheet-pdf/view/574755/ATMEL/AT24C256.html y https://www.nubbeo.com.ar/productos/modulo-memoria-at24c256-i2c-256kbits-32kbytes-arduino-nubbeo/
 
+
+https://embeddedprojects101.com/how-to-interface-an-i2c-eeprom-with stm32/#:~:text=I2C%20de%20Microchip.-,Configuraci%C3%B3n%20de%20pines%20y%20direcciones%20de%20la%20EEPROM,En%20nuestro%20caso%2C%20son%201010.
+https://deepbluembedded.com/stm32-eeprom-flash-emulation-fee-read-write-examples/#:~:text=STM32%20microcontrollers%20don't%20have,to%20implement%20in%20this%20tutorial.
+https://wiki.st.com/stm32mcu/wiki/Getting_started_with_I2C
+https://campusgrado.fi.uba.ar/course/view.php?id=1217&section=21#tabs-tree-starthttps://campusgrado.fi.uba.ar/course/view.php?id=1217&section=22#tabs-tree-start
+
+  
+</div>
