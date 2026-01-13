@@ -75,6 +75,29 @@ Se utilizó el siguiente pulsador como dispositivo de entrada. Permiten al usuar
   <p><em>Imagen 1: TOUCH SWITCH BASE GRANDE 7.5mm BOTON REDONDO.</em></p>
 </div>
 
+<h3>2.2.1 Buttons (Pulsadores)</h3>
+
+<table>
+  <tr>
+    <td width="60%" valign="top">
+      <p>Se utilizó el pulsador <strong>Touch Switch de 7.5mm</strong> como dispositivo de entrada principal.</p>
+      <p><strong>Funcionalidad:</strong></p>
+      <ul>
+        <li>Navegación por el menú.</li>
+        <li>Selección de dificultad.</li>
+        <li>Ingreso de secuencia de colores (Gameplay).</li>
+      </ul>
+      <p><strong>Implementación Técnica:</strong><br>
+      Se utilizaron mecanismos de <em>debounce por software</em> para filtrar el ruido mecánico y garantizar una lectura limpia de la señal.</p>
+    </td>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/6a23cbbe-e4e6-4d44-b88c-07d74bc2121b" width="250">
+      <br><br>
+      <sub><em>Imagen 1: Pulsador de base grande utilizado.</em></sub>
+    </td>
+  </tr>
+</table>
+
 ### 2.2.2 Leds (Diodos Emisores de Luz) 
 Como actuadores visuales principales, se emplearon cuatro LEDs de alto brillo en colores rojo, verde, azul y amarillo. Presentan la secuencia que el usuario debe memorizar y replicar.
 Cada LED está controlado por un canal PWM, permitiendo no solo el encendido y apagado (ON/OFF), sino también la regulación de la intensidad lumínica según las condiciones ambientales.
