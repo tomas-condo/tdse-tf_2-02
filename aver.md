@@ -69,7 +69,7 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
 # Introducción específica
 ## 2.1 Requisitos del proyecto
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
+En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 | Grupo | ID | Descripción |
 | :---- | :---- | :---- |
 | Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. |
@@ -128,7 +128,7 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
 <p align="center"><em>Tabla 2.2: Caso de uso 1: El usuario juega una partida</em></p>
 
 
- ## ** Caso de uso 2: El usuario cambia la dificultad del juego**
+ ## Caso de uso 2: El usuario cambia la dificultad del juego
 
 | Elemento | Definición |
 | :---- | :---- |
@@ -140,7 +140,7 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
 <p align="center"><em>Tabla 2.3: Caso de uso 2: El usuario cambia la dificultad del juego</em></p>
 
 
- ## ** Caso de uso 3: El usuario consulta o reinicia el puntaje máximo**
+ ## Caso de uso 3: El usuario consulta o reinicia el puntaje máximo
 
 | Elemento | Definición |
 | :---- | :---- |
@@ -327,7 +327,7 @@ Actúa como MEF intermedia entre display.c (librería de bajo nivel de abstracci
 
 Módulo encargado de la navegación del sistema cuando no se está en una partida activa. Gestiona las pantallas de bienvenida, la selección de dificultad y la visualización de los puntajes históricos. Interpreta las pulsaciones de los botones (provenientes de task sensor) como comandos de navegación ("Izquierda", "Derecha", "Enter" y "Back") en lugar de colores de juego.
 
-# falta: resumen, tabla de requisitos, escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), hacer que funcione el índice xd, agregar bibliografía. Estaría bueno describir las tareas con las cosas que pidieron en las prácticas (bloqueante, no bloqueante, etc)
+# falta: escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), agregar bibliografía. Estaría bueno describir las tareas con las cosas que pidieron en las prácticas (bloqueante, no bloqueante, etc)
 
 # 4. Ensayos y resultados
 ## 4.1 Medición y análisis de consumo
@@ -439,10 +439,10 @@ Este parámetro es crítico para garantizar que el sistema cumpla con los requis
         <td>199</td>
         <td>199</td>
         <td>199</td>
-        <td><strong>578</strong></td>
-        <td><strong>578</strong></td>
-        <td><strong>578</strong></td>
-        <td><strong>578</strong></td>
+        <td>578</td>
+        <td>578</td>
+        <td>578</td>
+        <td>578</td>
       </tr>
       <tr style="border-top: 2px solid #000; background-color: #fffde7;">
         <td align="left"><strong>CPU Usage (%)</strong></td>
@@ -450,24 +450,24 @@ Este parámetro es crítico para garantizar que el sistema cumpla con los requis
         <td>39.7%</td>
         <td>40.3%</td>
         <td>41.3%</td>
-        <td><strong>83.2%</strong></td>
-        <td><strong>83.2%</strong></td>
-        <td><strong>83.2%</strong></td>
-        <td><strong>82.9%</strong></td>
+        <td>83.2%</td>
+        <td>83.2%</td>
+        <td>83.2%</td>
+        <td>82.9%</td>
       </tr>
     </tbody>
   </table>
-  <p><em>Tabla 4: Evolución del WCET ($\mu s$) y Carga del CPU según el estado del juego.</em></p>
+  <p><em>Tabla 4: Evolución del WCET y Carga del CPU según el estado del juego.</em></p>
 </div>
 
 <p><strong>Observaciones:</strong><br>
-Se evidencia claramente cómo la tarea de almacenamiento (<em>Task Storage</em>) impacta en el rendimiento general. En los estados donde se requiere gestión de puntajes (t=4 a t=7), el tiempo de ejecución de esta tarea salta a <strong>578 $\mu s$</strong>, elevando el uso del CPU por encima del 80%. Sin embargo, el sistema se mantiene estable dentro del límite de tiempo real.</p>
+Se evidencia claramente cómo la tarea de almacenamiento (<em>Task Storage</em>) impacta en el rendimiento general. En los estados donde se requiere gestión de puntajes (t=4 a t=7), el tiempo de ejecución de esta tarea salta a 578 $\mu s$</strong>, elevando el uso del CPU por encima del 80%. Sin embargo, el sistema se mantiene estable dentro del límite de tiempo real.</p>
 
 ## 4.3 Cálculo del Factor de Uso (U) de la CPU
 
 ## 4.4 Cumplimiento de requisitos  
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciales, agregando el estado de los mismos. Esto se observa en la tabla 4.2.
+Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciales, agregando el estado de los mismos. Esto se observa en la tabla 4.2.
 | Grupo | ID | Descripción | Estado |
 | :---- | :---- | :---- | :---- |
 | Juego | 1.1 | El sistema generará una secuencia de LEDs pseudoaleatoria de longitud creciente. | Completo |
