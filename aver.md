@@ -48,6 +48,7 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
     - [4.1 Medición y análisis de consumo](#41-medición-y-análisis-de-consumo)
     - [4.2 Medición y análisis de tiempos de ejecución (WCET)](#42-medición-y-análisis-de-tiempos-de-ejecución-de-cada-tarea-wcet)
     - [4.3 Cálculo del Factor de Uso (U) de la CPU](#43-cálculo-del-factor-de-uso-u-de-la-cpu)
+    - [4.4 Cumplimiento de requisitos](#44-cumplimiento-de-requisitos)
 5. [Conclusiones](#conclusiones)
 6. [Bibliografía](#bibliografia)
 
@@ -332,6 +333,135 @@ Módulo encargado de la navegación del sistema cuando no se está en una partid
 ## 4.1 Medición y análisis de consumo
 
 ## 4.2 Medición y análisis de tiempos de ejecución (WCET)
+
+Se determinó el Worst Case Execution Time (WCET) de cada tarea del sistema utilizando el Timer DWT (Data Watchpoint and Trace) del microcontrolador para contar ciclos de reloj exactos antes y después de cada función task_update, convirtiendo luego esos ciclos a microsegundos. 
+Este parámetro es crítico para garantizar que el sistema cumpla con los requisitos de tiempo real (Soft Real-Time) y no se produzca pérdida de eventos.
+
+<h3>4.2.1 Tabla Detallada de WCET por Estados</h3>
+<p>A continuación se detallan los tiempos de ejecución medidos (en $\mu s$) y el porcentaje de uso de CPU para cada tarea, dependiendo del estado en el que se encuentra la Máquina de Estados del sistema.</p>
+
+<div align="center">
+  <table border="1" style="border-collapse: collapse; text-align: center;">
+    <thead>
+      <tr style="background-color: #f2f2f2;">
+        <th>Tarea / Estado ($t$)</th>
+        <th>t=0<br><sub></th>
+        <th>t=1<br><sub></th>
+        <th>t=2<br><sub></th>
+        <th>t=3<br><sub></th>
+        <th>t=4<br><sub></th>
+        <th>t=5<br><sub></th>
+        <th>t=6<br><sub></th>
+        <th>t=7<br><sub></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="left"><strong>Task Sensor</strong></td>
+        <td>12</td>
+        <td>13</td>
+        <td>13</td>
+        <td>13</td>
+        <td>13</td>
+        <td>13</td>
+        <td>13</td>
+        <td>13</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task Actuator</strong></td>
+        <td>4</td>
+        <td>5</td>
+        <td>5</td>
+        <td>5</td>
+        <td>5</td>
+        <td>5</td>
+        <td>5</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task Display</strong></td>
+        <td>4</td>
+        <td>76</td>
+        <td>76</td>
+        <td>76</td>
+        <td>76</td>
+        <td>76</td>
+        <td>76</td>
+        <td>76</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task Menu</strong></td>
+        <td>3</td>
+        <td>72</td>
+        <td>78</td>
+        <td>88</td>
+        <td>128</td>
+        <td>128</td>
+        <td>128</td>
+        <td>128</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task ADC</strong></td>
+        <td>20</td>
+        <td>20</td>
+        <td>20</td>
+        <td>20</td>
+        <td>20</td>
+        <td>20</td>
+        <td>20</td>
+        <td>20</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task PWM</strong></td>
+        <td>2</td>
+        <td>3</td>
+        <td>3</td>
+        <td>3</td>
+        <td>3</td>
+        <td>3</td>
+        <td>3</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task Gameplay</strong></td>
+        <td>4</td>
+        <td>9</td>
+        <td>9</td>
+        <td>9</td>
+        <td>9</td>
+        <td>9</td>
+        <td>9</td>
+        <td>9</td>
+      </tr>
+      <tr>
+        <td align="left"><strong>Task Storage</strong></td>
+        <td>199</td>
+        <td>199</td>
+        <td>199</td>
+        <td>199</td>
+        <td><strong>578</strong></td>
+        <td><strong>578</strong></td>
+        <td><strong>578</strong></td>
+        <td><strong>578</strong></td>
+      </tr>
+      <tr style="border-top: 2px solid #000; background-color: #fffde7;">
+        <td align="left"><strong>CPU Usage (%)</strong></td>
+        <td>24.8%</td>
+        <td>39.7%</td>
+        <td>40.3%</td>
+        <td>41.3%</td>
+        <td><strong>83.2%</strong></td>
+        <td><strong>83.2%</strong></td>
+        <td><strong>83.2%</strong></td>
+        <td><strong>82.9%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Tabla 4: Evolución del WCET ($\mu s$) y Carga del CPU según el estado del juego.</em></p>
+</div>
+
+<p><strong>Observaciones:</strong><br>
+Se evidencia claramente cómo la tarea de almacenamiento (<em>Task Storage</em>) impacta en el rendimiento general. En los estados donde se requiere gestión de puntajes (t=4 a t=7), el tiempo de ejecución de esta tarea salta a <strong>578 $\mu s$</strong>, elevando el uso del CPU por encima del 80%. Sin embargo, el sistema se mantiene estable dentro del límite de tiempo real.</p>
 
 ## 4.3 Cálculo del Factor de Uso (U) de la CPU
 
