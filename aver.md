@@ -180,7 +180,7 @@ Actúa como MEF intermedia entre display.c (librería de bajo nivel de abstracci
 
 Módulo encargado de la navegación del sistema cuando no se está en una partida activa. Gestiona las pantallas de bienvenida, la selección de dificultad y la visualización de los puntajes históricos. Interpreta las pulsaciones de los botones (provenientes de task sensor) como comandos de navegación ("Izquierda", "Derecha", "Enter" y "Back") en lugar de colores de juego.
 
-# falta: resumen, tabla de requisitos, escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), hacer que funcione el índice xd, agregar bibliografía. 
+# falta: resumen, tabla de requisitos, escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), hacer que funcione el índice xd, agregar bibliografía. Estaría bueno describir las tareas con las cosas que pidieron en las prácticas (bloqueante, no bloqueante, etc)
 
 # 4. Ensayos y resultados
 ## 4.1 Medición y análisis de consumo
