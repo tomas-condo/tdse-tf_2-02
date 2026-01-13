@@ -25,7 +25,7 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
 2. [Introducción específica](#introducción-específica)
     - [2.1 Requisitos del proyecto](#21-requisitos-del-proyecto)
     - [2.2 Casos de uso](#22-casos-de-uso)
-        -[2.2.1 Caso de uso 1: El usuario juega una partida en modo clásico](#221-caso-de-uso-1-el-usuario-juega-una-partida-en-modo-clásico)
+        - [2.2.1 Caso de uso 1: El usuario juega una partida en modo clásico](#221-caso-de-uso-1-el-usuario-juega-una-partida-en-modo-clásico)
         - [2.2.2 Caso de uso 2: El usuario cambia la dificultad del juego](#222-caso-de-uso-2-el-usuario-cambia-la-dificultad-del-juego)
         - [2.2.3 Caso de uso 3: El usuario consulta los puntajes máximos](#223-caso-de-uso-3-el-usuario-consulta-los-puntajes-máximos)
     - [2.2 Elementos obligatorios de hardware](#22-elementos-obligatorios-de-hardware)
@@ -83,7 +83,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 |  | 1.4 | En caso de acierto, el sistema incrementará la longitud de la secuencia y avanzará al siguiente nivel. |
 |  | 1.5 | En caso de error, el sistema finalizará la ronda y mostrará el resultado al jugador. |
 |  | 1.6 | En modo Normal, al iniciar cada nivel se reproducirá la secuencia completa acumulada. |
-|  | 1.7 | En modo Difícil, al iniciar cada nivel solo se reproducirá el **nuevo color agregado** a la secuencia. |
+|  | 1.7 | En modo Difícil, al iniciar cada nivel solo se reproducirá el nuevo color agregado a la secuencia. |
 | Interfaz luminosa | 2.1 | Cada LED estará asociado a un color fijo y a un pulsador específico. |
 |  | 2.2 | Durante la reproducción de la secuencia, el LED correspondiente se encenderá de forma claramente distinguible. |
 |  | 2.3 | Al presionar un pulsador, el LED asociado se encenderá mientras dure la pulsación. |
