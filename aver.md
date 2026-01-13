@@ -637,20 +637,6 @@ https://wiki.st.com/stm32mcu/wiki/Getting_started_with_I2C
 
 https://campusgrado.fi.uba.ar/course/view.php?id=1217&section=21#tabs-tree-starthttps://campusgrado.fi.uba.ar/course/view.php?id=1217&section=22#tabs-tree-start
 
+https://web.alfredstate.edu/faculty/weimandn/programming/lcd/ATmega328/LCD_code_gcc_4d.html
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+https://www.arm.com/resources/education/books/designing-embedded-systems
