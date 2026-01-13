@@ -69,7 +69,7 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
 ## 2.1 Requisitos del proyecto
 ## 2.2 Elementos obligatorios de hardware:
 
-### 2.2.1 Buttons (Pulsadores)
+### 2.2.1 Buttons
 
 <table>
   <tr>
