@@ -120,11 +120,9 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 
 | Elemento | Definición |
 | :---- | :---- |
-| Disparador | El jugador quiere iniciar una nueva partida en modo clásico (Normal o Difícil). |
+| Disparador | El jugador quiere iniciar una nueva partida (Normal o Difícil). |
 | Precondiciones | El sistema está encendido. Se ha mostrado la pantalla de bienvenida. El jugador ha seleccionado la opción "Jugar" propuesta por el menú utilizando los botones del juego. Todos los LEDs se encuentran apagados. |
-| Flujo principal | El jugador navega el menú utilizando los botones y selecciona la dificultad. El sistema genera una secuencia pseudoaleatoria inicial de un solo LED y la reproduce con luz y sonido (según el modo: secuencia completa o solo el nuevo color). El jugador repite la secuencia utilizando los cuatro pulsadores; por cada pulsación correcta se enciende el LED correspondiente y se reproduce su tono. Si el jugador ingresa correctamente toda la secuencia, el sistema incrementa la longitud en un elemento, actualiza el nivel y el puntaje y muestra el nuevo puntaje en la pantalla LCD. Este ciclo se repite hasta que el jugador comete un error o decide abandonar la partida. |
-| Flujos alternativos | a) El jugador se equivoca en alguna pulsación: el sistema reproduce un sonido de error, muestra un mensaje de “Secuencia incorrecta” en el LCD y finaliza la partida mostrando el puntaje final.  b) El jugador excede el tiempo máximo para ingresar la secuencia: el sistema considera la jugada como incorrecta, reproduce un sonido de error y finaliza la partida.  c) El jugador presiona una combinación de botones para cancelar la partida: el sistema detiene el juego, guarda el puntaje si corresponde (por ejemplo, si es un nuevo récord) y vuelve al menú principal. |
-
+| Flujo principal | El jugador navega el menú utilizando los botones y selecciona la dificultad. El sistema genera una secuencia pseudoaleatoria inicial de un solo LED y la reproduce con luz (según el modo: secuencia completa o solo el nuevo color). El jugador repite la secuencia utilizando los cuatro pulsadores; por cada pulsación correcta se enciende el LED correspondiente. Si el jugador ingresa correctamente toda la secuencia, el sistema incrementa la longitud en un elemento, actualiza el nivel y el puntaje y muestra el nuevo puntaje en la pantalla LCD. Este ciclo se repite hasta que el jugador comete un error, donde el sistema muestra un mensaje de “Game Over” en el LCD y finaliza la partida mostrando el puntaje final.
 <p align="center"><em>Tabla 2.2: Caso de uso 1: El usuario juega una partida</em></p>
 
 
@@ -134,22 +132,20 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 | :---- | :---- |
 | Disparador | El jugador quiere cambiar el nivel de dificultad del juego (Normal / Difícil). |
 | Precondiciones | El sistema está encendido. No hay una partida en curso. El juego se encuentra en el menú principal o en el menú de configuración. |
-| Flujo principal | El jugador accede a la pantalla de selección de dificultad utilizando los botones del juego. En el LCD se muestran las opciones “Normal” y “Difícil”. Mediante uno o más botones se avanza entre las opciones y se selecciona la deseada con otro botón (por ejemplo, “Confirmar”). El sistema almacena la nueva dificultad seleccionada (posiblemente en EEPROM), actualiza los parámetros internos (forma de reproducir la secuencia, tiempos, etc.) y vuelve al menú principal mostrando la dificultad activa. |
-| Flujos alternativos | a) El jugador sale del menú de dificultad sin confirmar ningún cambio (por ejemplo, con una combinación de botones): el sistema mantiene la dificultad previamente establecida.  b) Se produce una lectura inválida de los botones (por rebote o secuencia inconsistente): el sistema descarta la entrada y solicita al usuario que vuelva a seleccionar, manteniendo el estado anterior. |
+| Flujo principal | El jugador accede a la pantalla de selección de dificultad utilizando los botones del juego. En el LCD se muestran las opciones “Normal” y “Difícil”, avanzando con el selector en dificil pulsando "Enter". El sistema almacena la nueva dificultad seleccionada en el struct de gameplay, actualiza los parámetros internos (forma de reproducir la secuencia, tiempos, etc.) y vuelve al menú principal mostrando la dificultad activa. |
 
 <p align="center"><em>Tabla 2.3: Caso de uso 2: El usuario cambia la dificultad del juego</em></p>
 
 
- ## Caso de uso 3: El usuario consulta o reinicia el puntaje máximo
+ ## Caso de uso 3: El usuario consulta los puntajes máximos
 
 | Elemento | Definición |
 | :---- | :---- |
-| Disparador | El jugador quiere consultar o reiniciar el puntaje máximo almacenado en la memoria EEPROM. |
+| Disparador | El jugador quiere consultar los puntajes máximos almacenados en la memoria EEPROM. |
 | Precondiciones | El sistema está encendido. No hay una partida en curso. El juego se encuentra en el menú principal. La EEPROM ha sido inicializada correctamente. |
-| Flujo principal | El jugador navega hasta el menú de “Estadísticas” utilizando los mismos botones del juego. El sistema lee de la EEPROM el puntaje máximo almacenado y lo muestra en la pantalla LCD, junto con el último puntaje obtenido (si se desea). El jugador puede desplazarse con los botones hasta la opción “Reiniciar récord” y seleccionarla con el botón de confirmación. El sistema solicita confirmación adicional (por ejemplo, mostrando “¿Confirmar borrado? Sí/No”). Si el jugador confirma, el sistema borra o reinicia el valor de récord en la EEPROM (por ejemplo, a 0) y muestra un mensaje indicando que el récord fue reiniciado correctamente. |
-| Flujos alternativos | a) El jugador decide no reiniciar el récord al momento de la confirmación (por ejemplo, seleccionando “No” con los botones): el sistema conserva el puntaje máximo y vuelve al menú anterior.  b) Se produce un error en el acceso a la EEPROM (por ejemplo, fallo de comunicación): el sistema muestra un mensaje de error en el LCD, reproduce un sonido de falla, descarta la operación de borrado y deshabilita temporalmente la opción de reinicio hasta que se reinicie el dispositivo o se recupere la condición. |
+| Flujo principal | El jugador navega hasta el menú de “Puntajes” utilizando los mismos botones del juego. El sistema lee de la EEPROM los 3 puntajes máximos almacenados y los muestra en la pantalla LCD. 
 
-<p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta o reinicia el puntaje máximo</em></p>
+<p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta el puntaje máximo</em></p>
 
 ## 2.2 Elementos obligatorios de hardware:
 
@@ -158,7 +154,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 <table>
   <tr>
     <td width="60%" valign="top">
-      <p>Se utilizó el pulsador <strong>Touch Switch de 7.5mm</strong> como dispositivo de entrada principal.</p>
+      <p>Se utilizaron cuatro pulsadores <strong>Touch Switch de 7.5mm</strong> como dispositivos de entrada principal.</p>
       <p><strong>Funcionalidad:</strong></p>
       <ul>
         <li>Navegación por el menú.</li>
