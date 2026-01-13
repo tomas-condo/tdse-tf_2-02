@@ -24,9 +24,13 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
      - [1.2 Análisis de mercado](#12-análisis-de-mercado)
 2. [Introducción específica](#introducción-específica)
     - [2.1 Requisitos del proyecto](#21-requisitos-del-proyecto)
+    - [2.2 Casos de uso](#22-casos-de-uso)
+        - [2.2.1 Caso de uso 1: El usuario juega una partida en modo clásico](#221-caso-de-uso-1:-el-usuario-juega-una-partida-en-modo-clásico)
+        - [2.2.2 Caso de uso 2: El usuario cambia la dificultad del juego](#222-caso-de-uso-2:-el-usuario-cambia-la-dificultad-del-juego)
+        - [2.2.3 Caso de uso 3: El usuario consulta los puntajes máximos](#223-caso-de-uso-3:-el-usuario-consulta-los-puntajes-máximos)
     - [2.2 Elementos obligatorios de hardware](#22-elementos-obligatorios-de-hardware)
         - [2.2.1 Buttons](#221-buttons)
-        - [2.2.2 Leds Diodos Emisores de Luz)](#222-leds-diodos-emisores-de-luz)
+        - [2.2.2 Leds (Diodos Emisores de Luz)](#222-leds-(diodos-emisores-de-luz))
         - [2.2.3 LDR Sensor Analógico](#223-ldr-sensor-analógico)
         - [2.2.4 Display LCD](#224-display-lcd)
         - [2.2.5 Memoria E2PROM Externa](#225-memoria-e2prom-externa)
@@ -57,7 +61,8 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
 ## 1.1 Análisis de objetivos
 
 El objetivo del proyecto es repensar el juego “Simon dice”. Al ser un juego que desafía la memoria visual, la concentración y los reflejos, mejorando la capacidad de atención y la resolución de problemas creemos que puede ser llevado al ámbito de la rehabilitación cognitiva, la prevención del deterioro cognitivo y en desarrollo infantil para estimular la neuroplasticidad ya que, al requerir un enfoque visual constante mejora la atención sostenida, la capacidad de retener información a corto plazo y la memoria episódica y semántica.
-## 1.2 ANÁLISIS DE MERCADO
+
+## 1.2 Análisis de mercado
 En el mercado existen diversos productos relacionados con juegos de memoria y reflejos, desde el clásico “Simon” de Hasbro, hasta juguetes electrónicos genéricos y aplicaciones móviles que imitan el mismo concepto. 
 
 El juguete clásico no guarda el historial de las diversas partidas y, al tener una dificultad fija que se acelera demasiado rápido para un paciente en rehabilitación o un niño con dificultades de aprendizaje vimos una oportunidad de mejora y de inclusión. 
@@ -112,21 +117,20 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 |  | 9.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. |
 |  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. |
 
-<p align="center"><em>Tabla 2.1: Requisitos del proyecto.</em></p>
+<p align="center"><em>Tabla 1: Requisitos del proyecto.</em></p>
 
-## ** Casos de uso** 
+# 2.2 Casos de uso
 
- **Caso de uso 1: El usuario juega una partida en modo clásico**
+## 2.2.1 Caso de uso 1: El usuario juega una partida en modo clásico
 
 | Elemento | Definición |
 | :---- | :---- |
 | Disparador | El jugador quiere iniciar una nueva partida (Normal o Difícil). |
 | Precondiciones | El sistema está encendido. Se ha mostrado la pantalla de bienvenida. El jugador ha seleccionado la opción "Jugar" propuesta por el menú utilizando los botones del juego. Todos los LEDs se encuentran apagados. |
 | Flujo principal | El jugador navega el menú utilizando los botones y selecciona la dificultad. El sistema genera una secuencia pseudoaleatoria inicial de un solo LED y la reproduce con luz (según el modo: secuencia completa o solo el nuevo color). El jugador repite la secuencia utilizando los cuatro pulsadores; por cada pulsación correcta se enciende el LED correspondiente. Si el jugador ingresa correctamente toda la secuencia, el sistema incrementa la longitud en un elemento, actualiza el nivel y el puntaje y muestra el nuevo puntaje en la pantalla LCD. Este ciclo se repite hasta que el jugador comete un error, donde el sistema muestra un mensaje de “Game Over” en el LCD y finaliza la partida mostrando el puntaje final.
-<p align="center"><em>Tabla 2.2: Caso de uso 1: El usuario juega una partida</em></p>
+<p align="center"><em>Tabla 2: Caso de uso 1: El usuario juega una partida</em></p>
 
-
- ## Caso de uso 2: El usuario cambia la dificultad del juego
+ ## 2.2.2 Caso de uso 2: El usuario cambia la dificultad del juego
 
 | Elemento | Definición |
 | :---- | :---- |
@@ -134,10 +138,9 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 | Precondiciones | El sistema está encendido. No hay una partida en curso. El juego se encuentra en el menú principal o en el menú de configuración. |
 | Flujo principal | El jugador accede a la pantalla de selección de dificultad utilizando los botones del juego. En el LCD se muestran las opciones “Normal” y “Difícil”, avanzando con el selector en dificil pulsando "Enter". El sistema almacena la nueva dificultad seleccionada en el struct de gameplay, actualiza los parámetros internos (forma de reproducir la secuencia, tiempos, etc.) y vuelve al menú principal mostrando la dificultad activa. |
 
-<p align="center"><em>Tabla 2.3: Caso de uso 2: El usuario cambia la dificultad del juego</em></p>
+<p align="center"><em>Tabla 3: Caso de uso 2: El usuario cambia la dificultad del juego</em></p>
 
-
- ## Caso de uso 3: El usuario consulta los puntajes máximos
+ ## 2.2.3 Caso de uso 3: El usuario consulta los puntajes máximos
 
 | Elemento | Definición |
 | :---- | :---- |
@@ -145,7 +148,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 | Precondiciones | El sistema está encendido. No hay una partida en curso. El juego se encuentra en el menú principal. La EEPROM ha sido inicializada correctamente. |
 | Flujo principal | El jugador navega hasta el menú de “Puntajes” utilizando los mismos botones del juego. El sistema lee de la EEPROM los 3 puntajes máximos almacenados y los muestra en la pantalla LCD. 
 
-<p align="center"><em>Tabla 2.4: Caso de uso 3: El usuario consulta el puntaje máximo</em></p>
+<p align="center"><em>Tabla 4: Caso de uso 3: El usuario consulta el puntaje máximo</em></p>
 
 ## 2.2 Elementos obligatorios de hardware:
 
@@ -257,11 +260,10 @@ Bus de Comunicación (I2C):
 
 Sensores Analógicos (ADC):
   <div align="center">
-  <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
+  <img width="440" height="450" alt="image" src="https://github.com/user-attachments/assets/a9a2d5ef-5c2f-4131-9a0c-987458883e0c" />
   <p><em>Imagen 7: IOC.</em></p>
 </div>
 
-# CAMBIAR IMAGENES!!!!!!!
 
 ## 3.2 Descripción del Esquema Eléctrico 
 El sistema se alimenta por USB de la Nucleo 
@@ -272,8 +274,8 @@ El sistema se alimenta por USB de la Nucleo
   <p><em>Imagen 8: esquema eléctrico.</em></p>
 </div>
 
+
 ## 3.3 Descripción del comportamiento
-aca iria el itemis o en su defecto un diagrama:
 
 
   <div align="center">
@@ -327,6 +329,78 @@ Módulo encargado de la navegación del sistema cuando no se está en una partid
 
 # 4. Ensayos y resultados
 ## 4.1 Medición y análisis de consumo
+
+Para evaluar la eficiencia energética del sistema, se realizaron mediciones de corriente en dos escenarios operativos: **Modo Activo** (*Run Mode*) y **Modo Bajo Consumo** (*Sleep Mode*).
+
+Las mediciones se dividen en dos categorías:
+1.  **Consumo de Periféricos:** Componentes externos (LEDs, Display, Sensores). Su consumo es independiente del estado del microcontrolador.
+2.  **Consumo del Microcontrolador (MCU):** Medido a través del *Jumper IDD* (JP5) de la placa Nucleo.
+
+### 4.1 Medición y análisis de consumo
+
+Para evaluar la eficiencia energética del sistema, se realizaron mediciones de corriente comparativas en dos escenarios operativos: **Modo Activo** (*Run Mode*) y **Modo Bajo Consumo** (*Sleep Mode*).
+
+<div align="center">
+  <table border="1" style="border-collapse: collapse; text-align: center;">
+    <thead>
+      <tr style="background-color: #f2f2f2;">
+        <th>Componente / Medición</th>
+        <th>Corriente <br>(SIN Sleep Mode)</th>
+        <th>Corriente <br>(CON Sleep Mode)</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="left"><strong>MCU (Jumper JP5 - IDD)</strong></td>
+        <td><strong>38.8 mA</strong></td>
+        <td><strong>[REVISAR] mA</strong></td>
+        <td align="left">Consumo del microcontrolador.</td>
+      </tr>
+      <tr>
+        <td align="left">LED Azul (ON)</td>
+        <td>0.146 mA</td>
+        <td>0.146 mA</td>
+        <td align="left">Consumo constante si está encendido.</td>
+      </tr>
+      <tr>
+        <td align="left">LED Rojo (ON)</td>
+        <td>0.120 mA</td>
+        <td>[COMPLETAR] mA</td>
+        <td align="left">Consumo constante si está encendido.</td>
+      </tr>
+      <tr>
+        <td align="left">Pulsador (Presionado)</td>
+        <td>0.333 mA</td>
+        <td>0.333 mA</td>
+        <td align="left">Depende de resistencia interna.</td>
+      </tr>
+      <tr>
+        <td align="left">Sensor LDR</td>
+        <td>3 µA</td>
+        <td>[COMPLETAR] µA</td>
+        <td align="left">Divisor de tensión resistivo.</td>
+      </tr>
+      <tr>
+        <td align="left">Display LCD</td>
+        <td>[COMPLETAR] mA</td>
+        <td>[COMPLETAR] mA</td>
+        <td align="left">Consumo del módulo + Backlight.</td>
+      </tr>
+      <tr>
+        <td align="left">Memoria EEPROM</td>
+        <td>[COMPLETAR] mA</td>
+        <td>[COMPLETAR] mA</td>
+        <td align="left">Mayor consumo durante escritura.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Tabla 5: Comparativa de consumo de corriente en los distintos modos de operación.</em></p>
+</div>
+
+<p><strong>Análisis:</strong><br>
+Se observa que el consumo de los periféricos (LEDs, Botones) se mantiene constante independientemente del modo del CPU, ya que su alimentación es eléctrica y no lógica. La diferencia principal debería reflejarse en la medición del <strong>Jumper JP5</strong>, donde el modo <em>Sleep</em> reduce la actividad del reloj del núcleo.</p>
+<p><strong>Nota:</strong> Los valores de corriente del display y la memoria se encuentran pendientes de medición final.</p>
 
 ## 4.2 Medición y análisis de tiempos de ejecución (WCET)
 
@@ -453,13 +527,37 @@ Este parámetro es crítico para garantizar que el sistema cumpla con los requis
       </tr>
     </tbody>
   </table>
-  <p><em>Tabla 4: Evolución del WCET y Carga del CPU según el estado del juego.</em></p>
+  <p><em>Tabla 6: Evolución del WCET y Carga del CPU según el estado del juego.</em></p>
 </div>
 
 <p><strong>Observaciones:</strong><br>
 Se evidencia claramente cómo la tarea de almacenamiento (<em>Task Storage</em>) impacta en el rendimiento general. En los estados donde se requiere gestión de puntajes (t=4 a t=7), el tiempo de ejecución de esta tarea salta a 578 $\mu s$</strong>, elevando el uso del CPU por encima del 80%. Sin embargo, el sistema se mantiene estable dentro del límite de tiempo real.</p>
 
 ## 4.3 Cálculo del Factor de Uso (U) de la CPU
+
+### 4.3 Cálculo del Factor de Uso (U) de la CPU
+
+El factor de utilización del procesador determina la viabilidad del sistema (planificabilidad). Para un sistema cíclico ejecutivo, la condición necesaria es que la suma de los tiempos de ejecución no supere el periodo del sistema ($U < 100\%$).
+
+La fórmula general aplicada es:
+
+$$U = \sum_{i=1}^{n} \frac{C_i}{T_i} \times 100$$
+
+Donde:
+* $C_i$: es el WCET (*Worst Case Execution Time*) de la tarea $i$.
+* $T_i$: es el periodo del planificador (**1000 $\mu s$**).
+
+**Verificación en el Peor Escenario (Worst Case Scenario):**
+Tomando los valores críticos medidos en la sección 4.2 (cuando la escritura en EEPROM y el menú están activos simultáneamente), se obtiene la siguiente sumatoria:
+
+$$U_{max} = \frac{13 + 5 + 76 + 128 + 20 + 3 + 9 + 578}{1000} \times 100$$
+
+$$U_{max} = \frac{832 \mu s}{1000 \mu s} \times 100$$
+
+$$U_{max} = \mathbf{83.2\%}$$
+
+**Conclusión:**
+El factor de uso máximo calculado es del **83.2%**. Dado que $U < 100\%$, se concluye que el sistema es **planificable**. El procesador dispone de un margen libre (*Slack Time*) del **16.8%** (~168 $\mu s$ por ciclo), tiempo durante el cual entra en modo *Sleep* para reducir el consumo energético.
 
 ## 4.4 Cumplimiento de requisitos  
 
@@ -506,11 +604,9 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 |  | 9.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. | Completo |
 |  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. | Completo |
 
-<p align="center"><em>Tabla 4.1: Cumplimiento de requisitos</em></p>
+<p align="center"><em>Tabla 7: Cumplimiento de requisitos</em></p>
 
-**Tabla 4.2**: Requisitos del proyecto y estados de cumplimiento.
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto. Este siendo el requisito mas inconsequente de todos, por mas que sea una aydua al jugador una indicacion de audio esto no impide el juego al usuario y puede ser usado de todas maneras.
+Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto. Este siendo el requisito mas inconsequente de todos, por mas que sea una aydua al jugador una indicacion de audio esto no impide el juego al usuario y puede ser usado de todas maneras.
 
 
 # 5.Bibliografía
