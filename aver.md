@@ -11,7 +11,7 @@
 
 <div align="justify">
   
-### **RESUMEN**
+### *Resumen*
 En este trabajo se realiza el diseño e implementación del juego "Simon Dice" basado en la arquitectura ARM Cortex-M3. Este sistema tiene por objetivo proporcionar una plataforma de entretenimiento y entrenamiento cognitivo, permitiendo al usuario ejercitar su memoria a corto plazo mediante la reproducción de secuencias aleatorias de luces. El sistema cuenta con características avanzadas como regulación automática de brillo ambiental mediante sensores LDR, almacenamiento no volátil de puntajes máximos en memoria EEPROM y una interfaz de usuario rica visualizada en un display LCD de 20x4 caracteres.
 
 La implementación del mismo se realizó bajo el paradigma Bare Metal (sin sistema operativo), utilizando lenguaje C y manipulando directamente los registros del microcontrolador STM32 Nucleo-F103RB. El diseño de software se estructura estrictamente mediante Máquinas de Estados Finitos (FSM) jerárquicas y modularizadas, garantizando un código robusto, escalable y mantenible.
@@ -279,7 +279,7 @@ El sistema se alimenta por USB de la Nucleo
 
 
   <div align="center">
-  <img width="915" height="500" alt="image" src="https://github.com/user-attachments/assets/0f13ce68-b4d7-48bd-afe8-7cd573a6255f" />
+  <img width="732" height="400" alt="image" src="https://github.com/user-attachments/assets/0f13ce68-b4d7-48bd-afe8-7cd573a6255f" />
   <p><em>Imagen 9: Diagrama de estados.</em></p>
 </div>
 
