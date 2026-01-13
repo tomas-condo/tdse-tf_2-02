@@ -249,34 +249,40 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
 
 # 3. Diseño de implementación 
 ## 3.1 Documentar esquema eléctrico y conexión de placas
-Para la integración física del sistema se soldó a una placa experimental de (15 x 20) cm. Para garantizar la robustez mecánica y eléctrica del prototipo. 
-El circuito se centra en la placa de desarrollo STM32, la cual gestiona los periféricos mediante las siguientes interfaces:
 
-Interfaz de Entrada (GPIO):
+Para la integración física del sistema se soldó a una placa experimental de (15 x 20) cm para garantizar la robustez mecánica y eléctrica del prototipo. El circuito se centra en la placa de desarrollo STM32, la cual gestiona los periféricos mediante las siguientes interfaces:
+
+Interfaz de Entrada (GPIO): En estos pines serán conectadas las teclas ya que no requieren de ningún requisito en especial.
 
 Interfaz de Salida (PWM): Los 4 LEDs de alto brillo se conectan a través de resistencias limitadoras de corriente para proteger los puertos del microcontrolador. Se utilizan canales de Timer para permitir la modulación de brillo (PWM).
 
-Bus de Comunicación (I2C):
+Bus de Comunicación (I2C): En dos pines preconfigurados SCL y SDA fueron inicializados y conectados a los pines de datos de la memoria EEPROM.
 
-Sensores Analógicos (ADC):
+Sensores Analógicos (ADC): En un pin preconfigurado al seleccionar en el archivo .ioc conectaremos el LDR tal que pueda enviar las muestras obtenidas al inicializar.
+
+Se tiene una noción visual de la configuración de cada pin con la siguiente figura:
+
   <div align="center">
   <img width="440" height="450" alt="image" src="https://github.com/user-attachments/assets/a9a2d5ef-5c2f-4131-9a0c-987458883e0c" />
   <p><em>Imagen 7: IOC.</em></p>
 </div>
 
-  <div align="center">
-  <img width="572" height="1024" alt="image" src="https://github.com/user-attachments/assets/0fde4e43-91c6-4830-b9ee-de725ee301c7" />
-  <p><em>Imagen 8: Placa soldada.</em></p>
-</div>
+A continuación se tiene tanto la placa Nucleo como el display LCD encastrados en los pines hembra dispuestos tal que:
 
   <div align="center">
-  <img width="572" height="1024" alt="image" src="https://github.com/user-attachments/assets/67c9ca5a-7458-41a6-a1d2-abc7871042e7" />
-  <p><em>Imagen 9: Pistas</em></p>
+  <img width="600" height="1000" alt="Gemini_Generated_Image_wrktq6wrktq6wrkt" src="https://github.com/user-attachments/assets/3a13e912-17ae-497b-986e-324b3b6481b0" />
+  <p><em>Imagen 8: Placa soldada frente.</em></p>
+</div>
+
+También, se puede ver las soldaduras en la placa en su otra cara:
+
+  <div align="center">
+  <img width="550" height="1000" alt="Gemini_Generated_Image_jht0mijht0mijht0" src="https://github.com/user-attachments/assets/0de1de57-ac4d-4adc-b239-943ed25f891d" />
+  <p><em>Imagen 9: Placa soldada dorso.</em></p>
 </div>
 
 ## 3.2 Descripción del Esquema Eléctrico 
 El sistema se alimenta por USB de la Nucleo 
-
 
   <div align="center">
   <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/a2a4f49f-4e85-42ec-a75d-7384a59d4de3" />
@@ -285,7 +291,6 @@ El sistema se alimenta por USB de la Nucleo
 
 
 ## 3.3 Descripción del comportamiento
-
 
   <div align="center">
   <img width="732" height="400" alt="image" src="https://github.com/user-attachments/assets/0f13ce68-b4d7-48bd-afe8-7cd573a6255f" />
@@ -334,7 +339,6 @@ Actúa como MEF intermedia entre display.c (librería de bajo nivel de abstracci
 
 Módulo encargado de la navegación del sistema cuando no se está en una partida activa. Gestiona las pantallas de bienvenida, la selección de dificultad y la visualización de los puntajes históricos. Interpreta las pulsaciones de los botones (provenientes de task sensor) como comandos de navegación ("Izquierda", "Derecha", "Enter" y "Back") en lugar de colores de juego.
 
-# falta: escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), agregar bibliografía. Estaría bueno describir las tareas con las cosas que pidieron en las prácticas (bloqueante, no bloqueante, etc)
 
 # 4. Ensayos y resultados
 ## 4.1 Medición y análisis de consumo
