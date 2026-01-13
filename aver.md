@@ -15,26 +15,26 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp aca va el resumen xd anashe
   
 # Índice 
-1. [Introducción](#introducción)
+1. [Introducción general](#introducción-general)
      - [1.1 Análisis de objetivos](#11-análisis-de-objetivos)
      - [1.2 Análisis de mercado](#12-análisis-de-mercado)
 2. [Introducción específica](#introducción-específica)
     - [2.1 Requisitos del proyecto](#21-requisitos-del-proyecto)
     - [2.2 Elementos obligatorios de hardware](#22-elementos-obligatorios-de-hardware)
-3. [Diseño e implementación](#diseño-e-implementación)
+3. [Diseño de implementación](#diseño-e-implementación)
     - [3.1 Documentar esquema eléctrico y conexión de placas](#31-documentar-esquema-eléctrico-y-conexión-de-placas)
     - [3.2 Descripción del Esquema Eléctrico](#32-descripción-del-esquema-eléctrico)
     - [3.3 Descripción del comportamiento](#33-descripción-del-comportamiento)
     - [3.4 Firmware del Simon Says](#34-firmware-del-simon-says)
         - [3.4.1 Task Actuator](#341-task-actuator)
         - [3.4.2 Task Sensor](#342-task-sensor)
-        - [Task ADC](#task-adc)
-        - [Task PWM](#task-pwm)
-        - [Task Gameplay](#task-gameplay)
-        - [Task Storage](#task-storage)
-        - [Task I2C](#task-i2c)
-        - [Task Display](#task-display)
-        - [Task Menu](#task-menu)
+        - [3.4.3 Task ADC](#343-task-adc)
+        - [3.4.4 Task PWM](#344-task-pwm)
+        - [3.4.5 Task Gameplay](#345-task-gameplay)
+        - [3.4.6 Task Storage](#346-task-storage)
+        - [3.4.7 Task I2C](#347-task-i2c)
+        - [3.4.8 Task Display](#348-task-display)
+        - [3.4.9 Task Menu](#349-task-menu)
 4. [Ensayos y resultados](#ensayos-y-resultados)
     - [4.1 Medición y análisis de consumo](#41-medición-y-análisis-de-consumo)
     - [4.2 Medición y análisis de tiempos de ejecución (WCET)](#42-medición-y-análisis-de-tiempos-de-ejecución-de-cada-tarea-wcet)
@@ -56,7 +56,7 @@ Se tomó como referente Lumosity, CogniFit y Peak, aplicaciones de ejercicios me
 
 El presente proyecto recupera ese aspecto físico y educativo, brindando un entorno ideal para el desarrollo de estimulación neurocognitiva que, a diferencia de los juguetes comerciales, que carecen de registros de progreso, este desarrollo propone una solución de bajo costo brindando esta posibilidad, sumado a la personalización de modos de juego, visibilidad y diversos parámetros como tiempo de encendido de luz a través de este prototipo basado en STM32. 
 
-# 2. Introducción específica
+# Introducción específica
 ## 2.1 Requisitos del proyecto
 ## 2.2 Elementos obligatorios de hardware:
 ## 2.2.1 Buttons
@@ -135,20 +135,23 @@ aca iria el itemis o en su defecto un diagrama:
 
 
 ## 3.4 Firmware del Simon Says:
-**3.4.1 Task Actuator**
+### 3.4.1 Task Actuator
+
 Módulo encargado de administrar estados básicos de los leds mediante una MEF. Esto permite desacoplar la lógica del juego del manejo directo de los pines. 
 
-**3.4.2 Task Sensor**
+### 3.4.2 Task Sensor
+
 Este módulo es responsable de la gestión de la interfaz de entrada física mediante una MEF. Su función principal es realizar el filtrado digital de las señales (software debouncing) para eliminar los rebotes mecánicos inherentes a los botones.
 
-**Task adc**
+### 3.4.3 Task adc
+
 Esta tarea administra el Conversor Analógico-Digital (ADC) del STM32F103RB. Se encarga de disparar la conversión del canal conectado al sensor LDR (resistencia dependiente de la luz) y realizar un promedio de las lecturas para filtrar ruido eléctrico. El valor digital resultante representa la intensidad de luz ambiental y es puesto a disposición del sistema para el ajuste de brillo.
 
-**Task pwm**
+### 3.4.4 Task pwm
+
 Responsable de la gestión de los Timers (TIM2 y TIM3) configurados en modo Pulse Width Modulation. Este módulo toma el valor procesado por la task adc y ajusta dinámicamente el Duty Cycle (ciclo de trabajo) de las señales que alimentan los LEDs. Su objetivo es mantener una visibilidad óptima de la secuencia de juego, aumentando la intensidad en ambientes iluminados y atenuándola en la oscuridad para confort visual.
 
-**Task gameplay**
-
+### 3.4.5 Task gameplay
 Es el núcleo lógico del proyecto. Implementa una  MEF que gestiona las reglas de "Simon Dice". Sus responsabilidades incluyen:
 - Generación de la secuencia pseudoaleatoria incremental.
 - Control de los tiempos de espera entre turnos.
@@ -156,19 +159,30 @@ Es el núcleo lógico del proyecto. Implementa una  MEF que gestiona las reglas 
 - Gestión de los niveles de dificultad ("Normal" y "Difícil").
 - Determinación de las condiciones de victoria o derrota (Game Over).
 
-**Task Storage**
+### 3.4.6 Task Storage
+
 Este módulo implementa la lógica de persistencia de datos. Se encarga de verificar si el puntaje obtenido al finalizar una partida califica como un "Récord Histórico". Si es así, gestiona la estructura de datos (Puntaje + Iniciales) y solicita su escritura en la memoria no volátil. Al inicio del sistema, recupera y ordena estos datos para su visualización.
 
-**Task i2c**
+### 3.4.7 Task i2c
+
 Módulo de bajo nivel que implementa el protocolo de comunicación I2C. Provee primitivas (Start, Stop, Write Byte, Read Ack) a la task storage. Su función crítica es manejar los tiempos de escritura (tWR) de la memoria EEPROM y asegurar la integridad de la transmisión de datos sin bloquear el resto del sistema.
 
-**Task display**
+### 3.4.8 Task display
+
 Actúa como MEF intermedia entre display.c (librería de bajo nivel de abstracción) y task menu (manejo de display de alto nivel). Gestiona un buffer de pantalla para optimizar la escritura, verificando que se imprima 1 caracter por cada milisegundo.
 
-**Task menu**
+### 3.4.9 Task menu
+
 Módulo encargado de la navegación del sistema cuando no se está en una partida activa. Gestiona las pantallas de bienvenida, la selección de dificultad y la visualización de los puntajes históricos. Interpreta las pulsaciones de los botones (provenientes de task sensor) como comandos de navegación ("Izquierda", "Derecha", "Enter" y "Back") en lugar de colores de juego.
 
 # falta: resumen, tabla de requisitos, escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), hacer que funcione el índice xd, agregar bibliografía. 
+
+# 4. Ensayos y resultados
+## 4.1 Medición y análisis de consumo
+
+## 4.2 Medición y análisis de tiempos de ejecución (WCET)
+
+## 4.3 Cálculo del Factor de Uso (U) de la CPU
 
 # 5.Bibliografía
 https://www.alldatasheet.com/datasheet-pdf/view/75272/MICRO-ELECTRONICS/MBB51D.html 
