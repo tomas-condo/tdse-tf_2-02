@@ -12,11 +12,11 @@
 <div align="justify">
   
 ### **RESUMEN**
-  En este trabajo se realiza el diseño e implementación del juego "Simon Dice" basado en la arquitectura ARM Cortex-M3. Este sistema tiene por objetivo proporcionar una plataforma de entretenimiento y entrenamiento cognitivo, permitiendo al usuario ejercitar su memoria a corto plazo mediante la reproducción de secuencias aleatorias de luces. El sistema cuenta con características avanzadas como regulación automática de brillo ambiental mediante sensores LDR, almacenamiento no volátil de puntajes máximos en memoria EEPROM y una interfaz de usuario rica visualizada en un display LCD de 20x4 caracteres.
+En este trabajo se realiza el diseño e implementación del juego "Simon Dice" basado en la arquitectura ARM Cortex-M3. Este sistema tiene por objetivo proporcionar una plataforma de entretenimiento y entrenamiento cognitivo, permitiendo al usuario ejercitar su memoria a corto plazo mediante la reproducción de secuencias aleatorias de luces. El sistema cuenta con características avanzadas como regulación automática de brillo ambiental mediante sensores LDR, almacenamiento no volátil de puntajes máximos en memoria EEPROM y una interfaz de usuario rica visualizada en un display LCD de 20x4 caracteres.
 
-  La implementación del mismo se realizó bajo el paradigma Bare Metal (sin sistema operativo), utilizando lenguaje C y manipulando directamente los registros del microcontrolador STM32 Nucleo-F103RB. El diseño de software se estructura estrictamente mediante Máquinas de Estados Finitos (FSM) jerárquicas y modularizadas, garantizando un código robusto, escalable y mantenible.
+La implementación del mismo se realizó bajo el paradigma Bare Metal (sin sistema operativo), utilizando lenguaje C y manipulando directamente los registros del microcontrolador STM32 Nucleo-F103RB. El diseño de software se estructura estrictamente mediante Máquinas de Estados Finitos (FSM) jerárquicas y modularizadas, garantizando un código robusto, escalable y mantenible.
 
-  En esta memoria se presenta la motivación del proyecto, el diseño del hardware y firmware, y los resultados de los ensayos funcionales.
+En esta memoria se presenta la motivación del proyecto, el diseño del hardware y firmware, y los resultados de los ensayos funcionales.
   
 # Índice 
 1. [Introducción general](#introducción-general)
@@ -69,7 +69,7 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
 ## 2.1 Requisitos del proyecto
 ## 2.2 Elementos obligatorios de hardware:
 
-<h3>2.2.1 Buttons (Pulsadores)</h3>
+### 2.2.1 Buttons (Pulsadores)
 
 <table>
   <tr>
@@ -87,12 +87,12 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
     <td width="40%" align="center">
       <img src="https://github.com/user-attachments/assets/6a23cbbe-e4e6-4d44-b88c-07d74bc2121b" width="250">
       <br><br>
-      <sub><em>Imagen 1: Pulsador de base grande utilizado.</em></sub>
+      <em>Imagen 1: Pulsador de base grande utilizado.</em>
     </td>
   </tr>
 </table>
 
-<h3>2.2.2 Leds (Diodos Emisores de Luz)</h3>
+### 2.2.2 Leds (Diodos Emisores de Luz)
 <table>
   <tr>
     <td width="60%" valign="top">
@@ -102,7 +102,7 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
     <td width="40%" align="center">
       <img src="https://github.com/user-attachments/assets/a923bc55-ecc7-4221-8a0b-ecd35c741caf" width="200">
       <br><br>
-      <sub><em>Imagen 2: Diodos LEDs utilizados.</em></sub>
+      <em>Imagen 2: Diodos LEDs utilizados.</em>
     </td>
   </tr>
 </table>
@@ -116,12 +116,12 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
     <td width="40%" align="center">
       <img src="https://github.com/user-attachments/assets/0886f18a-fa2f-44a9-8f7c-94493d16a883" width="176">
       <br><br>
-      <sub><em>Imagen 3: Sensor LDR utilizado.</em></sub>
+      <em>Imagen 3: Sensor LDR utilizado.</em> 
     </td>
   </tr>
 </table>
 
-<h3>2.2.4 Display LCD</h3>
+### 2.2.4 Display LCD
 <table>
   <tr>
     <td width="60%" valign="top">
@@ -130,22 +130,40 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
     <td width="40%" align="center">
       <img src="https://github.com/user-attachments/assets/925e7613-ac74-4276-904e-c581b1f05a5e" width="200">
       <br><br>
-      <sub><em>Imagen 4: Display LCD utilizado.</em></sub>
+      <em>Imagen 4: Display LCD utilizado.</em>
     </td>
   </tr>
 </table>
-### 2.2.5 Memoria E2PROM Externa 
-Se incorporó un módulo de memoria no volátil externa tipo EEPROM (familia AT24Cxxx) conectada a través del bus I2C. Se utiliza para almacenar la tabla de los tres mejores puntajes históricos, ya que conserva la información cuando el dispositivo se desconecta de la alimentación. Esto es vital para el enfoque de rehabilitación cognitiva del proyecto, ya que permite llevar un registro del progreso y desempeño del usuario a lo largo de las sesiones.
-  <div align="center">
-  <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
-  <p><em>Imagen 5: Memoria externa utilizada.</em></p>
-</div>
 
-falta: 
-  <div align="center">
-  <img width="280" height="200" alt="image" src="https://github.com/user-attachments/assets/a657bf6e-783d-4a81-aee4-6a8a7ba27641" />
-  <p><em>Imagen 6: Placa NUCLEO-F103RBTX utilizada.</em></p>
-</div>
+### 2.2.5 Memoria E2PROM Externa
+<table>
+  <tr>
+    <td width="60%" valign="top">
+      <p>Se incorporó un módulo de memoria no volátil externa tipo EEPROM (familia AT24Cxxx) conectada a través del bus I2C.</p>
+      <p>Se utiliza para almacenar la tabla de los tres mejores puntajes históricos, ya que conserva la información cuando el dispositivo se desconecta de la alimentación. Esto es vital para el enfoque de rehabilitación cognitiva del proyecto, ya que permite llevar un registro del progreso y desempeño del usuario a lo largo de las sesiones.</p>
+    </td>
+    <td width="40%" align="center">
+      <img src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" width="200">
+      <br><br>
+      <em>Imagen 5: Memoria externa utilizada.</em>
+    </td>
+  </tr>
+</table>
+
+### 2.2.6 Placa de Desarrollo (Microcontrolador)
+<table>
+  <tr>
+    <td width="55%" valign="top">
+      <p>Como unidad central de procesamiento se utilizó la placa de desarrollo <strong>NUCLEO-F103RB</strong>.</p>
+      <p>Esta placa incorpora un microcontrolador STM32 (ARM Cortex-M3) de 32 bits, encargado de gestionar toda la lógica del juego (Máquina de Estados), el manejo de tiempos críticos mediante Timers y la comunicación con todos los periféricos a través de protocolos I2C, ADC y PWM.</p>
+    </td>
+    <td width="45%" align="center">
+      <img src="https://github.com/user-attachments/assets/a657bf6e-783d-4a81-aee4-6a8a7ba27641" width="280">
+      <br>
+      <em>Imagen 6: Placa NUCLEO-F103RBTX utilizada.</em>
+    </td>
+  </tr>
+</table>
 
 # 3. Diseño de implementación 
 ## 3.1 Documentar esquema eléctrico y conexión de placas
