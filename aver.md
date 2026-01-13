@@ -351,8 +351,6 @@ Las mediciones se dividen en dos categorías:
 1.  **Consumo de Periféricos:** Componentes externos (LEDs, Display, Sensores). Su consumo es independiente del estado del microcontrolador.
 2.  **Consumo del Microcontrolador (MCU):** Medido a través del *Jumper IDD* (JP5) de la placa Nucleo.
 
-### 4.1 Medición y análisis de consumo
-
 Para evaluar la eficiencia energética del sistema, se realizaron mediciones de corriente comparativas en dos escenarios operativos: **Modo Activo** (*Run Mode*) y **Modo Bajo Consumo** (*Sleep Mode*).
 
 <div align="center">
