@@ -21,6 +21,11 @@
 2. [Introducción específica](#introducción-específica)
     - [2.1 Requisitos del proyecto](#21-requisitos-del-proyecto)
     - [2.2 Elementos obligatorios de hardware](#22-elementos-obligatorios-de-hardware)
+        - [2.2.1 Buttons](#221-buttons)
+        - [2.2.2 Leds Diodos Emisores de Luz)](#222-leds-diodos-emisores-de-luz)
+        - [2.2.3 LDR Sensor Analógico](#223-ldr-sensor-analógico)
+        - [2.2.4 Display LCD](#224-display-lcd)
+        - [2.2.5 Memoria E2PROM Externa](#225-memoria-e2prom-externa)
 3. [Diseño de implementación](#diseño-e-implementación)
     - [3.1 Documentar esquema eléctrico y conexión de placas](#31-documentar-esquema-eléctrico-y-conexión-de-placas)
     - [3.2 Descripción del Esquema Eléctrico](#32-descripción-del-esquema-eléctrico)
@@ -59,14 +64,14 @@ El presente proyecto recupera ese aspecto físico y educativo, brindando un ento
 # Introducción específica
 ## 2.1 Requisitos del proyecto
 ## 2.2 Elementos obligatorios de hardware:
-## 2.2.1 Buttons
+### 2.2.1 Buttons
 Se utilizó el siguiente pulsador como dispositivo de entrada. Permiten al usuario navegar por el menú, seleccionar la dificultad e ingresar la secuencia de colores durante el juego. Se utilizaron mecanismos de debounce por software para garantizar una lectura limpia de la entrada.
   <div align="center">
   <img width="300" height="200" alt="image" src="https://github.com/user-attachments/assets/70dbbb43-39b2-4bab-8014-2569d698b4a3" />
   <p><em>Imagen 1: TOUCH SWITCH BASE GRANDE 7.5mm BOTON REDONDO.</em></p>
 </div>
 
-## 2.2.2 Leds (Diodos Emisores de Luz) 
+### 2.2.2 Leds (Diodos Emisores de Luz) 
 Como actuadores visuales principales, se emplearon cuatro LEDs de alto brillo en colores rojo, verde, azul y amarillo. Presentan la secuencia que el usuario debe memorizar y replicar.
 Cada LED está controlado por un canal PWM, permitiendo no solo el encendido y apagado (ON/OFF), sino también la regulación de la intensidad lumínica según las condiciones ambientales.
   <div align="center">
@@ -74,21 +79,21 @@ Cada LED está controlado por un canal PWM, permitiendo no solo el encendido y a
   <p><em>Imagen 2: Diodos LEDs utilizados.</em></p>
 </div>
 
-## 2.2.3 LDR (Sensor Analógico) 
+### 2.2.3 LDR (Sensor Analógico) 
 Para dotar al sistema de capacidad adaptativa, se integró un sensor analógico LDR (Light Dependent Resistor o Fotorresistencia). Este sensor mide la intensidad de la luz ambiental en tiempo real al prender el juego. 
   <div align="center">
   <img width="176.8" height="200" alt="image" src="https://github.com/user-attachments/assets/0886f18a-fa2f-44a9-8f7c-94493d16a883" />
   <p><em>Imagen 3: Sensor LDR utilizado.</em></p>
 </div>
 
-## 2.2.4 Display LCD 
+### 2.2.4 Display LCD 
 Para la visualización de datos alfanuméricos, se utilizó un módulo LCD (Liquid Crystal Display). Constituye la interfaz principal de comunicación con el usuario (HMI), mostrando el menú de bienvenida, instrucciones, puntaje actual, entre otras pantallas.
   <div align="center">
   <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/925e7613-ac74-4276-904e-c581b1f05a5e" />
   <p><em>Imagen 4: Display LCD utilizado.</em></p>
   </div>
 
-## 2.2.5 Memoria E2PROM Externa 
+### 2.2.5 Memoria E2PROM Externa 
 Se incorporó un módulo de memoria no volátil externa tipo EEPROM (familia AT24Cxxx) conectada a través del bus I2C. Se utiliza para almacenar la tabla de los tres mejores puntajes históricos, ya que conserva la información cuando el dispositivo se desconecta de la alimentación. Esto es vital para el enfoque de rehabilitación cognitiva del proyecto, ya que permite llevar un registro del progreso y desempeño del usuario a lo largo de las sesiones.
   <div align="center">
   <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
