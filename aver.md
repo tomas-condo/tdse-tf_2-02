@@ -277,7 +277,7 @@ A continuación se tiene tanto la placa Nucleo como el display LCD encastrados e
 También, se puede ver las soldaduras en la placa en su otra cara:
 
   <div align="center">
-  <img width="550" height="1000" alt="Gemini_Generated_Image_jht0mijht0mijht0" src="https://github.com/user-attachments/assets/0de1de57-ac4d-4adc-b239-943ed25f891d" />
+  <img width="576" height="1125" alt="Gemini_Generated_Image_ww0mpwww0mpwww0m" src="https://github.com/user-attachments/assets/b5015b90-6761-4323-92ef-d555fa747698" />  
   <p><em>Imagen 9: Placa soldada dorso.</em></p>
 </div>
 
@@ -299,6 +299,8 @@ El sistema se alimenta por USB de la Nucleo
 
 
 ## 3.4 Firmware del Simon Says:
+Este proyecto implementa un enfoque orientado a eventos y polling no bloqueante:
+
 ### 3.4.1 Task Actuator
 
 Módulo encargado de administrar estados básicos de los leds mediante una MEF. Esto permite desacoplar la lógica del juego del manejo directo de los pines. 
