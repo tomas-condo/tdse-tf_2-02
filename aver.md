@@ -22,11 +22,12 @@
     - [2.1 Requisitos del proyecto](#21-requisitos-del-proyecto)
     - [2.2 Elementos obligatorios de hardware](#22-elementos-obligatorios-de-hardware)
 3. [Diseño e implementación](#diseño-e-implementación)
-    - [3.1 Documentar esquema eléctrico y conexión de placas/módulos](#31-documentar-esquema-eléctrico-y-conexión-de-placasmódulos)
-    - [3.2 Descripción del comportamiento](#32-descripción-del-comportamiento)
-    - [3.3 Firmware del Simon Says](#33-firmware-del-simon-says)
-        - [3.3.1 Task Actuator](#331-task-actuator)
-        - [3.3.2 Task Sensor](#332-task-sensor)
+    - [3.1 Documentar esquema eléctrico y conexión de placas](#31-documentar-esquema-eléctrico-y-conexión-de-placas)
+    - [3.2 Descripción del Esquema Eléctrico](#32-descripción-del-esquema-eléctrico)
+    - [3.3 Descripción del comportamiento](#33-descripción-del-comportamiento)
+    - [3.4 Firmware del Simon Says](#34-firmware-del-simon-says)
+        - [3.4.1 Task Actuator](#341-task-actuator)
+        - [3.4.2 Task Sensor](#342-task-sensor)
         - [Task ADC](#task-adc)
         - [Task PWM](#task-pwm)
         - [Task Gameplay](#task-gameplay)
@@ -101,7 +102,7 @@ falta:
 </div>
 
 # 3. Diseño de implementación 
-## 3.1 Documentar esquema eléctrico y conexión de placas:
+## 3.1 Documentar esquema eléctrico y conexión de placas
 Para la integración física del sistema se soldó a una placa experimental de (15 x 20) cm. Para garantizar la robustez mecánica y eléctrica del prototipo. 
 El circuito se centra en la placa de desarrollo STM32, la cual gestiona los periféricos mediante las siguientes interfaces:
 
@@ -134,10 +135,10 @@ aca iria el itemis o en su defecto un diagrama:
 
 
 ## 3.4 Firmware del Simon Says:
-**Task Actuator**
+**3.4.1 Task Actuator**
 Módulo encargado de administrar estados básicos de los leds mediante una MEF. Esto permite desacoplar la lógica del juego del manejo directo de los pines. 
 
-**Task Sensor**
+**3.4.2 Task Sensor**
 Este módulo es responsable de la gestión de la interfaz de entrada física mediante una MEF. Su función principal es realizar el filtrado digital de las señales (software debouncing) para eliminar los rebotes mecánicos inherentes a los botones.
 
 **Task adc**
