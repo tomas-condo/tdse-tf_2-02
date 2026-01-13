@@ -125,13 +125,13 @@ El sistema se alimenta por USB de la Nucleo
 
 
   <div align="center">
-  <img width="200" height="200" alt="image" src="https://github.com/user-attachments/assets/65b4cff7-fc20-4808-9c69-925c4ad1f505" />
+  <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/a2a4f49f-4e85-42ec-a75d-7384a59d4de3" />
   <p><em>Imagen 8: esquema eléctrico.</em></p>
 </div>
 
 ## 3.3 Descripción del comportamiento
 aca iria el itemis o en su defecto un diagrama:
-<img width="1234" height="804" alt="image" src="https://github.com/user-attachments/assets/69914f40-e277-4584-8655-2a5835c444b0" />
+<img width="760" height="500" alt="image" src="https://github.com/user-attachments/assets/69914f40-e277-4584-8655-2a5835c444b0" />
 
 
 ## 3.4 Firmware del Simon Says:
