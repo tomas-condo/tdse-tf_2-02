@@ -264,6 +264,15 @@ Sensores Analógicos (ADC):
   <p><em>Imagen 7: IOC.</em></p>
 </div>
 
+  <div align="center">
+  <img width="572" height="1024" alt="image" src="https://github.com/user-attachments/assets/0fde4e43-91c6-4830-b9ee-de725ee301c7" />
+  <p><em>Imagen 8: Placa soldada.</em></p>
+</div>
+
+  <div align="center">
+  <img width="572" height="1024" alt="image" src="https://github.com/user-attachments/assets/67c9ca5a-7458-41a6-a1d2-abc7871042e7" />
+  <p><em>Imagen 9: Pistas</em></p>
+</div>
 
 ## 3.2 Descripción del Esquema Eléctrico 
 El sistema se alimenta por USB de la Nucleo 
@@ -271,7 +280,7 @@ El sistema se alimenta por USB de la Nucleo
 
   <div align="center">
   <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/a2a4f49f-4e85-42ec-a75d-7384a59d4de3" />
-  <p><em>Imagen 8: esquema eléctrico.</em></p>
+  <p><em>Imagen 10: esquema eléctrico.</em></p>
 </div>
 
 
@@ -280,7 +289,7 @@ El sistema se alimenta por USB de la Nucleo
 
   <div align="center">
   <img width="732" height="400" alt="image" src="https://github.com/user-attachments/assets/0f13ce68-b4d7-48bd-afe8-7cd573a6255f" />
-  <p><em>Imagen 9: Diagrama de estados.</em></p>
+  <p><em>Imagen 11: Diagrama de estados.</em></p>
 </div>
 
 
