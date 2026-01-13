@@ -129,18 +129,21 @@ El sistema se alimenta por USB de la Nucleo
 </div>
 
 ## 3.3 Descripción del comportamiento
+aca iria el itemis o en su defecto un diagrama:
+<img width="1234" height="804" alt="image" src="https://github.com/user-attachments/assets/69914f40-e277-4584-8655-2a5835c444b0" />
 
-## 3.3 Firmware del Simon Says:
+
+## 3.4 Firmware del Simon Says:
 **Task Actuator**
 Módulo encargado de administrar estados básicos de los leds mediante una MEF. Esto permite desacoplar la lógica del juego del manejo directo de los pines. 
 
 **Task Sensor**
 Este módulo es responsable de la gestión de la interfaz de entrada física mediante una MEF. Su función principal es realizar el filtrado digital de las señales (software debouncing) para eliminar los rebotes mecánicos inherentes a los botones.
 
-Task adc
+**Task adc**
 Esta tarea administra el Conversor Analógico-Digital (ADC) del STM32F103RB. Se encarga de disparar la conversión del canal conectado al sensor LDR (resistencia dependiente de la luz) y realizar un promedio de las lecturas para filtrar ruido eléctrico. El valor digital resultante representa la intensidad de luz ambiental y es puesto a disposición del sistema para el ajuste de brillo.
 
-Task pwm
+**Task pwm**
 Responsable de la gestión de los Timers (TIM2 y TIM3) configurados en modo Pulse Width Modulation. Este módulo toma el valor procesado por la task adc y ajusta dinámicamente el Duty Cycle (ciclo de trabajo) de las señales que alimentan los LEDs. Su objetivo es mantener una visibilidad óptima de la secuencia de juego, aumentando la intensidad en ambientes iluminados y atenuándola en la oscuridad para confort visual.
 
 **Task gameplay**
@@ -152,16 +155,16 @@ Es el núcleo lógico del proyecto. Implementa una  MEF que gestiona las reglas 
 - Gestión de los niveles de dificultad ("Normal" y "Difícil").
 - Determinación de las condiciones de victoria o derrota (Game Over).
 
-Task Storage
+**Task Storage**
 Este módulo implementa la lógica de persistencia de datos. Se encarga de verificar si el puntaje obtenido al finalizar una partida califica como un "Récord Histórico". Si es así, gestiona la estructura de datos (Puntaje + Iniciales) y solicita su escritura en la memoria no volátil. Al inicio del sistema, recupera y ordena estos datos para su visualización.
 
-Task i2c
+**Task i2c**
 Módulo de bajo nivel que implementa el protocolo de comunicación I2C. Provee primitivas (Start, Stop, Write Byte, Read Ack) a la task storage. Su función crítica es manejar los tiempos de escritura (tWR) de la memoria EEPROM y asegurar la integridad de la transmisión de datos sin bloquear el resto del sistema.
 
-Task display
+**Task display**
 Actúa como MEF intermedia entre display.c (librería de bajo nivel de abstracción) y task menu (manejo de display de alto nivel). Gestiona un buffer de pantalla para optimizar la escritura, verificando que se imprima 1 caracter por cada milisegundo.
 
-Task menu
+**Task menu**
 Módulo encargado de la navegación del sistema cuando no se está en una partida activa. Gestiona las pantallas de bienvenida, la selección de dificultad y la visualización de los puntajes históricos. Interpreta las pulsaciones de los botones (provenientes de task sensor) como comandos de navegación ("Izquierda", "Derecha", "Enter" y "Back") en lugar de colores de juego.
 
 # falta: resumen, tabla de requisitos, escribir sleep, escribir mejor calculo cpu y conclusion (por esto, no pasé el apartado 4. prefiero que se escriba bien en el doc y dps pasarlo aca), hacer que funcione el índice xd, agregar bibliografía. 
