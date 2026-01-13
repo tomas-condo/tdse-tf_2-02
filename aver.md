@@ -247,7 +247,7 @@ En la Tabla 2.1 se detallan los principales requisitos funcionales del sistema:
   </tr>
 </table>
 
-# 3. Diseño de implementación 
+# 3. Diseño e implementación 
 ## 3.1 Documentar esquema eléctrico y conexión de placas
 
 Para la integración física del sistema se soldó a una placa experimental de (15 x 20) cm para garantizar la robustez mecánica y eléctrica del prototipo. El circuito se centra en la placa de desarrollo STM32, la cual gestiona los periféricos mediante las siguientes interfaces:
@@ -281,13 +281,16 @@ También, se puede ver las soldaduras en la placa en su otra cara:
   <p><em>Imagen 9: Placa soldada dorso.</em></p>
 </div>
 
-## 3.2 Descripción del Esquema Eléctrico 
-El sistema se alimenta por USB de la Nucleo 
+El sistema se alimenta por USB de la Nucleo, pudiendo verse el siguiente esquema:
 
   <div align="center">
   <img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/a2a4f49f-4e85-42ec-a75d-7384a59d4de3" />
-  <p><em>Imagen 10: esquema eléctrico.</em></p>
+  <p><em>Imagen 10: Diseño esquema eléctrico.</em></p>
 </div>
+
+## 3.2 Descripción del Esquema Eléctrico 
+
+
 
 
 ## 3.3 Descripción del comportamiento
@@ -298,8 +301,15 @@ El sistema se alimenta por USB de la Nucleo
 </div>
 
 
+
+
 ## 3.4 Firmware del Simon Says:
-Este proyecto implementa un enfoque orientado a eventos y polling no bloqueante:
+Este proyecto implementa un enfoque orientado a eventos y polling no bloqueante, tal que en varios módulos hay implementadas funciones interfaz que permiten comunicación entre diferentes máquinas de estados, a continuación un ejemplo en el que se puede ver cómo ayuda esta metodología a respetar un aspecto básico como lo es la modularización en este proyecto:
+
+  <div align="center">
+  <img width="857" height="170" alt="image" src="https://github.com/user-attachments/assets/e48f5359-6c7d-4efc-a687-6680d2200db9" />
+  <p><em>Imagen 11: Fragmento de código de task_gameplay.c.</em></p>
+</div>
 
 ### 3.4.1 Task Actuator
 
