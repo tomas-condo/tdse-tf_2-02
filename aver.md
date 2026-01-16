@@ -629,7 +629,7 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 
 <p align="center"><em>Tabla 7: Cumplimiento de requisitos</em></p>
 
-Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizo debido al tiempo limite del proyecto. Este siendo el requisito mas inconsequente de todos, por mas que sea una aydua al jugador una indicacion de audio esto no impide el juego al usuario y puede ser usado de todas maneras.
+Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizó debido al tiempo límite del proyecto. Este siendo el requisito más inconsecuente de todos; por más que sea una ayuda al jugador una indicación de audio, esto no le impide el juego al usuario y puede ser usado de todas maneras.
 
 
 # 5.Bibliografía
