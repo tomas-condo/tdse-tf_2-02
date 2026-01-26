@@ -290,8 +290,11 @@ El sistema se alimenta por USB de la Nucleo, pudiendo verse el siguiente esquema
 
 ## 3.2 Descripción del Esquema Eléctrico 
 
+El circuito integra tres bloques funcionales principales: una etapa de sensado de luz con el sensor LDR de manera analógica, una etapa de entrada de usuario mediante pulsadores y una etapa de visualización de estado mediante diodos LED. Todas las señales están referenciadas a una tierra común, GND.
 
+El LDR está configurado junto con una resistencia fija de 10 kΩ. El nodo central del divisor está conectado a la entrada PA1. La variación de la resistencia del LDR en función de la luz incidente provocará un cambio en el voltaje analógico en PA1, permitiendo al microcontrolador leer la intensidad lumínica ambiental.
 
+Cada pulsador está configurado de manera que las entradas de señal (PC10, PD2, PC2, PC1) no reciben tensión ni corriente hasta que el botón sea presionado. Al presionar el botón, en el circuito se envía una señal al microcontrolador para que sea activada la luz LED correspondiente. Las cuatro LED están conectadas en serie con una resistencia limitadora de corriente de 100 Ω para proteger el componente. Los ánodos de los LEDs reciben la señal de control desde las entradas PA6, PB1, PB0 y PA7, mientras que los cátodos están conectados a tierra común.
 
 ## 3.3 Descripción del comportamiento
 
