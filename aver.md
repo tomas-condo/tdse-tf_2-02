@@ -54,8 +54,8 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
     - [4.2 Medición y análisis de tiempos de ejecución (WCET)](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#42-medici%C3%B3n-y-an%C3%A1lisis-de-tiempos-de-ejecuci%C3%B3n-wcet)
     - [4.3 Cálculo del Factor de Uso (U) de la CPU](#43-cálculo-del-factor-de-uso-u-de-la-cpu)
     - [4.4 Cumplimiento de requisitos](#44-cumplimiento-de-requisitos)
-5. [Conclusiones](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#3-dise%C3%B1o-e-implementaci%C3%B3n)
-6. [Bibliografía](https://github.com/tomas-condo/tdse-tf_2-02/edit/main/aver.md#6bibliograf%C3%ADa)
+5. [Conclusiones](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#5conclusiones)
+6. [Bibliografía](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#6bibliograf%C3%ADa)
 
 
 # **Introducción general** 
