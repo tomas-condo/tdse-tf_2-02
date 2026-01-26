@@ -54,8 +54,7 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
     - [4.2 Medición y análisis de tiempos de ejecución (WCET)](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#42-medici%C3%B3n-y-an%C3%A1lisis-de-tiempos-de-ejecuci%C3%B3n-wcet)
     - [4.3 Cálculo del Factor de Uso (U) de la CPU](#43-cálculo-del-factor-de-uso-u-de-la-cpu)
     - [4.4 Cumplimiento de requisitos](#44-cumplimiento-de-requisitos)
-5. [Conclusiones](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#5conclusiones)
-6. [Bibliografía](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#6bibliograf%C3%ADa)
+5. [Bibliografía](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#5bibliograf%C3%ADa)
 
 
 # **Introducción general** 
@@ -635,9 +634,7 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizó debido al tiempo límite del proyecto. Este siendo el requisito más inconsecuente de todos; por más que sea una ayuda al jugador una indicación de audio, esto no le impide el juego al usuario y puede ser usado de todas maneras.
 
 
-# 5.Conclusiones 
-
-# 6.Bibliografía
+# 5.Bibliografía
 https://www.alldatasheet.com/datasheet-pdf/view/75272/MICRO-ELECTRONICS/MBB51D.html 
 
 https://www.alldatasheet.com/datasheet-pdf/view/574755/ATMEL/AT24C256.html 
