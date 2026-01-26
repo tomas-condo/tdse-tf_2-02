@@ -34,6 +34,7 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
         - [2.2.3 LDR Sensor Analógico](#223-ldr-sensor-analógico)
         - [2.2.4 Display LCD](#224-display-lcd)
         - [2.2.5 Memoria E2PROM Externa](#225-memoria-e2prom-externa)
+        - [2.2.6 Placa de Desarrollo](#226-placa-de-desarrollo)
 3. [Diseño de implementación](#diseño-e-implementación)
     - [3.1 Documentar esquema eléctrico y conexión de placas](#31-documentar-esquema-eléctrico-y-conexión-de-placas)
     - [3.2 Descripción del Esquema Eléctrico](#32-descripción-del-esquema-eléctrico)
@@ -632,7 +633,9 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizó debido al tiempo límite del proyecto. Este siendo el requisito más inconsecuente de todos; por más que sea una ayuda al jugador una indicación de audio, esto no le impide el juego al usuario y puede ser usado de todas maneras.
 
 
-# 5.Bibliografía
+# 5.Conclusiones 
+
+# 6.Bibliografía
 https://www.alldatasheet.com/datasheet-pdf/view/75272/MICRO-ELECTRONICS/MBB51D.html 
 
 https://www.alldatasheet.com/datasheet-pdf/view/574755/ATMEL/AT24C256.html 
