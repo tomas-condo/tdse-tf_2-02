@@ -34,7 +34,7 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
         - [2.2.3 LDR Sensor Analógico](#223-ldr-sensor-analógico)
         - [2.2.4 Display LCD](#224-display-lcd)
         - [2.2.5 Memoria E2PROM Externa](#225-memoria-e2prom-externa)
-        - [[2.2.6 Placa de Desarrollo](#226-placa-de-desarrollo)](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#226-placa-de-desarrollo-microcontrolador)
+        - [(2.2.6 Placa de Desarrollo](#226-placa-de-desarrollo)
 3. [Diseño de implementación](#diseño-e-implementación)
     - [3.1 Documentar esquema eléctrico y conexión de placas](#31-documentar-esquema-eléctrico-y-conexión-de-placas)
     - [3.2 Descripción del Esquema Eléctrico](#32-descripción-del-esquema-eléctrico)
