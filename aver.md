@@ -299,12 +299,16 @@ Cada pulsador está configurado de manera que las entradas de señal (PC10, PD2,
 ## 3.3 Descripción del comportamiento
 
   <div align="center">
-  <img width="732" height="400" alt="image" src="https://github.com/user-attachments/assets/0f13ce68-b4d7-48bd-afe8-7cd573a6255f" />
+  <img width="941" height="432" alt="image" src="https://github.com/user-attachments/assets/60a716ed-63ae-4e5f-8e8b-5b06931d566d" />
+
   <p><em>Imagen 11: Diagrama de estados.</em></p>
 </div>
 
+Podemos ver cómo se comporta el sistema a partir de la imagen 11, pasando por los estados de menú de acuerdo a lo que el usuario haga; para ejecutar los distintos eventos, se deben presionar los distintos pulsadores. Las instrucciones para cuál pulsador presionar se ven en el estado ST_MEN_MENU; luego de esa introducción se pasa al ST_MEN_MENU1, donde se verá la opción de seleccionar el modo de juego en ST_MEN_MENU3 o ver el historial de puntajes en ST_MEN_MENU3. 
 
+Pasando al ST_MEN_MENU2, allí se seleccionará el modo de juego, siendo difícil o normal; cada uno, al ser seleccionado, pasará a su respectivo evento donde se desarrollará el juego.
 
+Finalmente, una vez que finalice el juego, sin importar el modo anteriormente seleccionado, se pasará al evento EV_GAME_OVER, que nos dejará en el estado ST_MEN_MENU4. Ahí se visualizará una indicación de fin de juego y se pasará a ST_MEN_MENU1 nuevamente.
 
 ## 3.4 Firmware del Simon Says:
 Este proyecto implementa un enfoque orientado a eventos y polling no bloqueante, tal que en varios módulos hay implementadas funciones interfaz que permiten comunicación entre diferentes máquinas de estados, a continuación un ejemplo en el que se puede ver cómo ayuda esta metodología a respetar un aspecto básico como lo es la modularización en este proyecto:
