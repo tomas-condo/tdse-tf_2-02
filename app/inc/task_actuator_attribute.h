@@ -71,10 +71,8 @@ typedef enum task_actuator_id {ID_LED_AZ,
 
 typedef struct {
 	uint32_t led_id;
-	// Agregamos el CANAL del Timer:
-	uint32_t pwm_channel; // Ej: TIM_CHANNEL_1, TIM_CHANNEL_2...
+	uint32_t pwm_channel;
 
-	// Estos valores definen el comportamiento de tiempos
 	uint32_t tick_blink;
 	uint32_t tick_pulse;
 } task_actuator_cfg_t;

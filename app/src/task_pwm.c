@@ -90,15 +90,8 @@ void task_pwm_statechart(void)
 
 void task_pwm_update(void *parameters)
 {
-    // Eliminamos la variable local b_time_update_required
-
-    /* Sección Crítica: Verificar y descontar SOLO UN tick */
     __asm("CPSID i");   /* Deshabilitar interrupciones */
 
-    // OPTIMIZACIÓN: Usamos IF en lugar de WHILE.
-    // Esto evita que la tarea intente "ponerse al día" (Catch-up) ejecutando
-    // 50 veces seguidas si el sistema tuvo una pausa larga al inicio.
-    // Garantiza un WCET constante y mínimo.
     if (G_TASK_PWM_TICK_CNT_INI < g_task_pwm_tick_cnt)
     {
         g_task_pwm_tick_cnt--;
@@ -108,12 +101,10 @@ void task_pwm_update(void *parameters)
 
         g_task_pwm_cnt++;
 
-        // Ejecutamos la máquina UNA sola vez
         task_pwm_statechart();
     }
     else
     {
-        // Si no había ticks, habilitamos interrupciones y salimos rápido
         __asm("CPSIE i");
     }
 }

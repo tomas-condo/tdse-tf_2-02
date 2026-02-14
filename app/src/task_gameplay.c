@@ -134,14 +134,31 @@ void task_gameplay_init(void *parameters)
 	put_event_task_actuator(EV_LED_XX_OFF, ID_LED_VE);
 
 	// --- LDR CODIGO ---
-	// 1. Leemos el LDR una sola vez al arrancar
 	HAL_ADC_Start(&hadc1);
 	if (HAL_ADC_PollForConversion(&hadc1, 20) == HAL_OK)
 	{
-		brillo_juego = HAL_ADC_GetValue(&hadc1);
+	    // A. Lectura cruda (Rango 0 a 4095)
+	    uint32_t raw_adc = HAL_ADC_GetValue(&hadc1);
 
-		// Ajuste opcional: Si el valor es muy bajo, lo subimos para que se vea algo
-		if(brillo_juego < 500) brillo_juego = 500;
+	    // B. ESCALADO: Convertir 12 bits a 16 bits
+	    // Desplazar 4 bits a la izquierda equivale a multiplicar por 16.
+	    // 4095 * 16 = 65520 (Casi el 100% del periodo de 65535 del PWM)
+	    brillo_juego = raw_adc << 4;
+
+	    // C. Ajuste de brillo mínimo (Offset)
+	    // Como escalamos por 16, el piso de "500" ahora debe ser "8000"
+	    // para mantener la proporción visual.
+	    if(brillo_juego < 8000)
+	    {
+	        brillo_juego = 8000;
+	    }
+
+	    // D. Protección de desbordamiento (Safety clamp)
+	    // Aseguramos que no supere el periodo del PWM definido en task_pwm.h
+	    if (brillo_juego > 65535)
+	    {
+	        brillo_juego = 65535;
+	    }
 	}
 	HAL_ADC_Stop(&hadc1);
 
@@ -155,6 +172,7 @@ void task_gameplay_init(void *parameters)
 	if(high_score2 == 0xFFFF) high_score2 = 0;
 	if(high_score3 == 0xFFFF) high_score3 = 0;
 
+	// Para reinicio de puntajes:
 	//EEPROM_PageErase(0);
 	//EEPROM_PageErase(2);
 	//EEPROM_PageErase(4);

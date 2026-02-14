@@ -89,7 +89,7 @@ const char *p_task_actuator_ 		= "Non-Blocking & Update By Time Code";
 uint32_t g_task_actuator_cnt;
 volatile uint32_t g_task_actuator_tick_cnt;
 
-extern TIM_HandleTypeDef htim3; // Importamos el handle del timer
+extern TIM_HandleTypeDef htim3;
 extern uint32_t brillo_juego;
 
 static uint32_t g_current_actuator_idx = 0;
@@ -104,14 +104,8 @@ void task_actuator_init(void *parameters)
 	task_actuator_ev_t event;
 	bool b_event;
 
-	/* Print out: Task Initialized */
-	/*LOGGER_INFO(" ");
-	LOGGER_INFO("  %s is running - %s", GET_NAME(task_actuator_init), p_task_actuator);
-	LOGGER_INFO("  %s is a %s", GET_NAME(task_actuator), p_task_actuator_);*/
-
 	/* Init & Print out: Task execution counter */
 	g_task_actuator_cnt = G_TASK_ACT_CNT_INIT;
-	//LOGGER_INFO("   %s = %lu", GET_NAME(g_task_actuator_cnt), g_task_actuator_cnt);
 
 	g_current_actuator_idx = 0;
 
@@ -131,29 +125,17 @@ void task_actuator_init(void *parameters)
 		b_event = false;
 		p_task_actuator_dta->flag = b_event;
 
-		/*LOGGER_INFO(" ");
-		LOGGER_INFO("   %s = %lu   %s = %lu   %s = %lu   %s = %s",
-					 GET_NAME(index), index,
-					 GET_NAME(state), (uint32_t)state,
-					 GET_NAME(event), (uint32_t)event,
-					 GET_NAME(b_event), (b_event ? "true" : "false"));*/
-
 		task_pwm_set(p_task_actuator_cfg->pwm_channel, 0);
 	}
 }
 
 void task_actuator_update(void *parameters)
 {
-	// OPTIMIZACIÓN ANTI-BURST: Usamos IF en lugar de WHILE
-	// Esto previene picos de WCET si se acumulan ticks.
-
 	__asm("CPSID i");	/* disable interrupts*/
     if (G_TASK_ACT_TICK_CNT_INI < g_task_actuator_tick_cnt)
     {
 		/* Update Tick Counter */
     	g_task_actuator_tick_cnt--;
-
-        // Habilitamos interrupciones ANTES de la carga de trabajo
         __asm("CPSIE i");
 
 		g_task_actuator_cnt++;
@@ -172,15 +154,9 @@ void task_actuator_statechart(void)
 	const task_actuator_cfg_t *p_task_actuator_cfg;
 	task_actuator_dta_t *p_task_actuator_dta;
 
-    // OPTIMIZACIÓN ROUND ROBIN
-    // En lugar de un bucle 'for', usamos el índice estático para procesar
-    // SOLO UN actuador por llamada.
-
-    // 1. Configuramos punteros para el LED actual
     p_task_actuator_cfg = &task_actuator_cfg_list[g_current_actuator_idx];
     p_task_actuator_dta = &task_actuator_dta_list[g_current_actuator_idx];
 
-    // 2. Ejecutamos la lógica SOLO para este LED
     switch (p_task_actuator_dta->state)
     {
         case ST_LED_XX_OFF:
@@ -220,7 +196,6 @@ void task_actuator_statechart(void)
             break;
 
         case ST_LED_XX_BLINK_ON:
-            // Decremento del tick (ahora ocurre cada 4ms reales)
             if(p_task_actuator_dta->tick > DEL_LED_XX_MIN)
             {
                 p_task_actuator_dta->tick --;
@@ -297,7 +272,6 @@ void task_actuator_statechart(void)
             break;
     }
 
-    // 3. Preparamos el índice para el siguiente ciclo (Round Robin)
     g_current_actuator_idx++;
     if (g_current_actuator_idx >= ACTUATOR_DTA_QTY) {
         g_current_actuator_idx = 0;

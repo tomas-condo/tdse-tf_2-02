@@ -9,11 +9,6 @@ extern "C" {
 /********************** inclusions *******************************************/
 #include "stdint.h"
 #include "main.h"
-/********************** macros ***********************************************/
-
-/********************** typedef **********************************************/
-
-/********************** external data declaration ****************************/
 
 /********************** external functions declaration ***********************/
 extern void EEPROM_Write (uint16_t page, uint16_t offset, uint8_t *data, uint16_t size);

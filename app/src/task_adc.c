@@ -61,7 +61,6 @@ static volatile bool adc_is_converting = false;
 static uint32_t adc_last_tick = 0;
 
 /********************** internal functions declaration ***********************/
-//HAL_StatusTypeDef ADC_Poll_Read(uint16_t *value);
 
 /********************** internal data definition *****************************/
 
@@ -72,13 +71,6 @@ extern ADC_HandleTypeDef hadc1;
 /********************** external functions definition ************************/
 void task_adc_init(void *parameters)
 {
-	/*shared_data_type *shared_data = (shared_data_type *) parameters;
-
-	//LOGGER_LOG("  %s is running - %s\r\n", GET_NAME(task_adc_init), p_task_adc);
-
-	// shared_data->adc_end_of_conversion = false;
-
-*/
 	    p_adc_shared_data = (shared_data_type *) parameters;
 
 	    p_adc_shared_data->adc_end_of_conversion = false;
