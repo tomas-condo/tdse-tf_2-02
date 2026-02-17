@@ -419,8 +419,8 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
       </tr>
       <tr>
         <td align="left">Memoria EEPROM</td>
-        <td>[COMPLETAR] mA</td>
-        <td>[COMPLETAR] mA</td>
+        <td>[-] mA</td>
+        <td>[-] mA</td>
         <td align="left">Mayor consumo durante escritura.</td>
       </tr>
     </tbody>
@@ -428,9 +428,11 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
   <p><em>Tabla 5: Comparativa de consumo de corriente en los distintos modos de operación.</em></p>
 </div>
 
-<p><strong>Análisis:</strong><br>
-Se observa que el consumo de los periféricos (LEDs, Botones) se mantiene constante independientemente del modo del CPU, ya que su alimentación es eléctrica y no lógica. La diferencia principal debería reflejarse en la medición del <strong>Jumper JP5</strong>, donde el modo <em>Sleep</em> reduce la actividad del reloj del núcleo.</p>
-<p><strong>Nota:</strong> Los valores de corriente del display y la memoria se encuentran pendientes de medición final.</p>
+<p><strong>Conclusión del análisis de consumo:</strong><br>
+
+Tras realizar las pruebas comparativas, se observó que la corriente consumida por cada componente no registra variaciones perceptibles al activar el modo Sleep.
+
+Nota: Dada esta ausencia de diferencia significativa en el consumo base del MCU, se optó por no extender las mediciones detalladas de los periféricos en dicho modo, asumiendo los valores del modo activo como referencia para el peor caso.</p>
 
 ## 4.2 Medición y análisis de tiempos de ejecución (WCET)
 
