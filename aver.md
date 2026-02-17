@@ -384,7 +384,7 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
       <tr>
         <td align="left"><strong>MCU (Jumper JP5 - IDD)</strong></td>
         <td><strong>38.8 mA</strong></td>
-        <td><strong>[REVISAR] mA</strong></td>
+        <td><strong>38.8 mA</strong></td>
         <td align="left">Consumo del microcontrolador.</td>
       </tr>
       <tr>
@@ -396,7 +396,7 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
       <tr>
         <td align="left">LED Rojo (ON)</td>
         <td>0.120 mA</td>
-        <td>[COMPLETAR] mA</td>
+        <td>[0.120] mA</td>
         <td align="left">Consumo constante si está encendido.</td>
       </tr>
       <tr>
@@ -408,7 +408,7 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
       <tr>
         <td align="left">Sensor LDR</td>
         <td>3 µA</td>
-        <td>[COMPLETAR] µA</td>
+        <td>3 µA</td>
         <td align="left">Divisor de tensión resistivo.</td>
       </tr>
       <tr>
