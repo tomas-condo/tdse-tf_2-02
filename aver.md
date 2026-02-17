@@ -54,7 +54,8 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
     - [4.2 Medición y análisis de tiempos de ejecución (WCET)](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#42-medici%C3%B3n-y-an%C3%A1lisis-de-tiempos-de-ejecuci%C3%B3n-wcet)
     - [4.3 Cálculo del Factor de Uso (U) de la CPU](#43-cálculo-del-factor-de-uso-u-de-la-cpu)
     - [4.4 Cumplimiento de requisitos](#44-cumplimiento-de-requisitos)
-    - [4.5 Prueba de Integración](#45-Prueba-de-Integración)
+    - [4.5 Reporte de Uso](#45-Reporte-de-Uso)
+    - [4.6 Prueba de Integración](#46-Prueba-de-Integración)
 5. [Bibliografía](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#5bibliograf%C3%ADa)
 
 
@@ -437,8 +438,6 @@ Nota: Dada esta ausencia de diferencia significativa en el consumo base del MCU,
 
 ## 4.2 Medición y análisis de tiempos de ejecución (WCET)
 
-### 4.2 Medición y análisis de tiempos de ejecución (WCET)
-
 Se determinó el Worst Case Execution Time (WCET) de cada tarea del sistema utilizando el Timer DWT (Data Watchpoint and Trace) del microcontrolador para contar ciclos de reloj exactos antes y después de cada función task_update, convirtiendo luego esos ciclos a microsegundos. 
 Este parámetro es crítico para garantizar que el sistema cumpla con los requisitos de tiempo real (Soft Real-Time) y no se produzca pérdida de eventos.
 
@@ -570,8 +569,6 @@ Se evidencia claramente cómo la tarea de almacenamiento (<em>Task Storage</em>)
 
 ## 4.3 Cálculo del Factor de Uso (U) de la CPU
 
-### 4.3 Cálculo del Factor de Uso (U) de la CPU
-
 El factor de utilización del procesador determina la viabilidad del sistema (planificabilidad). Para un sistema cíclico ejecutivo, la condición necesaria es que la suma de los tiempos de ejecución no supere el periodo del sistema ($U < 100\%$).
 
 La fórmula general aplicada es:
@@ -644,7 +641,17 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 
 Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizó debido al tiempo límite del proyecto. Este siendo el requisito más inconsecuente de todos; por más que sea una ayuda al jugador una indicación de audio, esto no le impide el juego al usuario y puede ser usado de todas maneras.
 
-## 4.5 Prueba de Integración 
+
+## 4.5 Reporte de Uso
+Se muestra en "Console & Build Analyzer":
+
+[CAPTURA]
+  <p><em>Imagen 12:Resumen del proceso de compilación y reporte de ocupación de memoria (Build Output & Size Report).</em></p>
+</div>
+
+Se observa que el firmware actual ocupa --- de la capacidad de almacenamiento y el --- de la memoria dinámica disponible. Esto indica que el sistema --- , permitiendo futuras expansiones o la adición de funcionalidades complejas sin riesgo de desbordamiento de memoria (Stack Overflow) o falta de espacio en el disco.
+
+## 4.6 Prueba de Integración 
 
 Se dejará adjunto un link funcional al video: https://youtu.be/UB5wlkK1kCw
 
