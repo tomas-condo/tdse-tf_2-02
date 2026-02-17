@@ -645,8 +645,9 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 ## 4.5 Reporte de Uso
 Se muestra en "Console & Build Analyzer":
 
-[CAPTURA]
-  <p><em>Imagen 12:Resumen del proceso de compilación y reporte de ocupación de memoria (Build Output & Size Report).</em></p>
+  <div align="center">
+  <img width="500" height="500" alt="image" src="COPIA ACA" /> [CAPTURA]
+  <p><em>Imagen 12: Resumen del proceso de compilación y reporte de ocupación de memoria (Build Output & Size Report).</em></p>
 </div>
 
 Se observa que el firmware actual ocupa --- de la capacidad de almacenamiento y el --- de la memoria dinámica disponible. Esto indica que el sistema --- , permitiendo futuras expansiones o la adición de funcionalidades complejas sin riesgo de desbordamiento de memoria (Stack Overflow) o falta de espacio en el disco.
