@@ -54,6 +54,7 @@ En esta memoria se presenta la motivación del proyecto, el diseño del hardware
     - [4.2 Medición y análisis de tiempos de ejecución (WCET)](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#42-medici%C3%B3n-y-an%C3%A1lisis-de-tiempos-de-ejecuci%C3%B3n-wcet)
     - [4.3 Cálculo del Factor de Uso (U) de la CPU](#43-cálculo-del-factor-de-uso-u-de-la-cpu)
     - [4.4 Cumplimiento de requisitos](#44-cumplimiento-de-requisitos)
+    - [4.5 Prueba de Integración](#45-Prueba-de-Integración)
 5. [Bibliografía](https://github.com/tomas-condo/tdse-tf_2-02/blob/main/aver.md#5bibliograf%C3%ADa)
 
 
@@ -613,10 +614,10 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 |  | 2.5 | El sistema deberá registrar pulsaciones rápidas sin perder eventos. | Completo 🟢 |
 |  | 2.6 | El brillo de los LEDs se ajustará automáticamente según el valor leído en el sensor LDR. | Completo 🟢 |
 | Sensor LDR | 3.1 | El sistema contará con un sensor de luz LDR conectado a una entrada analógica del STM32. | Completo 🟢 |
-|  | 3.2 | El sistema leerá periódicamente el valor de la LDR mediante el ADC. | Completo 🟢 |
+|  | 3.2 | El sistema leerá al iniciar el valor de la LDR mediante el ADC. | Completo 🟢 |
 |  | 3.3 | El sistema ajustará el ciclo de trabajo PWM de los LEDs en función de la luminosidad ambiente. | Completo 🟢 |
 | Pantalla LCD | 4.1 | El sistema contará con una pantalla LCD para mostrar información de estado. | Completo 🟢 |
-|  | 4.2 | Al encender el sistema, el LCD mostrará una pantalla de bienvenida durante unos segundos. | Completo 🟢 |
+|  | 4.2 | Al encender el sistema, el LCD mostrará una pantalla de bienvenida. | Completo 🟢 |
 |  | 4.3 | Luego de la bienvenida, el LCD mostrará una pantalla de selección de dificultad (Normal / Difícil). | Completo 🟢 |
 |  | 4.4 | Durante el juego, el LCD mostrará el puntaje actual del jugador. | Completo 🟢 |
 |  | 4.5 | Al apagar o finalizar el juego, el LCD mostrará una pantalla de despedida. | Completo 🟢 |
@@ -633,16 +634,19 @@ Una vez finalizado el trabajo, se realizó una tabla con los requisitos iniciale
 |  | 7.3 | En Normal se reproducirá la secuencia completa en cada nivel; en Difícil, solo el nuevo color agregado. | Completo 🟢 |
 | Persistencia y estadísticas (EEPROM) | 8.1 | El sistema almacenará el puntaje máximo alcanzado en memoria EEPROM externa. | Completo 🟢 |
 |  | 8.2 | El sistema permitirá leer y mostrar el puntaje máximo guardado al inicio o desde un menú de estadísticas. | Completo 🟢 |
-|  | 8.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. | Completo 🟢 |
+|  | 8.3 | El sistema permitirá reiniciar el récord (borrar el puntaje máximo guardado) desde el menú. | Cancelado 🔴 |
 |  | 8.4 | La EEPROM podrá usarse para almacenar configuraciones de dificultad u otros parámetros del juego. | Completo 🟢 |
 | Seguridad y robustez | 9.1 | El sistema deberá iniciar siempre en un estado seguro, con LEDs y buzzer apagados hasta que el usuario interactúe. | Completo 🟢 |
 |  | 9.2 | El sistema organizará su lógica en una máquina de estados para evitar bloqueos y comportamientos impredecibles. | Completo 🟢 |
-|  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. | Completo 🟢 |
+|  | 9.3 | El sistema deberá indicar mediante mensajes en la pantalla y señales sonoras si ocurre un error interno o condición inesperada. | Cancelado 🔴 |
 
 <p align="center"><em>Tabla 7: Cumplimiento de requisitos</em></p>
 
 Se observa que la gran mayoría de los requisitos se cumplieron para este proyecto. Solamente resta agregar el audio que no se realizó debido al tiempo límite del proyecto. Este siendo el requisito más inconsecuente de todos; por más que sea una ayuda al jugador una indicación de audio, esto no le impide el juego al usuario y puede ser usado de todas maneras.
 
+## 4.5 Prueba de Integración 
+
+Se dejará adjunto un link funcional al video: https://youtu.be/UB5wlkK1kCw
 
 # 5.Bibliografía
 https://www.alldatasheet.com/datasheet-pdf/view/75272/MICRO-ELECTRONICS/MBB51D.html 
