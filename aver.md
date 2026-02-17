@@ -413,15 +413,15 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
       </tr>
       <tr>
         <td align="left">Display LCD</td>
-        <td>[COMPLETAR] mA</td>
-        <td>[COMPLETAR] mA</td>
-        <td align="left">Consumo del módulo + Backlight.</td>
+        <td>[-] mA</td>
+        <td>[-] mA</td>
+        <td align="left">-</td>
       </tr>
       <tr>
         <td align="left">Memoria EEPROM</td>
         <td>[-] mA</td>
         <td>[-] mA</td>
-        <td align="left">Mayor consumo durante escritura.</td>
+        <td align="left">-</td>
       </tr>
     </tbody>
   </table>
