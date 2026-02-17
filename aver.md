@@ -396,7 +396,7 @@ Para evaluar la eficiencia energética del sistema, se realizaron mediciones de 
       <tr>
         <td align="left">LED Rojo (ON)</td>
         <td>0.120 mA</td>
-        <td>[0.120] mA</td>
+        <td>0.120 mA</td>
         <td align="left">Consumo constante si está encendido.</td>
       </tr>
       <tr>
