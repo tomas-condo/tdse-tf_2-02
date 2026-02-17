@@ -645,12 +645,17 @@ Se observa que la gran mayoría de los requisitos se cumplieron para este proyec
 ## 4.5 Reporte de Uso
 Se muestra en "Console & Build Analyzer":
 
-  <div align="center">
-  <img width="500" height="500" alt="image" src="COPIA ACA" /> [CAPTURA]
-  <p><em>Imagen 12: Resumen del proceso de compilación y reporte de ocupación de memoria (Build Output & Size Report).</em></p>
+<img width="770" height="219" alt="Captura de pantalla 2026-02-17 091647" src="https://github.com/user-attachments/assets/4dcc685b-f506-4dbb-94a7-4577b9bfcd3b" />
+
+  <p><em>Imagen 12:Resumen del proceso de compilación (Build Output).</em></p>
 </div>
 
-Se observa que el firmware actual ocupa --- de la capacidad de almacenamiento y el --- de la memoria dinámica disponible. Esto indica que el sistema --- , permitiendo futuras expansiones o la adición de funcionalidades complejas sin riesgo de desbordamiento de memoria (Stack Overflow) o falta de espacio en el disco.
+<img width="696" height="62" alt="Captura de pantalla 2026-02-17 093125" src="https://github.com/user-attachments/assets/fc268403-327b-462b-ab67-52ebe046923a" />
+
+  <p><em>Imagen 13:Reporte de ocupación de memoria (Size Report).</em></p>
+</div>
+
+Se observa que el firmware actual ocupa el 26.81% de la capacidad de almacenamiento y el 14.84% de la memoria dinámica disponible. Esto indica que el sistema posee un amplio margen de recursos excedentes , permitiendo futuras expansiones o la adición de funcionalidades complejas sin riesgo de desbordamiento de memoria (Stack Overflow) o falta de espacio en el disco.
 
 ## 4.6 Prueba de Integración 
 
